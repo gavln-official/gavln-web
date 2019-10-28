@@ -5,6 +5,11 @@ import store from './store';
 
 import App from './app/index.vue';
 
+// Element-UI custom theme
+import './style/theme/index.css';
+// Element-UI reset styles
+import './style/reset/index.scss';
+
 Vue.config.productionTip = false;
 
 new Vue({
