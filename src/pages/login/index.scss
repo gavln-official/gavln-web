@@ -1,0 +1,9 @@
+.page-login {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .ui-login {
+    flex: 1;
+  }
+}
