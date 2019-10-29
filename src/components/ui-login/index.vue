@@ -1,25 +1,26 @@
 <template>
   <div class="ui-login">
-    <el-row>
-      <el-col
-          :span="12">form</el-col>
-      <el-col
-          :span="12">image</el-col>
-    </el-row>
+    <div class="content">
+      <div class="form">
+        <form-content-login
+            v-if="type === 'login'" />
+      </div>
+      <div class="img">
+        <img
+            src="https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&h=500&q=80"
+            alt="logo">
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import {
-  Row,
-  Col,
-} from 'element-ui';
+import FormContentLogin from './login.vue';
 
 export default {
   name: 'UiLogin',
   components: {
-    'el-row': Row,
-    'el-col': Col,
+    FormContentLogin,
   },
   props: {
     // 类型（register: 注册, login: 登录）
@@ -36,3 +37,8 @@ export default {
   },
 };
 </script>
+
+<style
+    src="./index.scss"
+    lang="scss"
+    scoped></style>

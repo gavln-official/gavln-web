@@ -1,7 +1,10 @@
 @import '../../style/mixins.scss';
 
 .login-header {
+  box-sizing: border-box;
+  margin: 0 auto;
   padding: 22px;
+  width: 100%;
   max-width: 1600px;
   position: relative;
 
