@@ -2,7 +2,7 @@
   <div class="page-login">
     <login-header />
     <ui-login
-        type="login"></ui-login>
+        :type="page"></ui-login>
     <login-footer />
   </div>
 </template>
@@ -18,6 +18,14 @@ export default {
     'login-header': LoginHeader,
     'ui-login': UiLogin,
     'login-footer': LoginFooter,
+  },
+  data() {
+    return {
+      page: 'login',
+    };
+  },
+  mounted() {
+    this.page = this.$route.name;
   },
 };
 </script>
