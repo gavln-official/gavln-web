@@ -1,13 +1,18 @@
 <template>
-  <div class="form-content login">
-    <h2>欢迎回来</h2>
+  <div class="form-content register">
+    <h2>欢迎加入</h2>
     <el-form
         class="login-form"
         label-position="top">
       <el-form-item>
         <el-input
-            placeholder="用户名/邮箱"
+            placeholder="用户名"
             v-model="username" />
+      </el-form-item>
+      <el-form-item>
+        <el-input
+            placeholder="邮箱"
+            v-model="email" />
       </el-form-item>
       <el-form-item>
         <el-input
@@ -23,15 +28,15 @@
               slot="suffix"
               @click="toggleShowPassword"></i>
         </el-input>
+        <span class="tips">8～18位字符，包含数字及字母</span>
       </el-form-item>
     </el-form>
     <div class="links">
-      <a href="/">忘记密码？</a>
-      <a href="/register" class="right">去注册</a>
+      <a href="/login" class="right">去注册</a>
     </div>
     <el-button
         type="text">
-      <span>登录账户</span>
+      <span>创建账户</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
   </div>
@@ -46,7 +51,7 @@ import {
 } from 'element-ui';
 
 export default {
-  name: 'FormContentLogin',
+  name: 'FormContentRegister',
   components: {
     'el-form': Form,
     'el-form-item': FormItem,
@@ -56,6 +61,7 @@ export default {
   data() {
     return {
       username: '',
+      email: '',
       password: '',
       showPassword: false,
     };

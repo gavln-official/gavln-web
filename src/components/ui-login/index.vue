@@ -4,6 +4,8 @@
       <div class="form">
         <form-content-login
             v-if="type === 'login'" />
+        <form-content-register
+            v-else />
       </div>
       <div class="img">
         <img
@@ -16,11 +18,13 @@
 
 <script>
 import FormContentLogin from './login.vue';
+import FormContentRegister from './register.vue';
 
 export default {
   name: 'UiLogin',
   components: {
     FormContentLogin,
+    FormContentRegister,
   },
   props: {
     // 类型（register: 注册, login: 登录）
