@@ -1,0 +1,42 @@
+.form-content {
+  margin: 0 auto;
+  max-width: 380px;
+
+  h2 {
+    margin: 0;
+    font-size: 32px;
+    line-height: 46px;
+    text-align: center;
+    font-weight: normal;
+  }
+
+  .el-form {
+    margin-top: 50px;
+  }
+
+  .links {
+    margin-top: 44px;
+
+    a {
+      font-size: 18px;
+      line-height: 24px;
+      color: #FFF;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+      &.right {
+        float: right;
+      }
+    }
+  }
+
+  .el-button--text {
+    margin-top: 42px;
+    border: none;
+    padding: 8px 0;
+    font-size: 22px;
+    line-height: 30px;
+    color: #FFF;
+  }
+}
