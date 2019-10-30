@@ -2,7 +2,7 @@
   <main class="main-frame">
     <main-nav />
     <article>
-      <header>header</header>
+      <frame-header />
       <div class="content">
         <slot>content</slot>
       </div>
@@ -12,11 +12,13 @@
 
 <script>
 import MainNav from '../main-nav/index.vue';
+import FrameHeader from './header.vue';
 
 export default {
   name: 'MainFrame',
   components: {
     MainNav,
+    FrameHeader,
   },
 };
 </script>
