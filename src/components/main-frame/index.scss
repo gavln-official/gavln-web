@@ -1,0 +1,25 @@
+.main-frame {
+  display: flex;
+  height: 100%;
+
+  nav {
+    width: 200px;
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .content {
+      flex: 1;
+      overflow: auto;
+    }
+  }
+}
+
+@media (min-width: 1000px) {
+  .main-frame nav {
+    width: 260px;
+  }
+}
