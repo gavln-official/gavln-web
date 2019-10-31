@@ -4,7 +4,7 @@
     <article>
       <frame-header />
       <div class="content">
-        <slot>content</slot>
+        <slot></slot>
       </div>
     </article>
   </main>
