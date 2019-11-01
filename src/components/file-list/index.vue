@@ -36,6 +36,8 @@
         </el-button>
        </div>
     </div>
+    <file-table
+        :data="data" />
   </div>
 </template>
 
@@ -46,9 +48,9 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  // Table,
-  // TableColumn,
 } from 'element-ui';
+
+import FileTable from './table.vue';
 
 export default {
   name: 'FileList',
@@ -58,8 +60,7 @@ export default {
     'el-dropdown': Dropdown,
     'el-dropdown-menu': DropdownMenu,
     'el-dropdown-item': DropdownItem,
-    // 'el-table': Table,
-    // 'el-table-column': TableColumn,
+    FileTable,
   },
   props: {
     data: Array,
