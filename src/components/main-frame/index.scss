@@ -1,17 +1,22 @@
 .main-frame {
-  display: flex;
   height: 100%;
+  position: relative;
 
   nav {
     width: 200px;
+    height: 100%;
   }
 
   article {
     display: flex;
+    box-sizing: border-box;
     flex-direction: column;
-    flex: 1;
+    height: 100%;
     padding-top: 64px;
-    position: relative;
+    position: absolute;
+    left: 200px;
+    top: 0;
+    right: 0;
 
     .content {
       flex: 1;
@@ -20,7 +25,13 @@
 }
 
 @media (min-width: 1000px) {
-  .main-frame nav {
-    width: 260px;
+  .main-frame {
+    nav {
+      width: 260px;
+    }
+
+    article {
+      left: 260px;
+    }
   }
 }

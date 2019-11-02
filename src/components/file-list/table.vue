@@ -1,7 +1,8 @@
 <template>
   <el-table
       class="file-table"
-      :data="data">
+      :data="data"
+      :height="tableHeight">
     <el-table-column
         type="selection"></el-table-column>
     <el-table-column
@@ -37,6 +38,24 @@ export default {
   },
   props: {
     data: Array,
+  },
+  data() {
+    return {
+      tableHeight: null,
+    };
+  },
+  mounted() {
+    window.addEventListener('resize', this.calcTableHeight);
+
+    this.calcTableHeight();
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.calcTableHeight);
+  },
+  methods: {
+    calcTableHeight() {
+      this.tableHeight = window.innerHeight - 124;
+    },
   },
 };
 </script>

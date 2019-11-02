@@ -1,12 +1,13 @@
 @import "../../style/mixins.scss";
 
 .main-nav {
+  box-sizing: border-box;
+  padding-top: 24px;
   height: 100%;
   color: #FFF;
   background-color: #171819;
 
   .logo {
-    margin: 24px 0;
     text-align: center;
 
     a {
@@ -19,6 +20,7 @@
 
   ul {
     @include list-clean();
+    margin-top: 24px;
 
     li {
       position: relative;
