@@ -23,13 +23,21 @@
       </template>
     </el-table-column>
     <el-table-column
-        prop="size"
         label="文件大小"
-        width="90"></el-table-column>
+        width="90">
+      <template
+          slot-scope="scope">
+        <span>{{ scope.row.size | filesize }}</span>
+      </template>
+    </el-table-column>
     <el-table-column
-        prop="utime"
         label="修改时间"
-        width="160"></el-table-column>
+        width="160">
+      <template
+          slot-scope="scope">
+        <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+      </template>
+    </el-table-column>
     <el-table-column
         width="140">
       <template>
