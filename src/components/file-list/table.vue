@@ -4,23 +4,42 @@
       :data="data"
       :height="tableHeight">
     <el-table-column
-        type="selection"></el-table-column>
+        type="selection"
+        width="64"></el-table-column>
     <el-table-column
-        fixed
         prop="type"
-        label="全选"></el-table-column>
+        label="全选"
+        width="48">
+      <template>
+        <i class="iconfont icon-folder-add"></i>
+      </template>
+    </el-table-column>
     <el-table-column
-        fixed
-        prop="name"
-        label="文件名称"></el-table-column>
+        label="文件名称">
+      <template
+          slot-scope="scope">
+        <a
+            :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
+      </template>
+    </el-table-column>
     <el-table-column
-        fixed
         prop="size"
-        label="文件大小"></el-table-column>
+        label="文件大小"
+        width="90"></el-table-column>
     <el-table-column
-        fixed
         prop="utime"
-        label="修改时间"></el-table-column>
+        label="修改时间"
+        width="160"></el-table-column>
+    <el-table-column
+        width="140">
+      <template>
+        <div>
+          <i class="iconfont icon-share"></i>
+          <i class="iconfont icon-download"></i>
+          <i class="iconfont icon-menu-circle"></i>
+        </div>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
