@@ -21,7 +21,10 @@
       <template
           slot-scope="scope">
         <a
+            v-if="scope.row.type === 'folder'"
             :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
+        <span
+            v-else>{{ scope.row.name }}</span>
       </template>
     </el-table-column>
     <el-table-column

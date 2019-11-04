@@ -1,4 +1,7 @@
 .file-list {
+  display: flex;
+  flex-direction: column;
+
   .toolbar {
     padding: 12px 20px;
 
@@ -63,5 +66,10 @@
         }
       }
     }
+  }
+
+  .file-table,
+  .file-grid {
+    flex: 1;
   }
 }

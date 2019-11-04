@@ -37,6 +37,10 @@
        </div>
     </div>
     <file-table
+        v-if="viewMode === 'list'"
+        :data="data" />
+    <file-grid
+        v-else
         :data="data" />
   </div>
 </template>
@@ -51,6 +55,7 @@ import {
 } from 'element-ui';
 
 import FileTable from './table.vue';
+import FileGrid from './grid.vue';
 
 export default {
   name: 'FileList',
@@ -61,9 +66,15 @@ export default {
     'el-dropdown-menu': DropdownMenu,
     'el-dropdown-item': DropdownItem,
     FileTable,
+    FileGrid,
   },
   props: {
     data: Array,
+  },
+  data() {
+    return {
+      viewMode: 'grid',
+    };
   },
 };
 </script>
