@@ -9,17 +9,15 @@ const units = [
 
 const filesize = (value) => {
   const size = parseFloat(value);
+
   for (let i = units.length - 1; i >= 0; i -= 1) {
     const baseValue = baseSize ** i;
 
     if (size >= baseValue) {
-      let fValue = (size / baseValue).toFixed(2);
+      const formatedValue = (size / baseValue).toFixed(2)
+        .replace('.00', '');
 
-      if (fValue.substring(fValue.length - 3) === '.00') {
-        fValue = fValue.substring(0, fValue.length - 3);
-      }
-
-      return `${fValue} ${units[i]}`;
+      return `${formatedValue} ${units[i]}`;
     }
   }
 

@@ -15,7 +15,9 @@
       </template>
     </el-table-column>
     <el-table-column
-        label="文件名称">
+        label="文件名称"
+        sortable
+        :sort-method="sortByName">
       <template
           slot-scope="scope">
         <a
@@ -24,7 +26,9 @@
     </el-table-column>
     <el-table-column
         label="文件大小"
-        width="90">
+        sortable
+        width="100"
+        :sort-method="sortBySize">
       <template
           slot-scope="scope">
         <span>{{ scope.row.size | filesize }}</span>
@@ -32,7 +36,9 @@
     </el-table-column>
     <el-table-column
         label="修改时间"
-        width="160">
+        sortable
+        width="160"
+        :sort-method="sortByUtime">
       <template
           slot-scope="scope">
         <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
@@ -82,6 +88,16 @@ export default {
   methods: {
     calcTableHeight() {
       this.tableHeight = window.innerHeight - 124;
+    },
+    sortByName(a, b) {
+      return a.name
+        .localeCompare(b.name);
+    },
+    sortBySize(a, b) {
+      return a.size - b.size;
+    },
+    sortByUtime(a, b) {
+      return new Date(a.utime) - new Date(b.utime);
     },
   },
 };
