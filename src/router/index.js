@@ -23,9 +23,34 @@ const routes = [
     component: Login,
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../pages/about.vue'),
+    path: '/favorite',
+    name: 'favorite',
+    component: () => import(/* webpackChunkName: "favorite" */ '../pages/favorite.vue'),
+  },
+  {
+    path: '/upload',
+    name: 'upload',
+    component: () => import(/* webpackChunkName: "upload" */ '../pages/upload.vue'),
+  },
+  {
+    path: '/download',
+    name: 'download',
+    component: () => import(/* webpackChunkName: "download" */ '../pages/download.vue'),
+  },
+  {
+    path: '/finished',
+    name: 'finished',
+    component: () => import(/* webpackChunkName: "finished" */ '../pages/finished.vue'),
+  },
+  {
+    path: '/share',
+    name: 'share',
+    component: () => import(/* webpackChunkName: "share" */ '../pages/share.vue'),
+  },
+  {
+    path: '/trash',
+    name: 'trash',
+    component: () => import(/* webpackChunkName: "trash" */ '../pages/trash.vue'),
   },
 ];
 
