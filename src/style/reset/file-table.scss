@@ -1,0 +1,52 @@
+.file-table {
+  width: 100%;
+  color: #000;
+
+  thead {
+    color: #000;
+
+    th {
+      line-height: 32px;
+      font-weight: normal;
+    }
+  }
+
+  tr th,
+  tr td {
+    padding: 8px 0;
+    &:first-of-type {
+      text-align: right;
+    }
+    &:nth-of-type(2) div {
+      text-overflow: clip;
+    }
+    &:last-child {
+      .iconfont {
+        margin-right: 4px;
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+
+    a {
+      color: #000;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .iconfont {
+    display: inline-block;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    line-height: 32px;
+    text-align: center;
+    &.icon-folder-add {
+      font-size: 24px;
+    }
+  }
+}

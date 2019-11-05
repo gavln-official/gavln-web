@@ -1,0 +1,80 @@
+@import "../../style/mixins.scss";
+
+.main-nav {
+  box-sizing: border-box;
+  padding-top: 24px;
+  height: 100%;
+  color: #FFF;
+  background-color: #171819;
+
+  .logo {
+    text-align: center;
+
+    a {
+      font-size: 32px;
+      line-height: 40px;
+      color: #FFF;
+      text-decoration: none;
+    }
+  }
+
+  ul {
+    @include list-clean();
+    margin-top: 24px;
+
+    li {
+      position: relative;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+      &.active {
+        background-color: rgba(255, 255, 255, 0.2);
+        &:after {
+          content: "";
+          display: block;
+          width: 5px;
+          height: 24px;
+          background-color: #FFF;
+          box-shadow: 3px 0px 6px 0px rgba(255, 255, 255, 0.38);
+          position: absolute;
+          left: 0;
+          top: 13px;
+        }
+      }
+    }
+
+    a {
+      display: block;
+      padding: 12px 0;
+      padding-left: 38px;
+      height: 26px;
+      font-size: 18px;
+      line-height: 26px;
+      text-decoration: none;
+      color: #FFF;
+
+      .iconfont,
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .iconfont {
+        margin-right: 16px;
+        width: 26px;
+        height: 26px;
+        font-size: 22px;
+        line-height: 26px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (min-width: 1000px) {
+  .main-nav ul a {
+    padding-left: 64px;
+  }
+}
