@@ -1,0 +1,16 @@
+<template>
+  <main-frame>
+    <div class="page-upload">Page Upload</div>
+  </main-frame>
+</template>
+
+<script>
+import MainFrame from '../components/main-frame/index.vue';
+
+export default {
+  name: 'Upload',
+  components: {
+    MainFrame,
+  },
+};
+</script>
