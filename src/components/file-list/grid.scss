@@ -38,6 +38,7 @@
     a,
     span {
       display: block;
+      padding: 0 6px;
       height: 30px;
       font-size: 14px;
       line-height: 30px;
@@ -49,6 +50,9 @@
     a {
       text-decoration: none;
       color: #000;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }

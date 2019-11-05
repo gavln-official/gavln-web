@@ -3,7 +3,7 @@
   flex-direction: column;
 
   .toolbar {
-    padding: 12px 20px;
+    padding: 12px 24px;
 
     > .el-button {
       border: none;
@@ -36,13 +36,16 @@
         display: inline-block;
         vertical-align: middle;
       }
+
       .el-input {
         margin-right: 10px;
         width: 180px;
       }
+
       .el-dropdown {
         margin-right: 10px;
       }
+
       .el-button {
         border: none;
         padding: 8px;
@@ -64,6 +67,27 @@
         span + .iconfont {
           margin-left: 4px;
         }
+      }
+    }
+  }
+
+  &.upload-list {
+    .toolbar .right {
+      .el-progress,
+      > strong,
+      > span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .el-progress {
+        margin: 0 10px;
+        width: 160px;
+      }
+      > strong,
+      > span {
+        font-size: 14px;
+        line-height: 36px;
       }
     }
   }

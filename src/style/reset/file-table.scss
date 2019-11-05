@@ -49,4 +49,24 @@
       font-size: 24px;
     }
   }
+
+  &.upload-table {
+    tr td {
+      &:nth-child(5) {
+        text-align: center;
+        white-space: pre;
+        font-size: 13px;
+        line-height: 20px;
+
+        .cell {
+          position: relative;
+          top: 6px;
+        }
+
+        span {
+          color: rgba(0, 0, 0, 0.6);
+        }
+      }
+    }
+  }
 }

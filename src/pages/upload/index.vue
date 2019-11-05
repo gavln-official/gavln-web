@@ -1,9 +1,8 @@
 <template>
   <main-frame>
-    <div class="page-home">
-      <file-list
-          type="home"
-          :data="data"></file-list>
+    <div class="page-upload">
+      <upload-list
+          :data="data" />
     </div>
   </main-frame>
 </template>
@@ -12,17 +11,17 @@
 import Mock from '../../api/mock';
 
 import MainFrame from '../../components/main-frame/index.vue';
-import FileList from '../../components/file-list/index.vue';
+import UploadList from '../../components/upload-list/index.vue';
 
 export default {
-  name: 'Home',
+  name: 'Upload',
   components: {
     MainFrame,
-    FileList,
+    UploadList,
   },
   data() {
     return {
-      data: Mock.files,
+      data: Mock.uploads,
     };
   },
 };
