@@ -1,6 +1,6 @@
 @import '../../style/mixins.scss';
 
-.login-header {
+.page-header {
   box-sizing: border-box;
   margin: 0 auto;
   padding: 22px;
@@ -41,7 +41,7 @@
 }
 
 @media (min-width: 1000px) {
-  .login-header {
+  .page-header {
     padding: 42px;
 
     .links {

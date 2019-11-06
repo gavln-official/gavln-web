@@ -1,23 +1,19 @@
 <template>
-  <div class="page-login">
-    <login-header />
+  <page-frame>
     <ui-login
         :type="page"></ui-login>
-    <login-footer />
-  </div>
+  </page-frame>
 </template>
 
 <script>
-import LoginHeader from '../../components/ui-login/header.vue';
+import PageFrame from '../../components/page-frame/index.vue';
 import UiLogin from '../../components/ui-login/index.vue';
-import LoginFooter from '../../components/ui-login/footer.vue';
 
 export default {
   name: 'PageLogin',
   components: {
-    'login-header': LoginHeader,
-    'ui-login': UiLogin,
-    'login-footer': LoginFooter,
+    PageFrame,
+    UiLogin,
   },
   data() {
     return {
