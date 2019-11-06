@@ -1,5 +1,5 @@
 <template>
-  <header class="login-header">
+  <header class="page-header">
     <a
         class="logo"
         href="/">Gavln</a>
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'LoginHeader',
+  name: 'PageHeader',
 };
 </script>
 

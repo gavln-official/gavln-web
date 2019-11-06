@@ -1,0 +1,9 @@
+.page-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .page-content {
+    flex: 1;
+  }
+}

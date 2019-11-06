@@ -1,5 +1,5 @@
 <template>
-  <footer class="login-footer">
+  <footer class="page-footer">
     <ul class="links">
       <li>
         <a href="/">服务条款</a>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'LoginFooter',
+  name: 'PageFooter',
 };
 </script>
 
