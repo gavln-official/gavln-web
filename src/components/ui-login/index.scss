@@ -1,54 +1,86 @@
-.ui-login {
-  height: 100%;
-  position: relative;
+@import "../../style/mixins.scss";
 
-  .content {
-    display: flex;
-    border-radius: 18px;
-    width: 94%;
-    max-width: 1200px;
-    height: 100%;
-    max-height: 778px;
-    box-shadow:0px 20px 40px 0px rgba(0, 0, 0, 0.15);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.form-content {
+  margin: 0 auto;
+  max-width: 380px;
 
-    .form,
-    .img {
-      width: 50%;
+  h2 {
+    margin: 0;
+    font-size: 32px;
+    line-height: 46px;
+    text-align: center;
+    font-weight: normal;
+  }
+
+  .el-form {
+    margin-top: 50px;
+
+    .tips {
+      display: block;
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 18px;
+      color: rgba(255, 255, 255, 0.6);
     }
+  }
 
-    .form {
-      box-sizing: border-box;
-      padding: 40px;
-      border-radius: 18px;
+  .links {
+    @include clearfix();
+    margin-top: 44px;
+
+    a {
+      font-size: 18px;
+      line-height: 24px;
       color: #FFF;
-      background-color: #0D0C12;
-    }
-
-    .img {
-      position: relative;
-
-      img {
-        display: block;
-        width: 85%;
-        max-width: 500px;
-        background-color: #CCC;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+      &.right {
+        float: right;
       }
     }
   }
+  &.register .links {
+    margin-top: 18px;
+  }
+
+  .el-button--text {
+    margin-top: 42px;
+    border: none;
+    padding: 8px 0;
+    font-size: 22px;
+    line-height: 30px;
+    color: #FFF;
+  }
 }
 
-@media (min-width: 1000px) {
-  .ui-login {
-    .content .form {
-      padding-top: 75px;
+@media (max-height: 700px) {
+  .form-content {
+    h2 {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .el-form {
+      margin-top: 20px;
+    }
+    &.login .el-form {
+      margin-top: 30px;
+    }
+
+    .links {
+      margin-top: 20px;
+    }
+    &.register .links {
+      margin-top: 14px;
+    }
+
+    .el-button--text {
+      margin-top: 20px;
+    }
+    &.login .el-button--text {
+      margin-top: 30px;
     }
   }
 }

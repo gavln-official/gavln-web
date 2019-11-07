@@ -3,7 +3,7 @@
     <div class="ui-login">
       <div class="content">
         <div class="form">
-          <form-content-login />
+          <form-content-register />
         </div>
         <div class="img">
           <img
@@ -16,19 +16,14 @@
 </template>
 
 <script>
-import PageFrame from '../../components/page-frame/index.vue';
-import FormContentLogin from '../../components/ui-login/index.vue';
+import PageFrame from '../components/page-frame/index.vue';
+import FormContentRegister from '../components/ui-login/register.vue';
 
 export default {
-  name: 'PageLogin',
+  name: 'PageRegister',
   components: {
     PageFrame,
-    FormContentLogin,
-  },
-  data() {
-    return {
-      page: 'login',
-    };
+    FormContentRegister,
   },
   mounted() {
     this.page = this.$route.name;
@@ -37,6 +32,6 @@ export default {
 </script>
 
 <style
-    src="./index.scss"
+    src="./login/index.scss"
     lang="scss"
     scoped></style>

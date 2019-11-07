@@ -75,6 +75,6 @@ export default {
 </script>
 
 <style
-    src="./login.scss"
+    src="./index.scss"
     lang="scss"
     scoped></style>
