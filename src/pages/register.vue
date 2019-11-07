@@ -25,9 +25,6 @@ export default {
     PageFrame,
     FormContentRegister,
   },
-  mounted() {
-    this.page = this.$route.name;
-  },
 };
 </script>
 
