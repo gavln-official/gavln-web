@@ -25,14 +25,6 @@ export default {
     PageFrame,
     FormContentLogin,
   },
-  data() {
-    return {
-      page: 'login',
-    };
-  },
-  mounted() {
-    this.page = this.$route.name;
-  },
 };
 </script>
 

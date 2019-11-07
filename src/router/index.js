@@ -22,6 +22,11 @@ const routes = [
     component: () => import('../pages/register.vue'),
   },
   {
+    path: '/s/:shareId',
+    name: 'open-share',
+    component: () => import('../pages/open-share/index.vue'),
+  },
+  {
     path: '/favorite',
     name: 'favorite',
     component: () => import('../pages/favorite.vue'),
@@ -50,6 +55,10 @@ const routes = [
     path: '/trash',
     name: 'trash',
     component: () => import('../pages/trash.vue'),
+  },
+  {
+    path: '*',
+    redirect: '/',
   },
 ];
 
