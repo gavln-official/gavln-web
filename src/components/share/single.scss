@@ -1,0 +1,69 @@
+.share-single {
+  border-radius: 18px;
+  width: 640px;
+  height: 380px;
+  box-shadow: 0px 20px 40px 0px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  .header {
+    border-radius: 18px 18px 0 0;
+    padding: 30px;
+    color: #FFF;
+    background-color: #000;
+
+    .el-button {
+      padding: 11px 17px;
+      font-size: 16px;
+
+      & + .el-button {
+        margin-left: 24px;
+      }
+
+      .iconfont,
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .iconfont {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .content {
+    padding: 60px 100px 0;
+    text-align: center;
+    color: #000;
+
+    .file {
+      .iconfont,
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .iconfont {
+        margin-right: 20px;
+        width: 64px;
+        height: 64px;
+        font-size: 48px;
+        line-height: 64px;
+        text-align: center;
+      }
+      span {
+        font-size: 20px;
+        line-height: 36px;
+      }
+    }
+
+    .info {
+      margin-top: 14px;
+      font-size: 24px;
+      line-height: 36px;
+      font-weight: bold;
+    }
+  }
+}
