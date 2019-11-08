@@ -5,8 +5,11 @@
           v-if="!verified" />
       <template
           v-else>
-        <share-single
-            v-if="isSingle"
+        <share-folder
+            v-if="type === 'folder'"
+            :data="data" />
+        <share-file
+            v-else
             :data="data" />
       </template>
     </div>
@@ -14,26 +17,31 @@
 </template>
 
 <script>
+import Mock from '../../api/mock';
+
 import PageFrame from '../../components/page-frame/index.vue';
 import ShareVerify from '../../components/share/verify.vue';
-import ShareSingle from '../../components/share/single.vue';
+import ShareFolder from '../../components/share/folder.vue';
+import ShareFile from '../../components/share/file.vue';
 
 export default {
   name: 'PageShare',
   components: {
     PageFrame,
     ShareVerify,
-    ShareSingle,
+    ShareFolder,
+    ShareFile,
   },
   data() {
     return {
       verified: true,
-      isSingle: true,
+      type: 'folder',
       data: {
         id: 123,
-        name: '使用文档.pdf',
-        type: 'pdf',
+        name: '我的文档',
+        type: 'folder',
         size: 7612344,
+        content: Mock.files,
       },
     };
   },

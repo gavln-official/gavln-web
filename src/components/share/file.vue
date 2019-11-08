@@ -1,5 +1,5 @@
 <template>
-  <div class="share-single">
+  <div class="share-file">
     <div class="header">
       <el-button>
         <i class="iconfont icon-download"></i>
@@ -26,7 +26,7 @@ import {
 } from 'element-ui';
 
 export default {
-  name: 'ShareSingle',
+  name: 'ShareFile',
   props: {
     data: Object,
   },
@@ -37,6 +37,6 @@ export default {
 </script>
 
 <style
-    src="./single.scss"
+    src="./file.scss"
     lang="scss"
     scoped></style>
