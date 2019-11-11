@@ -1,13 +1,17 @@
 <template>
-  <div class="file-list finished-list">
+  <div class="file-list share-list">
     <div class="toolbar">
       <el-button>
         <i class="iconfont icon-trash"></i>
         <span>清空全部记录</span>
       </el-button>
+      <el-button>
+        <i class="iconfont icon-share"></i>
+        <span>取消分享</span>
+      </el-button>
     </div>
     <el-table
-        class="file-table finished-table"
+        class="file-table share-table"
         :data="data"
         :height="tableHeight">
       <el-table-column
@@ -22,7 +26,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件名称">
+          label="分享文件">
         <template
             slot-scope="scope">
           <a
@@ -33,27 +37,40 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件大小"
-          width="100">
+          label="分享时间"
+          width="160">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.size | filesize }}</span>
+          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
-          label="状态"
-          width="200">
-        <template
-            slot-scope="scope">
-          <span>下载完成 {{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-          width="70">
+          label="查看次数"
+          width="80">
         <template>
-          <div>
-            <i class="iconfont icon-trash"></i>
-          </div>
+          <span>1次</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+          label="下载次数"
+          width="80">
+        <template>
+          <span>1次</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+          label="保存次数"
+          width="80">
+        <template>
+          <span>1次</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+          label="失效时间"
+          width="160">
+        <template
+            slot-scope="scope">
+          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -68,11 +85,14 @@ import {
 } from 'element-ui';
 
 export default {
-  name: 'FinishedList',
+  name: 'ShareList',
   components: {
     'el-button': Button,
     'el-table': Table,
     'el-table-column': TableColumn,
+  },
+  props: {
+    data: Array,
   },
   data() {
     return {
