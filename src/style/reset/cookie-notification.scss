@@ -1,0 +1,35 @@
+.el-notification {
+  padding: 18px;
+  width: 280px;
+
+  .el-notification__group {
+    margin: 0;
+  }
+
+  .el-notification__content {
+    margin-top: 0;
+  }
+}
+
+.cookie-notification {
+  p {
+    margin: 0;
+    margin-bottom: 18px;
+    font-size: 12px;
+    line-height: 18px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .el-button {
+    width: 100%;
+  }
+}
