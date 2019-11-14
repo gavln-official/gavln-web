@@ -67,6 +67,8 @@
         :data="data" />
     <url-dialog
         :visible="showUrlDialog" />
+    <folder-dialog
+        :visible="false" />
   </div>
 </template>
 
@@ -81,6 +83,7 @@ import {
 
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
+import FolderDialog from '../dialog/folder/index.vue';
 import UrlDialog from '../dialog/url/index.vue';
 
 export default {
@@ -93,6 +96,7 @@ export default {
     'el-dropdown-item': DropdownItem,
     FileTable,
     FileGrid,
+    FolderDialog,
     UrlDialog,
   },
   props: {

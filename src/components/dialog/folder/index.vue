@@ -2,20 +2,18 @@
   <el-dialog
       class="folder-dialog"
       :visible="visible"
-      width="640px">
-    <div class="header">
-      <el-button-group>
-        <el-button
-            type="text">
-          <i class="iconfont icon-arrow-l-left"></i>
-        </el-button>
-        <el-button
-            type="text">
-          <i class="iconfont icon-arrow-l-right"></i>
-        </el-button>
-      </el-button-group>
-      <h3>{{ title || defaultTitle }}</h3>
-    </div>
+      width="640px"
+      :title="title || defaultTitle">
+    <el-button-group class="nav">
+      <el-button
+          type="text">
+        <i class="iconfont icon-arrow-l-left"></i>
+      </el-button>
+      <el-button
+          type="text">
+        <i class="iconfont icon-arrow-l-right"></i>
+      </el-button>
+    </el-button-group>
     <el-table
         class="file-table dialog-table"
         :data="data"
@@ -99,3 +97,8 @@ export default {
   },
 };
 </script>
+
+<style
+    src="./index.scss"
+    lang="scss"
+    scoped></style>

@@ -2,46 +2,7 @@
   border-radius: 8px;
 
   .el-dialog__header {
-    padding: 0;
-  }
-
-  .header {
-    position: relative;
-    padding: 20px;
-    padding-bottom: 10px;
-
-    .el-button-group {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-    }
-
-    .el-button--text {
-      border: none;
-      border-radius: 0;
-      padding: 0;
-      width: 40px;
-      height: 40px;
-      &:not(:last-child) {
-        margin-right: 10px;
-      }
-
-      .iconfont {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
-        line-height: 40px;
-        text-align: center;
-      }
-    }
-
-    h3 {
-      margin: 0;
-      font-size: 18px;
-      line-height: 40px;
-      text-align: center;
-    }
+    text-align: center;
   }
 
   .el-dialog__body {
