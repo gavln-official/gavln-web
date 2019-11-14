@@ -1,8 +1,8 @@
 <template>
   <el-dialog
       class="folder-dialog"
-      :visible.sync="visible"
-      width="640">
+      :visible="visible"
+      width="640px">
     <div class="header">
       <el-button-group>
         <el-button

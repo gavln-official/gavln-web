@@ -3,10 +3,22 @@
     <div class="toolbar">
       <template
           v-if="type === 'home'">
-        <el-button>
-          <i class="iconfont icon-upload"></i>
+      <el-dropdown
+          placement="bottom"
+          @command="uploadCommand">
+        <el-button
+            class="el-dropdown-link">
           <span>上传</span>
+          <i class="iconfont icon-upload"></i>
         </el-button>
+        <el-dropdown-menu
+            slot="dropdown">
+          <el-dropdown-item
+              command="local">本地文件</el-dropdown-item>
+          <el-dropdown-item
+              command="url">链接</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
         <el-button>
           <i class="iconfont icon-folder-add"></i>
           <span>新建文件夹</span>
@@ -53,6 +65,8 @@
     <file-grid
         v-else
         :data="data" />
+    <url-dialog
+        :visible="showUrlDialog" />
   </div>
 </template>
 
@@ -67,6 +81,7 @@ import {
 
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
+import UrlDialog from '../dialog/url/index.vue';
 
 export default {
   name: 'FileList',
@@ -78,6 +93,7 @@ export default {
     'el-dropdown-item': DropdownItem,
     FileTable,
     FileGrid,
+    UrlDialog,
   },
   props: {
     // 类型（home: 全部文件, favorite: 我的收藏）
@@ -97,6 +113,8 @@ export default {
     return {
       // view mode: list|grid
       viewMode: 'list',
+      // show url-dialog
+      showUrlDialog: false,
     };
   },
   methods: {
@@ -104,6 +122,14 @@ export default {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'
         : 'list';
+    },
+    toggleUrlDialog() {
+      this.showUrlDialog = !this.showUrlDialog;
+    },
+    uploadCommand(command) {
+      if (command === 'url') {
+        this.toggleUrlDialog();
+      }
     },
   },
 };
