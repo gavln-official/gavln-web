@@ -61,7 +61,8 @@
     </div>
     <file-table
         v-if="viewMode === 'list'"
-        :data="data" />
+        :data="data"
+        @share="toggleShareDialog" />
     <file-grid
         v-else
         :data="data" />
@@ -69,6 +70,9 @@
         :visible="showUrlDialog" />
     <folder-dialog
         :visible="false" />
+    <share-dialog
+        :visible="showShareDialog"
+        :data="shareData" />
   </div>
 </template>
 
@@ -85,6 +89,7 @@ import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
 import UrlDialog from '../dialog/url/index.vue';
+import ShareDialog from '../dialog/share/index.vue';
 
 export default {
   name: 'FileList',
@@ -98,6 +103,7 @@ export default {
     FileGrid,
     FolderDialog,
     UrlDialog,
+    ShareDialog,
   },
   props: {
     // 类型（home: 全部文件, favorite: 我的收藏）
@@ -119,6 +125,12 @@ export default {
       viewMode: 'list',
       // show url-dialog
       showUrlDialog: false,
+      showShareDialog: false,
+      shareData: {
+        id: null,
+        name: '',
+        type: '',
+      },
     };
   },
   methods: {
@@ -134,6 +146,20 @@ export default {
       if (command === 'url') {
         this.toggleUrlDialog();
       }
+    },
+    toggleShareDialog(data) {
+      const {
+        id,
+        name,
+        type,
+      } = data;
+
+      this.shareData = {
+        id,
+        name,
+        type,
+      };
+      this.showShareDialog = true;
     },
   },
 };

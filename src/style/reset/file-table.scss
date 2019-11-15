@@ -37,6 +37,15 @@
     }
   }
 
+  tr {
+    .actions {
+      display: none;
+    }
+    &:hover .actions {
+      display: block;
+    }
+  }
+
   .iconfont {
     display: inline-block;
     vertical-align: middle;

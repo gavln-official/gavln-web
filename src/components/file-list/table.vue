@@ -49,9 +49,12 @@
     </el-table-column>
     <el-table-column
         width="140">
-      <template>
-        <div>
-          <i class="iconfont icon-share"></i>
+      <template
+          slot-scope="scope">
+        <div class="actions">
+          <i
+              class="iconfont icon-share"
+              @click="share(scope.row)"></i>
           <i class="iconfont icon-download"></i>
           <i class="iconfont icon-menu-circle"></i>
         </div>
@@ -101,6 +104,9 @@ export default {
     },
     sortByUtime(a, b) {
       return new Date(a.utime) - new Date(b.utime);
+    },
+    share(data) {
+      this.$emit('share', data);
     },
   },
 };

@@ -1,0 +1,42 @@
+.share-dialog {
+  .el-radio-group {
+    display: block;
+
+    label {
+      padding: 5px 0;
+      line-height: 30px;
+      color: #000;
+      font-weight: normal;
+    }
+
+    &.type {
+      label {
+        display: block;
+      }
+    }
+
+    &.duration {
+      label.is-checked {
+        position: relative;
+        &:after {
+          content: "";
+          width: 10px;
+          height: 3px;
+          background-color: #000;
+          position: absolute;
+          bottom: 3px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+
+      /deep/ .el-radio__input {
+        display: none;
+      }
+
+      /deep/ .el-radio__label {
+        padding-left: 0;
+      }
+    }
+  }
+}
