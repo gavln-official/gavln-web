@@ -5,7 +5,8 @@
         <i class="iconfont icon-trash"></i>
         <span>清空全部记录</span>
       </el-button>
-      <el-button>
+      <el-button
+          @click="cancelShare">
         <i class="iconfont icon-share"></i>
         <span>取消分享</span>
       </el-button>
@@ -82,6 +83,7 @@ import {
   Button,
   Table,
   TableColumn,
+  MessageBox,
 } from 'element-ui';
 
 export default {
@@ -110,6 +112,15 @@ export default {
   methods: {
     calcTableHeight() {
       this.tableHeight = window.innerHeight - 124;
+    },
+    cancelShare() {
+      MessageBox.confirm('你要确认取消分享吗？<br>取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接', '确认取消分享', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      })
+        .then(() => {})
+        .catch(() => {});
     },
   },
 };
