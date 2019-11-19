@@ -8,50 +8,50 @@
     padding: 10px 20px;
   }
 
-  ul {
+  .grids {
     @include list-clean();
     flex: 1;
     padding: 0 15px;
     overflow-y: auto;
-  }
 
-  li {
-    display: inline-block;
-    margin: 10px;
-    border-radius: 8px;
-    width: 120px;
-    height: 120px;
-    color: #000;
-    user-select: none;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.06);
-    }
-
-    .iconfont {
-      display: block;
-      height: 90px;
-      font-size: 64px;
-      line-height: 90px;
-      text-align: center;
-    }
-
-    a,
-    span {
-      display: block;
-      padding: 0 6px;
-      height: 30px;
-      font-size: 14px;
-      line-height: 30px;
-      text-align: center;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    a {
-      text-decoration: none;
+    li {
+      display: inline-block;
+      margin: 10px;
+      border-radius: 8px;
+      width: 120px;
+      height: 120px;
       color: #000;
+      user-select: none;
       &:hover {
-        text-decoration: underline;
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+
+      .iconfont {
+        display: block;
+        height: 90px;
+        font-size: 64px;
+        line-height: 90px;
+        text-align: center;
+      }
+
+      a,
+      span {
+        display: block;
+        padding: 0 6px;
+        height: 30px;
+        font-size: 14px;
+        line-height: 30px;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      a {
+        text-decoration: none;
+        color: #000;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

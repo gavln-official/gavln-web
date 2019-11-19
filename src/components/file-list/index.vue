@@ -125,7 +125,7 @@ export default {
       viewMode: 'list',
       // show url-dialog
       showUrlDialog: false,
-      showShareDialog: true,
+      showShareDialog: false,
       shareData: {
         id: null,
         name: '',

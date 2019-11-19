@@ -11,6 +11,8 @@ import './style/base.scss';
 import './style/theme/index.css';
 // Element-UI reset styles
 import './style/reset/index.scss';
+// VueContext custom style
+import './style/vue-context.scss';
 
 Vue.use(filters);
 

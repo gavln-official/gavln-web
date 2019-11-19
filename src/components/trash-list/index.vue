@@ -9,7 +9,8 @@
     <el-table
         class="file-table trash-table"
         :data="data"
-        :height="tableHeight">
+        :height="tableHeight"
+        @row-contextmenu="showContextMenu">
       <el-table-column
           type="selection"
           width="64"></el-table-column>
@@ -56,6 +57,11 @@
         </template>
       </el-table-column>
     </el-table>
+    <vue-context
+        ref="menu">
+      <li>还原</li>
+      <li>彻底删除</li>
+    </vue-context>
   </div>
 </template>
 
@@ -65,6 +71,9 @@ import {
   Table,
   TableColumn,
 } from 'element-ui';
+import {
+  VueContext,
+} from 'vue-context';
 
 export default {
   name: 'UploadList',
@@ -72,6 +81,7 @@ export default {
     'el-button': Button,
     'el-table': Table,
     'el-table-column': TableColumn,
+    VueContext,
   },
   props: {
     // 类型（upload: 全部文件, download: 我的收藏）
@@ -103,6 +113,15 @@ export default {
   methods: {
     calcTableHeight() {
       this.tableHeight = window.innerHeight - 124;
+    },
+    showContextMenu(row, column, event) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      this.$refs.menu.open(event);
+
+      return [row, column];
     },
   },
 };
