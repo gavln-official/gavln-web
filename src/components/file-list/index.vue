@@ -123,7 +123,6 @@ export default {
     return {
       // view mode: list|grid
       viewMode: 'list',
-      // show url-dialog
       showUrlDialog: false,
       showShareDialog: false,
       shareData: {

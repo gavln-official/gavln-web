@@ -47,7 +47,7 @@
       <el-button
           class="left">新建文件夹</el-button>
       <el-button>取消</el-button>
-      <el-button>{{ type === 'move' ? '移动' : '复制' }}</el-button>
+      <el-button>{{ actionLabel }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -77,7 +77,7 @@ export default {
       type: Boolean,
       required: true,
     },
-    type: {
+    type: { // move | copy | save
       type: String,
       default: 'move',
     },
@@ -90,9 +90,22 @@ export default {
   },
   computed: {
     defaultTitle() {
-      return this.type === 'move'
-        ? '移动文件'
-        : '复制文件';
+      const titles = {
+        move: '移动文件',
+        copy: '复制文件',
+        save: '保存到网盘',
+      };
+
+      return titles[this.type];
+    },
+    actionLabel() {
+      const labels = {
+        move: '移动',
+        copy: '复制',
+        save: '保存',
+      };
+
+      return labels[this.type];
     },
   },
 };
