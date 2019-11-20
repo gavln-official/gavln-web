@@ -9,8 +9,8 @@
   position: relative;
 
   .logo {
-    font-size: 48px;
-    line-height: 62px;
+    font-size: 36px;
+    line-height: 48px;
     color: #000;
     text-decoration: none;
   }
@@ -42,10 +42,10 @@
 
 @media (min-width: 1000px) {
   .page-header {
-    padding: 42px;
+    padding: 22px 42px;
 
     .links {
-      top: 61px;
+      right: 42px;
     }
   }
 }

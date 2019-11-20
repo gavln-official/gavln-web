@@ -32,7 +32,7 @@
       </el-form-item>
     </el-form>
     <div class="links">
-      <a href="/login" class="right">去注册</a>
+      <a href="/login" class="right">去登录</a>
     </div>
     <el-button
         type="text">

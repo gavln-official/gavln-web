@@ -27,6 +27,11 @@ const routes = [
     component: () => import('../pages/register.vue'),
   },
   {
+    path: '/reset',
+    name: 'reset',
+    component: () => import('../pages/reset.vue'),
+  },
+  {
     path: '/s/:shareId',
     name: 'open-share',
     component: () => import('../pages/open-share/index.vue'),
