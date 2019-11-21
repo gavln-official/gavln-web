@@ -81,6 +81,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const everVisited = Storage.get('ever-visited');
 
+  Notification.closeAll();
+
   if (!everVisited) {
     Notification({
       showClose: false,

@@ -64,9 +64,15 @@
               <el-dropdown-menu
                   slot="dropdown">
                 <el-dropdown-item
-                    command="local">本地文件</el-dropdown-item>
+                    command="move">移动到</el-dropdown-item>
                 <el-dropdown-item
-                    command="url">链接</el-dropdown-item>
+                    command="copy">复制到</el-dropdown-item>
+                <el-dropdown-item
+                    command="rename">重命名</el-dropdown-item>
+                <el-dropdown-item
+                    command="favorite">收藏</el-dropdown-item>
+                <el-dropdown-item
+                    command="delete">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>

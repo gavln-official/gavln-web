@@ -73,6 +73,9 @@
     <share-dialog
         :visible="showShareDialog"
         :data="shareData" />
+    <ui-progress
+        :percentage="50"
+        message="正在删除...50%" />
   </div>
 </template>
 
@@ -90,6 +93,7 @@ import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
 import UrlDialog from '../dialog/url/index.vue';
 import ShareDialog from '../dialog/share/index.vue';
+import UiProgress from '../ui-progress/index.vue';
 
 export default {
   name: 'FileList',
@@ -104,6 +108,7 @@ export default {
     FolderDialog,
     UrlDialog,
     ShareDialog,
+    UiProgress,
   },
   props: {
     // 类型（home: 全部文件, favorite: 我的收藏）

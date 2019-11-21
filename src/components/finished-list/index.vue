@@ -74,6 +74,9 @@ export default {
     'el-table': Table,
     'el-table-column': TableColumn,
   },
+  props: {
+    data: Array,
+  },
   data() {
     return {
       tableHeight: null,

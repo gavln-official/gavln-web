@@ -5,7 +5,7 @@
       width="640px"
       :title="title">
     <el-form
-        label-width="80px"
+        label-width="120px"
         v-if="step === 'create'">
       <el-form-item
           label="分享形式:">
@@ -103,7 +103,7 @@ export default {
   data() {
     return {
       // create | success
-      step: 'success',
+      step: 'create',
       form: {
         type: 'encrypt',
         duration: 0,
