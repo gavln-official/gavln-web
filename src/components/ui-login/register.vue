@@ -3,22 +3,29 @@
     <h2>欢迎加入</h2>
     <el-form
         class="login-form"
-        label-position="top">
-      <el-form-item>
+        label-position="top"
+        :model="form"
+        :rules="formRules"
+        ref="form">
+      <el-form-item
+          prop="username">
         <el-input
             placeholder="用户名"
-            v-model="username" />
+            v-model="form.username" />
       </el-form-item>
-      <el-form-item>
+      <el-form-item
+          prop="email">
         <el-input
+            type="email"
             placeholder="邮箱"
-            v-model="email" />
+            v-model="form.email" />
       </el-form-item>
-      <el-form-item>
+      <el-form-item
+          prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
             placeholder="密码"
-            v-model="password">
+            v-model="form.password">
           <i
               class="iconfont"
               :class="{
@@ -28,14 +35,14 @@
               slot="suffix"
               @click="toggleShowPassword"></i>
         </el-input>
-        <span class="tips">8～18位字符，包含数字及字母</span>
       </el-form-item>
     </el-form>
     <div class="links">
       <a href="/login" class="right">去登录</a>
     </div>
     <el-button
-        type="text">
+        type="text"
+        @click="register">
       <span>创建账户</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
@@ -50,6 +57,9 @@ import {
   Button,
 } from 'element-ui';
 
+import UserAPI from '../../api/user';
+import Validator from '../../utils/validator';
+
 export default {
   name: 'FormContentRegister',
   components: {
@@ -60,15 +70,83 @@ export default {
   },
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
+      form: {
+        username: '',
+        email: '',
+        password: '',
+      },
+      formRules: {
+        username: [
+          {
+            required: true,
+            message: '请输入用户名',
+            trigger: 'blur',
+          },
+          {
+            validator: this.checkUsername,
+            trigger: 'blur',
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: '请输入邮箱',
+            trigger: 'blur',
+          },
+          {
+            type: 'email',
+            message: '邮箱格式错误',
+            trigger: 'blur',
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur',
+          },
+        ],
+      },
       showPassword: false,
+      saving: false,
     };
   },
   methods: {
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
+    },
+    checkUsername(rule, value, callback) {
+      if (!Validator.checkUsername(value)) {
+        callback(new Error('用户名格式错误'));
+      }
+
+      UserAPI.checkUsername(value)
+        .then((res) => {
+          if (res.data.exist) {
+            callback(new Error('用户名已存在'));
+          }
+
+          callback();
+        })
+        .catch(() => {
+          callback();
+        });
+    },
+    register() {
+      if (this.saving) {
+        return;
+      }
+
+      this.$refs.form
+        .validate((valid) => {
+          if (!valid) {
+            return;
+          }
+
+          this.saving = true;
+
+          // TODO: register
+        });
     },
   },
 };
