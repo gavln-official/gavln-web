@@ -3,22 +3,22 @@
     <div class="toolbar">
       <template
           v-if="type === 'home'">
-      <el-dropdown
-          placement="bottom"
-          @command="uploadCommand">
-        <el-button
-            class="el-dropdown-link">
-          <span>上传</span>
-          <i class="iconfont icon-upload"></i>
-        </el-button>
-        <el-dropdown-menu
-            slot="dropdown">
-          <el-dropdown-item
-              command="local">本地文件</el-dropdown-item>
-          <el-dropdown-item
-              command="url">链接</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <el-dropdown
+            placement="bottom"
+            @command="uploadCommand">
+          <el-button
+              class="el-dropdown-link">
+            <span>上传</span>
+            <i class="iconfont icon-upload"></i>
+          </el-button>
+          <el-dropdown-menu
+              slot="dropdown">
+            <el-dropdown-item
+                command="local">本地文件</el-dropdown-item>
+            <el-dropdown-item
+                command="url">链接</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button>
           <i class="iconfont icon-folder-add"></i>
           <span>新建文件夹</span>
