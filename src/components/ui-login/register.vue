@@ -6,7 +6,8 @@
         label-position="top"
         :model="form"
         :rules="formRules"
-        ref="form">
+        ref="form"
+        :disabled="saving">
       <el-form-item
           prop="username">
         <el-input
@@ -42,6 +43,7 @@
     </div>
     <el-button
         type="text"
+        :disabled="saving"
         @click="register">
       <span>创建账户</span>
       <i class="iconfont icon-arrow-right"></i>
@@ -55,6 +57,7 @@ import {
   FormItem,
   Input,
   Button,
+  Message,
 } from 'element-ui';
 
 import UserAPI from '../../api/user';
@@ -89,11 +92,6 @@ export default {
         ],
         email: [
           {
-            required: true,
-            message: '请输入邮箱',
-            trigger: 'blur',
-          },
-          {
             type: 'email',
             message: '邮箱格式错误',
             trigger: 'blur',
@@ -103,6 +101,10 @@ export default {
           {
             required: true,
             message: '请输入密码',
+            trigger: 'blur',
+          },
+          {
+            validator: this.checkPassword,
             trigger: 'blur',
           },
         ],
@@ -132,6 +134,13 @@ export default {
           callback();
         });
     },
+    checkPassword(rule, value, callback) {
+      if (!Validator.checkPassword(value)) {
+        callback(new Error('密码格式错误'));
+      }
+
+      callback();
+    },
     register() {
       if (this.saving) {
         return;
@@ -145,7 +154,28 @@ export default {
 
           this.saving = true;
 
-          // TODO: register
+          const {
+            username,
+            email,
+            password,
+          } = this.form;
+
+          UserAPI.register(
+            username,
+            password,
+            email,
+          )
+            .then(() => {
+              Message.success('账户注册成功，请登录');
+
+              this.$router.push({
+                name: 'login',
+              });
+            })
+            .catch(() => {})
+            .finally(() => {
+              this.saving = false;
+            });
         });
     },
   },

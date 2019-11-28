@@ -1,3 +1,5 @@
+import sha512 from 'crypto-js/sha512';
+
 function formatTime(seconds) {
   let value = seconds;
 
@@ -33,7 +35,12 @@ function copyToClipboard(text) {
   document.body.removeChild(element);
 }
 
+function encodePassword(password) {
+  return sha512(`${sha512(password)}gavln.com`);
+}
+
 export default {
   formatTime,
   copyToClipboard,
+  encodePassword,
 };
