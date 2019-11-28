@@ -37,6 +37,15 @@
     }
   }
 
+  tr {
+    .actions {
+      display: none;
+    }
+    &:hover .actions {
+      display: block;
+    }
+  }
+
   .iconfont {
     display: inline-block;
     vertical-align: middle;
@@ -66,6 +75,15 @@
         span {
           color: rgba(0, 0, 0, 0.6);
         }
+      }
+    }
+  }
+
+  &.dialog-table {
+    tr th,
+    tr td {
+      &:first-of-type {
+        text-align: left;
       }
     }
   }

@@ -3,7 +3,7 @@
     <div class="ui-login">
       <div class="content">
         <div class="form">
-          <form-content-register />
+          <form-content-reset />
         </div>
         <login-anim />
       </div>
@@ -13,14 +13,14 @@
 
 <script>
 import PageFrame from '../components/page-frame/index.vue';
-import FormContentRegister from '../components/ui-login/register.vue';
+import FormContentReset from '../components/ui-login/reset.vue';
 import LoginAnim from '../components/ui-login/anim.vue';
 
 export default {
-  name: 'PageRegister',
+  name: 'PageReset',
   components: {
     PageFrame,
-    FormContentRegister,
+    FormContentReset,
     LoginAnim,
   },
 };

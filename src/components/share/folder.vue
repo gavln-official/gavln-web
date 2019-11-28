@@ -3,7 +3,8 @@
       class="share-folder"
       ref="container">
     <div class="header">
-      <el-button>
+      <el-button
+          @click="toggleFolderDialog">
         <i class="iconfont icon-download"></i>
         <span>保存到网盘</span>
       </el-button>
@@ -71,6 +72,9 @@
         </el-table-column>
       </el-table>
     </div>
+    <folder-dialog
+        :visible="showFolderDialog"
+        type="save" />
   </div>
 </template>
 
@@ -82,6 +86,8 @@ import {
   TableColumn,
 } from 'element-ui';
 
+import FolderDialog from '../dialog/folder/index.vue';
+
 export default {
   name: 'ShareFolder',
   components: {
@@ -89,6 +95,7 @@ export default {
     'el-button-group': ButtonGroup,
     'el-table': Table,
     'el-table-column': TableColumn,
+    FolderDialog,
   },
   props: {
     data: Object,
@@ -96,6 +103,7 @@ export default {
   data() {
     return {
       tableHeight: null,
+      showFolderDialog: false,
     };
   },
   mounted() {
@@ -113,6 +121,9 @@ export default {
       } = this.$refs.container.getBoundingClientRect();
 
       this.tableHeight = height - 143;
+    },
+    toggleFolderDialog() {
+      this.showFolderDialog = !this.showFolderDialog;
     },
   },
 };

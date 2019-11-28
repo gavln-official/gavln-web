@@ -5,7 +5,8 @@
   .toolbar {
     padding: 12px 24px;
 
-    > .el-button {
+    > .el-button,
+    > .el-dropdown .el-button {
       border: none;
       padding: 8px 12px;
       height: 36px;
@@ -25,6 +26,9 @@
         line-height: 20px;
         text-align: center;
       }
+    }
+    & > .el-dropdown {
+      margin-right: 10px;
     }
 
     .right {

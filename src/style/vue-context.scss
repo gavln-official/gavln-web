@@ -1,0 +1,49 @@
+// https://github.com/rawilk/vue-context/tree/master/src/sass
+$menu-bg: #FFF;
+$item-color: #606266;
+$item-hover-bg: #E6E6E6;
+
+.v-context {
+  &,
+  & ul {
+    background-color: $menu-bg;
+    background-clip: padding-box;
+    border: 1px solid #EBEEF5;
+    border-radius: 4px;
+    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.06);
+    display: block;
+    margin: 0;
+    padding: 10px 0;
+    z-index: 1500;
+    position: fixed;
+    list-style: none;
+    box-sizing: border-box;
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+    &:focus {
+      outline: 0;
+    }
+
+    > li {
+      margin: 0;
+      padding: 0 20px;
+      font-size: 14px;
+      line-height: 36px;
+      font-weight: 400;
+      color: $item-color;
+      white-space: nowrap;
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      user-select: none;
+      &:hover,
+      &:focus {
+        text-decoration: none;
+        background-color: $item-hover-bg;
+      }
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+}

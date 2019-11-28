@@ -1,5 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import {
+  Notification,
+} from 'element-ui';
+
+import Storage from '../utils/storage';
 
 import Home from '../pages/home/index.vue';
 
@@ -20,6 +25,11 @@ const routes = [
     path: '/register',
     name: 'register',
     component: () => import('../pages/register.vue'),
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: () => import('../pages/reset.vue'),
   },
   {
     path: '/s/:shareId',
@@ -66,6 +76,36 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const everVisited = Storage.get('ever-visited');
+
+  Notification.closeAll();
+
+  if (!everVisited) {
+    Notification({
+      showClose: false,
+      duration: 0,
+      position: 'bottom-right',
+      dangerouslyUseHTMLString: true,
+      message: `
+        <div class="cookie-notification">
+          <p>我们使用cookie来确保您在我们的网站上获得最佳的体验。</p>
+          <p>
+            <span>请阅读我们的</span><a href="/">隐私政策</a><span>以了解更多的信息。</span>
+          </p>
+          <button type="button" class="el-button el-button--primary">好</button>
+        </div>
+      `,
+      onClick: () => {
+        Storage.set('ever-visited', true);
+        Notification.closeAll();
+      },
+    });
+  }
+
+  next();
 });
 
 export default router;

@@ -3,10 +3,22 @@
     <div class="toolbar">
       <template
           v-if="type === 'home'">
-        <el-button>
-          <i class="iconfont icon-upload"></i>
-          <span>上传</span>
-        </el-button>
+        <el-dropdown
+            placement="bottom"
+            @command="uploadCommand">
+          <el-button
+              class="el-dropdown-link">
+            <span>上传</span>
+            <i class="iconfont icon-upload"></i>
+          </el-button>
+          <el-dropdown-menu
+              slot="dropdown">
+            <el-dropdown-item
+                command="local">本地文件</el-dropdown-item>
+            <el-dropdown-item
+                command="url">链接</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button>
           <i class="iconfont icon-folder-add"></i>
           <span>新建文件夹</span>
@@ -49,10 +61,21 @@
     </div>
     <file-table
         v-if="viewMode === 'list'"
-        :data="data" />
+        :data="data"
+        @share="toggleShareDialog" />
     <file-grid
         v-else
         :data="data" />
+    <url-dialog
+        :visible="showUrlDialog" />
+    <folder-dialog
+        :visible="false" />
+    <share-dialog
+        :visible="showShareDialog"
+        :data="shareData" />
+    <!-- <ui-progress
+        :percentage="50"
+        message="正在删除...50%" /> -->
   </div>
 </template>
 
@@ -67,6 +90,10 @@ import {
 
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
+import FolderDialog from '../dialog/folder/index.vue';
+import UrlDialog from '../dialog/url/index.vue';
+import ShareDialog from '../dialog/share/index.vue';
+// import UiProgress from '../ui-progress/index.vue';
 
 export default {
   name: 'FileList',
@@ -78,6 +105,10 @@ export default {
     'el-dropdown-item': DropdownItem,
     FileTable,
     FileGrid,
+    FolderDialog,
+    UrlDialog,
+    ShareDialog,
+    // UiProgress,
   },
   props: {
     // 类型（home: 全部文件, favorite: 我的收藏）
@@ -97,6 +128,13 @@ export default {
     return {
       // view mode: list|grid
       viewMode: 'list',
+      showUrlDialog: false,
+      showShareDialog: false,
+      shareData: {
+        id: null,
+        name: '',
+        type: '',
+      },
     };
   },
   methods: {
@@ -104,6 +142,28 @@ export default {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'
         : 'list';
+    },
+    toggleUrlDialog() {
+      this.showUrlDialog = !this.showUrlDialog;
+    },
+    uploadCommand(command) {
+      if (command === 'url') {
+        this.toggleUrlDialog();
+      }
+    },
+    toggleShareDialog(data) {
+      const {
+        id,
+        name,
+        type,
+      } = data;
+
+      this.shareData = {
+        id,
+        name,
+        type,
+      };
+      this.showShareDialog = true;
     },
   },
 };
