@@ -16,7 +16,7 @@ const HTTP = Axios.create({
 HTTP.interceptors.request
   .use((req) => {
     // auth headers
-    const token = Storage.getToken();
+    const token = ''; // Storage.getToken();
     if (token) {
       req.headers.Authorization = token; /* eslint-disable-line */
     }
