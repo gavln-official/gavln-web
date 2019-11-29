@@ -15,6 +15,9 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
+    meta: {
+      login: true,
+    },
   },
   {
     path: '/login',
@@ -40,31 +43,49 @@ const routes = [
     path: '/favorite',
     name: 'favorite',
     component: () => import('../pages/favorite.vue'),
+    meta: {
+      login: true,
+    },
   },
   {
     path: '/upload',
     name: 'upload',
     component: () => import('../pages/upload/index.vue'),
+    meta: {
+      login: true,
+    },
   },
   {
     path: '/download',
     name: 'download',
     component: () => import('../pages/download.vue'),
+    meta: {
+      login: true,
+    },
   },
   {
     path: '/finished',
     name: 'finished',
     component: () => import('../pages/finished.vue'),
+    meta: {
+      login: true,
+    },
   },
   {
     path: '/share',
     name: 'share',
     component: () => import('../pages/share.vue'),
+    meta: {
+      login: true,
+    },
   },
   {
     path: '/trash',
     name: 'trash',
     component: () => import('../pages/trash.vue'),
+    meta: {
+      login: true,
+    },
   },
   {
     path: '*',
@@ -101,6 +122,22 @@ router.beforeEach((to, from, next) => {
       onClick: () => {
         Storage.set('ever-visited', true);
         Notification.closeAll();
+      },
+    });
+  }
+
+  const hasLogin = Storage.getToken();
+
+  // redirect to /login
+  if (to.meta
+      && to.meta.login
+      && !hasLogin) {
+    Storage.clearAuthInfo();
+
+    next({
+      name: 'login',
+      query: {
+        redirect: to.path,
       },
     });
   }

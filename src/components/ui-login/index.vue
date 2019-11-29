@@ -3,17 +3,23 @@
     <h2>欢迎回来</h2>
     <el-form
         class="login-form"
-        label-position="top">
-      <el-form-item>
+        label-position="top"
+        :model="form"
+        :rules="formRules"
+        ref="form"
+        :disabled="saving">
+      <el-form-item
+          prop="username">
         <el-input
-            placeholder="用户名/邮箱"
-            v-model="username" />
+            placeholder="用户名"
+            v-model="form.username" />
       </el-form-item>
-      <el-form-item>
+      <el-form-item
+          prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
             placeholder="密码"
-            v-model="password">
+            v-model="form.password">
           <i
               class="iconfont"
               :class="{
@@ -30,7 +36,9 @@
       <a href="/register" class="right">去注册</a>
     </div>
     <el-button
-        type="text">
+        type="text"
+        :disabled="saving"
+        @click="login">
       <span>登录账户</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
@@ -45,6 +53,8 @@ import {
   Button,
 } from 'element-ui';
 
+import UserAPI from '../../api/user';
+
 export default {
   name: 'FormContentLogin',
   components: {
@@ -55,14 +65,77 @@ export default {
   },
   data() {
     return {
-      username: '',
-      password: '',
+      form: {
+        username: '',
+        password: '',
+      },
+      formRules: {
+        username: [
+          {
+            required: true,
+            message: '请输入用户名',
+            trigger: 'blur',
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur',
+          },
+        ],
+      },
       showPassword: false,
+      saving: false,
     };
   },
   methods: {
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
+    },
+    login() {
+      if (this.saving) {
+        return;
+      }
+
+      this.$refs.form
+        .validate((valid) => {
+          if (!valid) {
+            return;
+          }
+
+          this.saving = true;
+
+          const {
+            username,
+            password,
+          } = this.form;
+
+          UserAPI.login(
+            username,
+            password,
+          )
+            .then(() => {
+              this.redirect();
+            })
+            .catch(() => {})
+            .finally(() => {
+              this.saving = false;
+            });
+        });
+    },
+    redirect() {
+      let {
+        path,
+      } = this.$route.query;
+
+      if (!path) {
+        path = '/';
+      }
+
+      this.$router.push({
+        path,
+      });
     },
   },
 };

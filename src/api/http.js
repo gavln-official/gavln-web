@@ -12,13 +12,48 @@ const HTTP = Axios.create({
   timeout: Config.timeout,
 });
 
+let refreshing = false;
+
+function autoRefreshToken() {
+  if (refreshing) {
+    return;
+  }
+
+  refreshing = true;
+
+  HTTP({
+    method: 'POST',
+    url: '/user/refreshToken',
+  })
+    .then((res) => {
+      Storage.set('access_token', res.data.access_token);
+      Storage.set('refresh_token', res.data.refresh_token);
+      Storage.set('token_expires_at', res.data.expires * 1000);
+    })
+    .finally(() => {
+      refreshing = false;
+    });
+}
+
 // request
 HTTP.interceptors.request
   .use((req) => {
     // auth headers
-    const token = ''; // Storage.getToken();
+    const token = Storage.getToken();
     if (token) {
-      req.headers.Authorization = token; /* eslint-disable-line */
+      req.headers.access_token = token; /* eslint-disable-line */
+    }
+
+    // refresh token
+    const tokenExpiresAt = Storage.get('token_expires_at');
+    const now = new Date().getTime();
+
+    if (tokenExpiresAt
+        && parseInt(tokenExpiresAt, 10) - now <= 1000 * 60 * 5) {
+      const refreshToken = Storage.get('refresh_token');
+      req.headers.refresh_token = refreshToken; /* eslint-disable-line */
+
+      autoRefreshToken();
     }
 
     return req;
@@ -35,8 +70,7 @@ HTTP.interceptors.response
       let errorMsg = '';
       switch (code) {
         case 401:
-          Storage.remove('userId');
-          Storage.remove('token');
+          Storage.clearAuthInfo();
 
           window.location.href = `/login?redirect=${window.location.pathname}`;
 
