@@ -12,8 +12,20 @@ function remove(key) {
   JsCookie.remove(key);
 }
 
+function getToken() {
+  return get('access_token');
+}
+
+function clearAuthInfo() {
+  remove('access_token');
+  remove('refresh_token');
+  remove('token_expires_at');
+}
+
 export default {
   set,
   get,
   remove,
+  getToken,
+  clearAuthInfo,
 };

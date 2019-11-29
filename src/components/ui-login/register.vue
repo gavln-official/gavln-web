@@ -124,7 +124,7 @@ export default {
 
       UserAPI.checkUsername(value)
         .then((res) => {
-          if (res.data.exist) {
+          if (res.data.exists) {
             callback(new Error('用户名已存在'));
           }
 
