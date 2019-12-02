@@ -3,26 +3,41 @@
     <h2>忘记密码</h2>
     <el-form
         class="login-form"
-        label-position="top">
-      <el-form-item>
+        label-position="top"
+        :model="form"
+        :rules="formRules"
+        ref="form"
+        :disabled="saving">
+      <el-form-item
+          prop="username">
         <el-input
-            placeholder="邮箱"
-            v-model="email" />
+            placeholder="用户名"
+            v-model="form.username" />
       </el-form-item>
       <el-form-item
-          class="code">
+          prop="email">
+        <el-input
+            placeholder="邮箱"
+            v-model="form.email" />
+      </el-form-item>
+      <el-form-item
+          class="code"
+          prop="code">
         <el-input
             placeholder="验证码"
-            v-model="code">
+            v-model="form.code">
         </el-input>
         <el-button
-            type="text">发送验证码</el-button>
+            type="text"
+            :disabled="waiting > 0"
+            @click="send">{{ sendBtnLabel }}</el-button>
       </el-form-item>
-      <el-form-item>
+      <el-form-item
+          prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
-            placeholder="设置密码"
-            v-model="password">
+            placeholder="密码"
+            v-model="form.password">
           <i
               class="iconfont"
               :class="{
@@ -32,11 +47,11 @@
               slot="suffix"
               @click="toggleShowPassword"></i>
         </el-input>
-        <span class="tips">8～18位字符，包含数字及字母</span>
       </el-form-item>
     </el-form>
     <el-button
-        type="text">
+        type="text"
+        @click="save">
       <span>完成</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
@@ -49,7 +64,12 @@ import {
   FormItem,
   Input,
   Button,
+  Message,
 } from 'element-ui';
+
+import UserAPI from '../../api/user';
+
+let timer = null;
 
 export default {
   name: 'FormContentReset',
@@ -61,15 +81,104 @@ export default {
   },
   data() {
     return {
-      email: '',
-      code: '',
-      password: '',
+      form: {
+        username: '',
+        email: '',
+        code: '',
+        password: '',
+      },
+      formRules: {
+        username: [
+          {
+            required: true,
+            message: '请输入用户名',
+            trigger: 'blur',
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: '请输入邮箱',
+            trigger: 'blur',
+          },
+          {
+            type: 'email',
+            message: '邮箱格式错误',
+            trigger: 'blur',
+          },
+        ],
+        code: [
+          {
+            required: true,
+            message: '请输入验证码',
+            trigger: 'blur',
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur',
+          },
+          {
+            validator: this.checkPassword,
+            trigger: 'blur',
+          },
+        ],
+      },
       showPassword: false,
+      waiting: 0,
+      saving: false,
     };
+  },
+  computed: {
+    sendBtnLabel() {
+      return this.waiting > 0
+        ? `${this.waiting}s`
+        : '发送验证码';
+    },
   },
   methods: {
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
+    },
+    send() {
+      if (this.waiting > 0) {
+        return;
+      }
+
+      const {
+        username,
+        email,
+      } = this.form;
+
+      if (!username
+          || !email) {
+        return;
+      }
+
+      // TODO: test
+      UserAPI.sendRetrieve(username, email)
+        .then(() => {
+          this.startCountdown();
+        })
+        .catch(() => {
+          Message.error('发送失败');
+        });
+    },
+    startCountdown() {
+      this.waiting = 60;
+
+      timer = window.setInterval(() => {
+        if (this.waiting > 0) {
+          this.waiting -= 1;
+        } else {
+          window.clearInterval(timer);
+        }
+      }, 1000);
+    },
+    save() {
+      // TODO: reset password
     },
   },
 };
