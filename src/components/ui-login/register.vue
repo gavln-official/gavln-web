@@ -172,7 +172,20 @@ export default {
                 name: 'login',
               });
             })
-            .catch(() => {})
+            .catch((error) => {
+              let message = '注册失败';
+
+              if (error
+                  && error.response
+                  && error.response.data
+                  && error.response.data.code) {
+                if (error.response.data.code === -1002) {
+                  message = '账户已存在';
+                }
+              }
+
+              Message.error(message);
+            })
             .finally(() => {
               this.saving = false;
             });

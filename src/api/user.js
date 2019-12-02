@@ -78,6 +78,19 @@ function sendRetrieve(username, email) {
   });
 }
 
+function resetPassword(email, code, password) {
+  const data = new FormData();
+  data.append('mail', email);
+  data.append('code', code);
+  data.append('pass', Utils.encodePassword(password));
+
+  return HTTP({
+    method: 'POST',
+    url: '/user/retrievePass',
+    data,
+  });
+}
+
 export default {
   checkUsername,
   register,
@@ -85,4 +98,5 @@ export default {
   getProfile,
   logOut,
   sendRetrieve,
+  resetPassword,
 };

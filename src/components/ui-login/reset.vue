@@ -161,9 +161,21 @@ export default {
       UserAPI.sendRetrieve(username, email)
         .then(() => {
           this.startCountdown();
+          Message.success('验证码已发送至您的邮箱');
         })
-        .catch(() => {
-          Message.error('发送失败');
+        .catch((error) => {
+          let message = '发送失败';
+
+          if (error
+              && error.response
+              && error.response.data
+              && error.response.data.code) {
+            if (error.response.data.code === -1012) {
+              message = '账户不存在';
+            }
+          }
+
+          Message.error(message);
         });
     },
     startCountdown() {
@@ -178,7 +190,43 @@ export default {
       }, 1000);
     },
     save() {
-      // TODO: reset password
+      if (this.saving) {
+        return;
+      }
+
+      this.$refs.form
+        .validate((valid) => {
+          if (!valid) {
+            return;
+          }
+
+          this.saving = true;
+
+          const {
+            email,
+            code,
+            password,
+          } = this.form;
+
+          UserAPI.resetPassword(
+            email,
+            code,
+            password,
+          )
+            .then(() => {
+              Message.success('密码已重置，请登录');
+
+              this.$router.push({
+                name: 'login',
+              });
+            })
+            .catch(() => {
+              Message.error('重置密码失败');
+            })
+            .finally(() => {
+              this.saving = false;
+            });
+        });
     },
   },
 };
