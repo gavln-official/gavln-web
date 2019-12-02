@@ -66,10 +66,23 @@ function logOut() {
   });
 }
 
+function sendRetrieve(username, email) {
+  const data = new FormData();
+  data.append('name', username);
+  data.append('mail', email);
+
+  return HTTP({
+    method: 'POST',
+    url: '/user/sendRetrieve',
+    data,
+  });
+}
+
 export default {
   checkUsername,
   register,
   login,
   getProfile,
   logOut,
+  sendRetrieve,
 };
