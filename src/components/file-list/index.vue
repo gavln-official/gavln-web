@@ -19,7 +19,8 @@
                 command="url">链接</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button>
+        <el-button
+            @click="toggleFolderNameDialog()">
           <i class="iconfont icon-folder-add"></i>
           <span>新建文件夹</span>
         </el-button>
@@ -76,6 +77,12 @@
     <!-- <ui-progress
         :percentage="50"
         message="正在删除...50%" /> -->
+    <folder-name-dialog
+        v-if="showFolderNameDialog"
+        :visible="showFolderNameDialog"
+        :folderData="folderData"
+        @close="folderNameDialogClose"
+        @success="folderNameDialogSuccess" />
   </div>
 </template>
 
@@ -94,6 +101,7 @@ import FolderDialog from '../dialog/folder/index.vue';
 import UrlDialog from '../dialog/url/index.vue';
 import ShareDialog from '../dialog/share/index.vue';
 // import UiProgress from '../ui-progress/index.vue';
+import FolderNameDialog from '../dialog/folder-name.vue';
 
 export default {
   name: 'FileList',
@@ -109,6 +117,7 @@ export default {
     UrlDialog,
     ShareDialog,
     // UiProgress,
+    FolderNameDialog,
   },
   props: {
     // 类型（home: 全部文件, favorite: 我的收藏）
@@ -122,12 +131,23 @@ export default {
         return (values.indexOf(value) >= 0);
       },
     },
+    // current path
+    path: String,
+    // content list
     data: Array,
   },
   data() {
     return {
       // view mode: list|grid
       viewMode: 'list',
+
+      showFolderNameDialog: false,
+      folderData: {
+        path: this.path,
+        name: '',
+        action: 'create',
+      },
+
       showUrlDialog: false,
       showShareDialog: false,
       shareData: {
@@ -164,6 +184,34 @@ export default {
         type,
       };
       this.showShareDialog = true;
+    },
+    // folder name dialog
+    toggleFolderNameDialog(item) {
+      if (item) {
+        const {
+          path,
+          name,
+        } = item;
+        this.folderData = {
+          path,
+          name,
+          action: 'update',
+        };
+      } else {
+        this.folderData = {
+          path: this.path,
+          name: '',
+          action: 'create',
+        };
+      }
+
+      this.showFolderNameDialog = !this.showFolderNameDialog;
+    },
+    folderNameDialogClose() {
+      this.showFolderNameDialog = false;
+    },
+    folderNameDialogSuccess() {
+      this.showFolderNameDialog = false;
     },
   },
 };
