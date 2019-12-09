@@ -22,8 +22,8 @@
         <template
             slot-scope="scope">
           <a
-              v-if="scope.row.type === 'folder'"
-              :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
+              v-if="scope.row.dir"
+              :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
           <span
               v-else>{{ scope.row.name }}</span>
         </template>
@@ -45,7 +45,7 @@
           :sort-method="sortByUtime">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
