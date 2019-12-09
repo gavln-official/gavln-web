@@ -6,12 +6,12 @@
     <ul class="grids">
       <li
           v-for="item in data"
-          :key="item.id"
+          :key="item.path"
           @contextmenu.prevent="showContextMenu($event, item)">
         <i class="iconfont icon-folder-add"></i>
         <a
-            v-if="item.type === 'folder'"
-            :href="`/?path=${item.id}`">{{ item.name }}</a>
+            v-if="item.dir"
+            :href="`/?path=${item.path}`">{{ item.name }}</a>
         <span
             v-else>{{ item.name }}</span>
       </li>
