@@ -5,6 +5,10 @@
   .toolbar {
     padding: 12px 24px;
 
+    input[type="file"] {
+      display: none;
+    }
+
     > .el-button,
     > .el-dropdown .el-button {
       border: none;

@@ -3,6 +3,10 @@
     <div class="toolbar">
       <template
           v-if="type === 'home'">
+        <input
+            type="file"
+            ref="fileInput"
+            @change="fileInputOnChange">
         <el-dropdown
             placement="bottom"
             @command="uploadCommand">
@@ -103,6 +107,8 @@ import ShareDialog from '../dialog/share/index.vue';
 // import UiProgress from '../ui-progress/index.vue';
 import FolderNameDialog from '../dialog/folder-name.vue';
 
+import IpfsAPI from '../../utils/ipfs';
+
 export default {
   name: 'FileList',
   components: {
@@ -167,9 +173,16 @@ export default {
       this.showUrlDialog = !this.showUrlDialog;
     },
     uploadCommand(command) {
-      if (command === 'url') {
+      if (command === 'local') {
+        this.$refs.fileInput.click();
+      } else if (command === 'url') {
         this.toggleUrlDialog();
       }
+    },
+    async fileInputOnChange(event) {
+      const list = await IpfsAPI.test('123', event.target.files[0]);
+
+      console.table(list);
     },
     toggleShareDialog(data) {
       const {
