@@ -14,6 +14,8 @@ import './style/reset/index.scss';
 // VueContext custom style
 import './style/vue-context.scss';
 
+import './utils/erasure';
+
 Vue.use(filters);
 
 Vue.config.productionTip = false;
