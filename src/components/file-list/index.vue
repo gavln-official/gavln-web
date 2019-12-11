@@ -3,10 +3,6 @@
     <div class="toolbar">
       <template
           v-if="type === 'home'">
-        <input
-            type="file"
-            ref="fileInput"
-            @change="fileInputOnChange">
         <el-dropdown
             placement="bottom"
             @command="uploadCommand">
@@ -71,6 +67,11 @@
     <file-grid
         v-else
         :data="data" />
+    <upload-dialog
+        :visible="showUploadDialog"
+        :path="path"
+        @close="toggleUploadDialog"
+        @success="toggleUploadDialog" />
     <url-dialog
         :visible="showUrlDialog" />
     <folder-dialog
@@ -102,12 +103,11 @@ import {
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
+import UploadDialog from '../dialog/upload/index.vue';
 import UrlDialog from '../dialog/url/index.vue';
 import ShareDialog from '../dialog/share/index.vue';
 // import UiProgress from '../ui-progress/index.vue';
 import FolderNameDialog from '../dialog/folder-name.vue';
-
-import IpfsAPI from '../../utils/ipfs';
 
 export default {
   name: 'FileList',
@@ -120,6 +120,7 @@ export default {
     FileTable,
     FileGrid,
     FolderDialog,
+    UploadDialog,
     UrlDialog,
     ShareDialog,
     // UiProgress,
@@ -154,6 +155,7 @@ export default {
         action: 'create',
       },
 
+      showUploadDialog: false,
       showUrlDialog: false,
       showShareDialog: false,
       shareData: {
@@ -172,17 +174,16 @@ export default {
     toggleUrlDialog() {
       this.showUrlDialog = !this.showUrlDialog;
     },
+    toggleUploadDialog() {
+      this.showUploadDialog = !this.showUploadDialog;
+    },
     uploadCommand(command) {
       if (command === 'local') {
-        this.$refs.fileInput.click();
+        // this.$refs.fileInput.click();
+        this.toggleUploadDialog();
       } else if (command === 'url') {
         this.toggleUrlDialog();
       }
-    },
-    async fileInputOnChange(event) {
-      const list = await IpfsAPI.test('123', event.target.files[0]);
-
-      console.table(list);
     },
     toggleShareDialog(data) {
       const {

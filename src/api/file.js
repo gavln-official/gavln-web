@@ -1,4 +1,5 @@
 import HTTP from './http';
+import IPFS from '../utils/ipfs';
 
 function getPath(path) {
   const data = new FormData();
@@ -34,8 +35,51 @@ function updatePath(path, name) {
   });
 }
 
+function addFile(path, name, size, blocks) {
+  const data = {
+    path,
+    name,
+    size,
+    blocks,
+  };
+
+  return HTTP({
+    method: 'POST',
+    url: '/file/add',
+    data,
+  });
+}
+
+function getUploadKey() {
+  return HTTP({
+    method: 'GET',
+    url: '/file/key',
+  });
+}
+
+async function upload(file, path, name) {
+  try {
+    const keyRes = await getUploadKey();
+
+    const {
+      key,
+    } = keyRes.data;
+
+    const list = await IPFS.upload(key, file);
+    const blocks = list.map(item => ({
+      key,
+      cid: item.hash,
+    }));
+
+    return await addFile(path, name, file.size, blocks);
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   getPath,
   createPath,
   updatePath,
+  upload,
 };
