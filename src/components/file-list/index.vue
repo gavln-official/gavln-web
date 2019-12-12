@@ -20,7 +20,7 @@
           </el-dropdown-menu>
         </el-dropdown>
         <el-button
-            @click="toggleFolderNameDialog()">
+            @click="toggleNameDialog()">
           <i class="iconfont icon-folder-add"></i>
           <span>新建文件夹</span>
         </el-button>
@@ -34,36 +34,36 @@
       </template>
       <div class="right">
         <el-input
-          type="text"
-          placeholder="搜索相关文件">
-        <i
-            class="iconfont icon-search"
-            slot="prefix"></i>
-      </el-input>
-      <el-dropdown
-          placement="bottom">
+            type="text"
+            placeholder="搜索相关文件">
+          <i
+              class="iconfont icon-search"
+              slot="prefix"></i>
+        </el-input>
+        <el-dropdown
+            placement="bottom">
+          <el-button
+              class="el-dropdown-link">
+            <span>排序方式</span>
+            <i class="iconfont icon-sort"></i>
+          </el-button>
+          <el-dropdown-menu
+              slot="dropdown">
+            <el-dropdown-item>AAA</el-dropdown-item>
+            <el-dropdown-item>BBB</el-dropdown-item>
+            <el-dropdown-item>CCC</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button
-            class="el-dropdown-link">
-          <span>排序方式</span>
-          <i class="iconfont icon-sort"></i>
+            @click="toggleViewMode">
+          <i class="iconfont icon-app"></i>
         </el-button>
-        <el-dropdown-menu
-            slot="dropdown">
-          <el-dropdown-item>AAA</el-dropdown-item>
-          <el-dropdown-item>BBB</el-dropdown-item>
-          <el-dropdown-item>CCC</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <el-button
-          @click="toggleViewMode">
-        <i class="iconfont icon-app"></i>
-      </el-button>
       </div>
     </div>
     <file-table
         v-if="viewMode === 'list'"
         :data="data"
-        @share="toggleShareDialog" />
+        @command="onCommand" />
     <file-grid
         v-else
         :data="data" />
@@ -82,12 +82,12 @@
     <!-- <ui-progress
         :percentage="50"
         message="正在删除...50%" /> -->
-    <folder-name-dialog
-        v-if="showFolderNameDialog"
-        :visible="showFolderNameDialog"
-        :folderData="folderData"
-        @close="folderNameDialogClose"
-        @success="folderNameDialogSuccess" />
+    <name-dialog
+        v-if="showNameDialog"
+        :visible="showNameDialog"
+        :data="nameData"
+        @close="nameDialogClose"
+        @success="nameDialogSuccess" />
   </div>
 </template>
 
@@ -107,7 +107,7 @@ import UploadDialog from '../dialog/upload/index.vue';
 import UrlDialog from '../dialog/url/index.vue';
 import ShareDialog from '../dialog/share/index.vue';
 // import UiProgress from '../ui-progress/index.vue';
-import FolderNameDialog from '../dialog/folder-name.vue';
+import NameDialog from '../dialog/name.vue';
 
 export default {
   name: 'FileList',
@@ -124,7 +124,7 @@ export default {
     UrlDialog,
     ShareDialog,
     // UiProgress,
-    FolderNameDialog,
+    NameDialog,
   },
   props: {
     // 类型（home: 全部文件, favorite: 我的收藏）
@@ -148,11 +148,16 @@ export default {
       // view mode: list|grid
       viewMode: 'list',
 
-      showFolderNameDialog: false,
-      folderData: {
+      showNameDialog: false,
+      nameData: {
+        // full path
         path: this.path,
+        // folder/file name
         name: '',
+        // form action
         action: 'create',
+        // is dir
+        dir: true,
       },
 
       showUploadDialog: false,
@@ -202,6 +207,31 @@ export default {
       this.showUrlDialog = !this.showUrlDialog;
     },
 
+    // child command
+    onCommand(data) {
+      switch (data.command) {
+        case 'share':
+          this.toggleShareDialog();
+          break;
+        case 'move':
+          this.toggleShareDialog();
+          break;
+        case 'copy':
+          // this.toggleShareDialog();
+          break;
+        case 'rename':
+          this.toggleNameDialog(data.row);
+          break;
+        case 'favorite':
+          // this.toggleShareDialog();
+          break;
+        case 'delete':
+          // this.toggleShareDialog();
+          break;
+        default:
+      }
+    },
+
     toggleShareDialog(data) {
       const {
         id,
@@ -218,32 +248,35 @@ export default {
     },
 
     // folder name dialog
-    toggleFolderNameDialog(item) {
+    toggleNameDialog(item) {
       if (item) {
         const {
           path,
           name,
         } = item;
-        this.folderData = {
+        this.nameData = {
           path,
           name,
           action: 'update',
+          dir: item.dir
+              || false,
         };
       } else {
-        this.folderData = {
+        this.nameData = {
           path: this.path,
           name: '',
           action: 'create',
+          dir: true,
         };
       }
 
-      this.showFolderNameDialog = true;
+      this.showNameDialog = true;
     },
-    folderNameDialogClose() {
-      this.showFolderNameDialog = false;
+    nameDialogClose() {
+      this.showNameDialog = false;
     },
-    folderNameDialogSuccess() {
-      this.showFolderNameDialog = false;
+    nameDialogSuccess() {
+      this.showNameDialog = false;
       this.refresh();
     },
   },

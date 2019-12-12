@@ -39,8 +39,25 @@ function encodePassword(password) {
   return sha512(`${sha512(password)}gavln.com`);
 }
 
+function parseFileName(name) {
+  const data = {
+    name: '',
+    ext: '',
+  };
+  const index = name.lastIndexOf('.');
+  if (index >= 0) {
+    data.name = name.substring(0, index).trim();
+    data.ext = name.substring(index + 1).trim();
+  } else {
+    data.name = name;
+  }
+
+  return data;
+}
+
 export default {
   formatTime,
   copyToClipboard,
   encodePassword,
+  parseFileName,
 };
