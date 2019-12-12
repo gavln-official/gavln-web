@@ -5,6 +5,7 @@ import {
 } from 'element-ui';
 
 import Config from '../utils/config';
+import ErrorMessage from '../utils/error-message';
 import Storage from '../utils/storage';
 
 const HTTP = Axios.create({
@@ -67,22 +68,27 @@ HTTP.interceptors.response
       const code = error
           && error.response
           && error.response.status;
-      let errorMsg = '';
-      switch (code) {
-        case 401:
-          Storage.clearAuthInfo();
+      let errorMsg = ErrorMessage.http[error.response.status]
+          || '';
 
-          window.location.href = `/login?redirect=${window.location.pathname}`;
+      if (code === 401) {
+        Storage.clearAuthInfo();
 
-          return;
-        case 404:
-          errorMsg = '请求的地址不存在';
-          break;
-        case 500:
-          errorMsg = '服务器出错了';
-          break;
-        default:
-          errorMsg = '出错了';
+        window.location.href = `/login?redirect=${window.location.pathname}`;
+
+        return;
+      }
+
+      if (error
+          && error.response
+          && error.response.data
+          && error.response.data.code) {
+        const detail = ErrorMessage.code[error.response.data.code]
+            || '';
+
+        if (detail) {
+          errorMsg = `${errorMsg}: ${detail}`;
+        }
       }
 
       Message.error(errorMsg);

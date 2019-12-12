@@ -4,16 +4,13 @@
       <file-list
           type="home"
           :path="path"
-          :data="data"></file-list>
+          :data="data"
+          @refresh="getPath"></file-list>
     </div>
   </main-frame>
 </template>
 
 <script>
-import {
-  Message,
-} from 'element-ui';
-
 import FileAPI from '../../api/file';
 
 import MainFrame from '../../components/main-frame/index.vue';
@@ -40,7 +37,12 @@ export default {
       return '/';
     },
   },
-  mounted() {
+  watch: {
+    path() {
+      this.getPath();
+    },
+  },
+  created() {
     this.getPath();
   },
   methods: {
@@ -54,10 +56,6 @@ export default {
       FileAPI.getPath(this.path)
         .then((res) => {
           this.data = res.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          Message.error('数据加载失败');
         })
         .finally(() => {
           this.loading = false;

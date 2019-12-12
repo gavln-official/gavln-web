@@ -162,20 +162,6 @@ export default {
         .then(() => {
           this.startCountdown();
           Message.success('验证码已发送至您的邮箱');
-        })
-        .catch((error) => {
-          let message = '发送失败';
-
-          if (error
-              && error.response
-              && error.response.data
-              && error.response.data.code) {
-            if (error.response.data.code === -1012) {
-              message = '账户不存在';
-            }
-          }
-
-          Message.error(message);
         });
     },
     startCountdown() {

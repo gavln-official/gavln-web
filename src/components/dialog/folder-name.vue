@@ -33,7 +33,6 @@
 
 <script>
 import {
-  Message,
   Dialog,
   Form,
   FormItem,
@@ -73,6 +72,10 @@ export default {
   },
   methods: {
     close() {
+      if (this.uploading) {
+        return;
+      }
+
       this.$emit('close');
     },
     saveFolder() {
@@ -101,13 +104,8 @@ export default {
         : `${this.folderData.path}/${this.form.name}`;
 
       FileAPI.createPath(path)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.$emit('success');
-        })
-        .catch((error) => {
-          console.log(error);
-          Message.error('保存失败');
         })
         .finally(() => {
           this.saving = false;
@@ -115,13 +113,8 @@ export default {
     },
     updatePath() {
       FileAPI.updatePath(this.folderData.path, this.form.name)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.$emit('success');
-        })
-        .catch((error) => {
-          console.log(error);
-          Message.error('保存失败');
         })
         .finally(() => {
           this.saving = false;
