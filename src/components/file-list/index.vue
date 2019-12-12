@@ -70,8 +70,8 @@
     <upload-dialog
         :visible="showUploadDialog"
         :path="path"
-        @close="toggleUploadDialog"
-        @success="toggleUploadDialog" />
+        @close="uploadDialogClose"
+        @success="uploadDialogSuccess" />
     <url-dialog
         :visible="showUrlDialog" />
     <folder-dialog
@@ -171,12 +171,11 @@ export default {
         ? 'grid'
         : 'list';
     },
-    toggleUrlDialog() {
-      this.showUrlDialog = !this.showUrlDialog;
+    refresh() {
+      this.$emit('refresh');
     },
-    toggleUploadDialog() {
-      this.showUploadDialog = !this.showUploadDialog;
-    },
+
+    // upload
     uploadCommand(command) {
       if (command === 'local') {
         // this.$refs.fileInput.click();
@@ -185,6 +184,24 @@ export default {
         this.toggleUrlDialog();
       }
     },
+
+    // upload local file
+    toggleUploadDialog() {
+      this.showUploadDialog = !this.showUploadDialog;
+    },
+    uploadDialogClose() {
+      this.showUploadDialog = false;
+    },
+    uploadDialogSuccess() {
+      this.showUploadDialog = false;
+      this.refresh();
+    },
+
+    // upload from url
+    toggleUrlDialog() {
+      this.showUrlDialog = !this.showUrlDialog;
+    },
+
     toggleShareDialog(data) {
       const {
         id,
@@ -199,6 +216,7 @@ export default {
       };
       this.showShareDialog = true;
     },
+
     // folder name dialog
     toggleFolderNameDialog(item) {
       if (item) {
@@ -219,13 +237,14 @@ export default {
         };
       }
 
-      this.showFolderNameDialog = !this.showFolderNameDialog;
+      this.showFolderNameDialog = true;
     },
     folderNameDialogClose() {
       this.showFolderNameDialog = false;
     },
     folderNameDialogSuccess() {
       this.showFolderNameDialog = false;
+      this.refresh();
     },
   },
 };

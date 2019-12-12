@@ -2,7 +2,7 @@
   <el-dialog
       class="url-dialog"
       :visible="visible"
-      width="360px"
+      width="480px"
       title="上传本地文件"
       @close="close">
     <el-form
@@ -122,6 +122,10 @@ export default {
   },
   methods: {
     close() {
+      if (this.uploading) {
+        return;
+      }
+
       this.$emit('close');
     },
     doNothing() {
@@ -130,8 +134,8 @@ export default {
     getFileName(file) {
       const index = file.name.lastIndexOf('.');
       if (index >= 0) {
-        this.form.name = file.name.substring(0, 6);
-        this.form.ext = file.name.substring(6 + 1);
+        this.form.name = file.name.substring(0, index);
+        this.form.ext = file.name.substring(index + 1);
       } else {
         this.form.name = file.name;
         this.form.ext = '';
@@ -159,9 +163,6 @@ export default {
           FileAPI.upload(this.file, this.fullPath, this.fullName)
             .then(() => {
               this.$emit('success');
-            })
-            .catch((error) => {
-              console.log(error);
             })
             .finally(() => {
               this.uploading = false;
