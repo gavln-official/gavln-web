@@ -49,6 +49,7 @@ import {
 } from 'element-ui';
 
 import FileAPI from '../../../api/file';
+import Utils from '../../../utils/index';
 
 export default {
   name: 'UploadDialog',
@@ -132,14 +133,10 @@ export default {
       return false;
     },
     getFileName(file) {
-      const index = file.name.lastIndexOf('.');
-      if (index >= 0) {
-        this.form.name = file.name.substring(0, index);
-        this.form.ext = file.name.substring(index + 1);
-      } else {
-        this.form.name = file.name;
-        this.form.ext = '';
-      }
+      const data = Utils.parseFileName(file.name);
+
+      this.form.name = data.name;
+      this.form.ext = data.ext;
     },
     onSelect(file) {
       this.file = file

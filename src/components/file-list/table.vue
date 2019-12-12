@@ -55,7 +55,7 @@
           <div class="actions">
             <i
                 class="iconfont icon-share"
-                @click="share(scope.row)"></i>
+                @click="rowCommand('share', scope.row)"></i>
             <i class="iconfont icon-download"></i>
             <el-dropdown
                 placement="bottom"
@@ -130,11 +130,11 @@ export default {
     sortByUtime(a, b) {
       return new Date(a.utime) - new Date(b.utime);
     },
-    share(data) {
-      this.$emit('share', data);
-    },
     rowCommand(command, row) {
-      return [command, row.id];
+      this.$emit('command', {
+        command,
+        row,
+      });
     },
   },
 };

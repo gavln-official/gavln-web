@@ -1,7 +1,7 @@
 <template>
   <el-dialog
       :visible="visible"
-      :title="folderData.action === 'create'
+      :title="data.action === 'create'
         ? '新建目录'
         : '重命名目录'"
       width="480px"
@@ -41,9 +41,10 @@ import {
 } from 'element-ui';
 
 import FileAPI from '../../api/file';
+import Utils from '../../utils/index';
 
 export default {
-  name: 'FolderNameDialog',
+  name: 'NameDialog',
   components: {
     'el-dialog': Dialog,
     'el-form': Form,
@@ -53,12 +54,13 @@ export default {
   },
   props: {
     visible: Boolean,
-    folderData: Object,
+    data: Object,
   },
   data() {
     return {
       form: {
         name: '',
+        ext: '',
       },
       formRules: {
         name: [{
@@ -69,6 +71,28 @@ export default {
       },
       saving: false,
     };
+  },
+  computed: {
+    fullName() {
+      let {
+        name,
+      } = this.form;
+      if (!this.data.dir) {
+        name = `${name}.${this.form.ext}`;
+      }
+
+      return name;
+    },
+  },
+  mounted() {
+    if (this.data.dir) { // folder
+      this.form.name = this.data.name;
+    } else { // file
+      const data = Utils.parseFileName(this.data.name);
+
+      this.form.name = data.name;
+      this.form.ext = data.ext;
+    }
   },
   methods: {
     close() {
@@ -91,7 +115,7 @@ export default {
 
           this.saving = true;
 
-          if (this.folderData.action === 'create') {
+          if (this.data.action === 'create') {
             this.createPath();
           } else {
             this.updatePath();
@@ -99,9 +123,9 @@ export default {
         });
     },
     createPath() {
-      const path = /\/$/.test(this.folderData.path)
-        ? `${this.folderData.path}${this.form.name}`
-        : `${this.folderData.path}/${this.form.name}`;
+      const path = /\/$/.test(this.data.path)
+        ? `${this.data.path}${this.form.name}`
+        : `${this.data.path}/${this.form.name}`;
 
       FileAPI.createPath(path)
         .then(() => {
@@ -112,7 +136,7 @@ export default {
         });
     },
     updatePath() {
-      FileAPI.updatePath(this.folderData.path, this.form.name)
+      FileAPI.updatePath(this.data.path, this.fullName)
         .then(() => {
           this.$emit('success');
         })
