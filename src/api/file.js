@@ -77,9 +77,21 @@ async function upload(file, path, name) {
   }
 }
 
+function deletePath(path) {
+  const data = new FormData();
+  data.append('path', path);
+
+  return HTTP({
+    method: 'POST',
+    url: '/file/delete',
+    data,
+  });
+}
+
 export default {
   getPath,
   createPath,
   updatePath,
   upload,
+  deletePath,
 };

@@ -21,6 +21,9 @@
           :sort-method="sortByName">
         <template
             slot-scope="scope">
+          <i
+              v-if="scope.row.mark"
+              class="iconfont icon-star-o"></i>
           <a
               v-if="scope.row.dir"
               :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
@@ -70,7 +73,7 @@
                 <el-dropdown-item
                     command="rename">重命名</el-dropdown-item>
                 <el-dropdown-item
-                    command="favorite">收藏</el-dropdown-item>
+                    command="favorite">{{ scope.row.mark ? '取消收藏' : '收藏' }}</el-dropdown-item>
                 <el-dropdown-item
                     command="delete">删除</el-dropdown-item>
               </el-dropdown-menu>
