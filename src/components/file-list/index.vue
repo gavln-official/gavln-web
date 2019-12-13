@@ -93,6 +93,7 @@
 
 <script>
 import {
+  MessageBox,
   Button,
   Input,
   Dropdown,
@@ -108,6 +109,9 @@ import UrlDialog from '../dialog/url/index.vue';
 import ShareDialog from '../dialog/share/index.vue';
 // import UiProgress from '../ui-progress/index.vue';
 import NameDialog from '../dialog/name.vue';
+
+import FileAPI from '../../api/file';
+import FavoriteAPI from '../../api/favorite';
 
 export default {
   name: 'FileList',
@@ -223,10 +227,10 @@ export default {
           this.toggleNameDialog(data.row);
           break;
         case 'favorite':
-          // this.toggleShareDialog();
+          this.toggleFavorite(data.row);
           break;
         case 'delete':
-          // this.toggleShareDialog();
+          this.deletePath(data.row);
           break;
         default:
       }
@@ -278,6 +282,33 @@ export default {
     nameDialogSuccess() {
       this.showNameDialog = false;
       this.refresh();
+    },
+
+    // delete folder/file
+    deletePath(item) {
+      const message = `删除该${item.dir ? '目录' : '文件'}？`;
+      MessageBox.confirm(message, '提示', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+      })
+        .then(() => {
+          FileAPI.deletePath(item.path)
+            .then(() => {
+              this.refresh();
+            });
+        });
+    },
+
+    // toggle favorite
+    toggleFavorite(item) {
+      const request = item.mark
+        ? FavoriteAPI.remove
+        : FavoriteAPI.add;
+
+      request(item.path)
+        .then(() => {
+          this.refresh();
+        });
     },
   },
 };

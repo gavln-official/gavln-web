@@ -78,7 +78,7 @@ export default {
         name,
       } = this.form;
       if (!this.data.dir) {
-        name = `${name}.${this.form.ext}`;
+        name = `${name.trim()}.${this.form.ext}`;
       }
 
       return name;
@@ -127,7 +127,7 @@ export default {
         ? `${this.data.path}${this.form.name}`
         : `${this.data.path}/${this.form.name}`;
 
-      FileAPI.createPath(path)
+      FileAPI.createPath(path.trim())
         .then(() => {
           this.$emit('success');
         })
