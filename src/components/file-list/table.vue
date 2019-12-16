@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     calcTableHeight() {
-      this.tableHeight = window.innerHeight - 124;
+      this.tableHeight = window.innerHeight - 168;
     },
     sortByName(a, b) {
       return a.name

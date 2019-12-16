@@ -1,5 +1,7 @@
 <template>
   <div class="file-list">
+    <bread-crumb
+        :path="path" />
     <div class="toolbar">
       <template
           v-if="type === 'home'">
@@ -101,6 +103,7 @@ import {
   DropdownItem,
 } from 'element-ui';
 
+import BreadCrumb from './bread-crumb.vue';
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -121,6 +124,7 @@ export default {
     'el-dropdown': Dropdown,
     'el-dropdown-menu': DropdownMenu,
     'el-dropdown-item': DropdownItem,
+    BreadCrumb,
     FileTable,
     FileGrid,
     FolderDialog,
