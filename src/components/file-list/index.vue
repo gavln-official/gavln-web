@@ -77,7 +77,10 @@
     <url-dialog
         :visible="showUrlDialog" />
     <folder-dialog
-        :visible="false" />
+        :visible="showFolderDialog"
+        :data="folderData"
+        @close="folderDialogClose"
+        @success="folderDialogSuccess" />
     <share-dialog
         :visible="showShareDialog"
         :data="shareData" />
@@ -176,6 +179,8 @@ export default {
         name: '',
         type: '',
       },
+      showFolderDialog: false,
+      folderData: null,
     };
   },
   methods: {
@@ -222,10 +227,10 @@ export default {
           this.toggleShareDialog();
           break;
         case 'move':
-          this.toggleShareDialog();
+          this.toggleFolderDialog();
           break;
         case 'copy':
-          // this.toggleShareDialog();
+          this.toggleFolderDialog();
           break;
         case 'rename':
           this.toggleNameDialog(data.row);
@@ -253,6 +258,20 @@ export default {
         type,
       };
       this.showShareDialog = true;
+    },
+
+    // folder dialog
+    toggleFolderDialog(item) {
+      this.folderData = item;
+
+      this.showFolderDialog = true;
+    },
+    folderDialogClose() {
+      this.showFolderDialog = false;
+    },
+    folderDialogSuccess() {
+      this.showFolderDialog = false;
+      this.refresh();
     },
 
     // folder name dialog

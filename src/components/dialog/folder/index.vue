@@ -14,10 +14,13 @@
         <i class="iconfont icon-arrow-l-right"></i>
       </el-button>
     </el-button-group>
+    <bread-crumb
+        :path="path"
+        @switch="switchPath" />
     <el-table
         class="file-table dialog-table"
-        :data="data"
-        :height="400">
+        :data="list"
+        :height="360">
       <el-table-column
           prop="type"
           label="文件名"
@@ -29,8 +32,9 @@
       <el-table-column>
         <template
             slot-scope="scope">
-          <a
-              :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
+          <span
+              class="link"
+              @click="switchPath(scope.row.path)">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -38,7 +42,7 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -61,7 +65,9 @@ import {
   Button,
 } from 'element-ui';
 
-import Mock from '../../../api/mock';
+import BreadCrumb from './bread-crumb.vue';
+
+import FileAPI from '../../../api/file';
 
 export default {
   name: 'FolderDialog',
@@ -71,6 +77,7 @@ export default {
     'el-table': Table,
     'el-table-column': TableColumn,
     'el-button': Button,
+    BreadCrumb,
   },
   props: {
     visible: {
@@ -82,10 +89,13 @@ export default {
       default: 'move',
     },
     title: String,
+    data: Object,
   },
   data() {
     return {
-      data: Mock.files,
+      loading: false,
+      path: '/',
+      list: [],
     };
   },
   computed: {
@@ -106,6 +116,30 @@ export default {
       };
 
       return labels[this.type];
+    },
+  },
+  created() {
+    this.getPath();
+  },
+  methods: {
+    switchPath(path) {
+      this.path = path;
+      this.getPath();
+    },
+    getPath() {
+      if (this.loading) {
+        return;
+      }
+
+      this.loading = true;
+
+      FileAPI.getPath(this.path)
+        .then((res) => {
+          this.list = res.data;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };

@@ -1,0 +1,14 @@
+.bread-crumb {
+  border-bottom: solid 1px #EBEEF5;
+  padding: 10px 0;
+
+  .el-breadcrumb {
+    line-height: 24px;
+    cursor: default;
+    user-select: none;
+  }
+
+  /deep/ .el-breadcrumb__separator {
+    margin: 0 4px;
+  }
+}
