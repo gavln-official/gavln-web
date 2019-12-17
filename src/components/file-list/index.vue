@@ -79,6 +79,7 @@
     <folder-dialog
         :visible="showFolderDialog"
         :data="folderData"
+        :type="folderDialogType"
         @close="folderDialogClose"
         @success="folderDialogSuccess" />
     <share-dialog
@@ -180,6 +181,7 @@ export default {
         type: '',
       },
       showFolderDialog: false,
+      folderDialogType: '',
       folderData: null,
     };
   },
@@ -227,10 +229,10 @@ export default {
           this.toggleShareDialog();
           break;
         case 'move':
-          this.toggleFolderDialog();
+          this.toggleFolderDialog(data.command, data.row);
           break;
         case 'copy':
-          this.toggleFolderDialog();
+          this.toggleFolderDialog(data.command, data.row);
           break;
         case 'rename':
           this.toggleNameDialog(data.row);
@@ -261,7 +263,8 @@ export default {
     },
 
     // folder dialog
-    toggleFolderDialog(item) {
+    toggleFolderDialog(type, item) {
+      this.folderDialogType = type;
       this.folderData = item;
 
       this.showFolderDialog = true;

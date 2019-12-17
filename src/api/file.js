@@ -88,10 +88,36 @@ function deletePath(path) {
   });
 }
 
+function move(from, to) {
+  const data = new FormData();
+  data.append('path', from);
+  data.append('tagPath', to);
+
+  return HTTP({
+    method: 'POST',
+    url: '/file/mv',
+    data,
+  });
+}
+
+function copy(from, to) {
+  const data = new FormData();
+  data.append('path', from);
+  data.append('tagPath', to);
+
+  return HTTP({
+    method: 'POST',
+    url: '/file/cp',
+    data,
+  });
+}
+
 export default {
   getPath,
   createPath,
   updatePath,
   upload,
   deletePath,
+  move,
+  copy,
 };
