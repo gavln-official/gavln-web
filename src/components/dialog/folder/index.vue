@@ -3,7 +3,8 @@
       class="folder-dialog"
       :visible="visible"
       width="640px"
-      :title="title || defaultTitle">
+      :title="title || defaultTitle"
+      @close="close">
     <el-button-group class="nav">
       <el-button
           type="text">
@@ -20,7 +21,9 @@
     <el-table
         class="file-table dialog-table"
         :data="list"
-        :height="360">
+        :height="360"
+        :highlight-current-row="true"
+        @row-click="toggleSelected">
       <el-table-column
           prop="type"
           label="文件名"
@@ -50,8 +53,12 @@
         slot="footer">
       <el-button
           class="left">新建文件夹</el-button>
-      <el-button>取消</el-button>
-      <el-button>{{ actionLabel }}</el-button>
+      <el-button
+          :disabled="saving"
+          @click="close">取消</el-button>
+      <el-button
+          :disabled="saving"
+          @click="save">{{ actionLabel }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -63,6 +70,7 @@ import {
   Table,
   TableColumn,
   Button,
+  Message,
 } from 'element-ui';
 
 import BreadCrumb from './bread-crumb.vue';
@@ -96,6 +104,8 @@ export default {
       loading: false,
       path: '/',
       list: [],
+      selected: null,
+      saving: false,
     };
   },
   computed: {
@@ -122,8 +132,19 @@ export default {
     this.getPath();
   },
   methods: {
+    close() {
+      if (this.saving) {
+        return;
+      }
+
+      this.$emit('close');
+    },
+    toggleSelected(row) {
+      this.selected = row;
+    },
     switchPath(path) {
       this.path = path;
+      this.selected = null;
       this.getPath();
     },
     getPath() {
@@ -140,6 +161,62 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    save() {
+      if (this.saving) {
+        return;
+      }
+
+      const from = this.data.path;
+
+      let target = this.path;
+      if (this.selected) {
+        if (!this.selected.dir) {
+          Message.error('请选择目标目录');
+          return;
+        }
+
+        target = this.selected.path;
+      }
+      const to = `${target === '/' ? '' : target}/${this.data.name}`;
+
+      console.log(from, to);
+      if (from === to
+          || to.indexOf(from) === 0) {
+        Message.error('请选择其他目录');
+        return;
+      }
+
+      switch (this.type) {
+        case 'move':
+          this.move(from, to);
+          break;
+        case 'copy':
+          this.copy(from, to);
+          break;
+        default:
+      }
+    },
+    move(from, to) {
+      FileAPI.move(from, to)
+        .then(() => {
+          this.success();
+        })
+        .finally(() => {
+          this.saving = false;
+        });
+    },
+    copy(from, to) {
+      FileAPI.copy(from, to)
+        .then(() => {
+          this.success();
+        })
+        .finally(() => {
+          this.saving = false;
+        });
+    },
+    success() {
+      this.$emit('success');
     },
   },
 };
