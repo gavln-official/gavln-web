@@ -77,6 +77,16 @@ async function upload(file, path, name) {
   }
 }
 
+async function download(file, size) {
+  try {
+    const list = await IPFS.download(file.blocks, size);
+
+    return list;
+  } catch (error) {
+    throw error;
+  }
+}
+
 function deletePath(path) {
   const data = new FormData();
   data.append('path', path);
@@ -117,6 +127,7 @@ export default {
   createPath,
   updatePath,
   upload,
+  download,
   deletePath,
   move,
   copy,
