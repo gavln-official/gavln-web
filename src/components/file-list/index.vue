@@ -70,6 +70,7 @@
         v-else
         :data="data" />
     <upload-dialog
+        v-if="showUploadDialog"
         :visible="showUploadDialog"
         :path="path"
         @close="uploadDialogClose"
@@ -106,6 +107,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'element-ui';
+import FileDownload from 'js-file-download';
 
 import BreadCrumb from './bread-crumb.vue';
 import FileTable from './table.vue';
@@ -228,6 +230,9 @@ export default {
         case 'share':
           this.toggleShareDialog();
           break;
+        case 'download':
+          this.download(data.row);
+          break;
         case 'move':
           this.toggleFolderDialog(data.command, data.row);
           break;
@@ -247,6 +252,7 @@ export default {
       }
     },
 
+    // share dialog
     toggleShareDialog(data) {
       const {
         id,
@@ -260,6 +266,14 @@ export default {
         type,
       };
       this.showShareDialog = true;
+    },
+
+    // download file
+    download(item) {
+      FileAPI.download(item, item.size)
+        .then((res) => {
+          FileDownload(res, item.name);
+        });
     },
 
     // folder dialog

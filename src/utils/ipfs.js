@@ -1,5 +1,6 @@
 import IPFS from 'ipfs';
 import Crypto from 'crypto-js';
+import Erasure from './erasure';
 
 let rootNode = null;
 
@@ -14,8 +15,30 @@ async function init() {
 async function encode(file) {
   const buffer = new Uint8Array(await file.arrayBuffer());
 
-  return window.erasure.split(buffer, 40, 10);
+  return Erasure.split(buffer, 5, 2);
 }
+
+/* eslint-disable */
+// https://gist.github.com/getify/7325764#file-gistfile1-js-L7
+function wordArrayToU8Array(wordArray) {
+  const length = wordArray.words.length;
+  const u8Array = new Uint8Array(wordArray.sigBytes + 1);
+
+  let offset = 0;
+  for (let i = 0; i < length; i += 1) {
+    const word = wordArray.words[i];
+
+    u8Array[offset + 1] = word >> 24;
+    u8Array[offset + 2] = (word >> 16) & 0xff;
+    u8Array[offset + 3] = (word >> 8) & 0xff;
+    u8Array[offset + 4] = word & 0xff;
+
+    offset += 4;
+  }
+
+  return u8Array.subarray(1);
+}
+/* eslint-enable */
 
 async function upload(key, file) {
   try {
@@ -30,7 +53,7 @@ async function upload(key, file) {
       );
 
       const res = await node.add(data.toString()); /* eslint-disable-line */
-      list.push(res[0]);
+      list.push(...res);
     }
 
     return list;
@@ -39,7 +62,33 @@ async function upload(key, file) {
   }
 }
 
+function decode(fragments, size) {
+  const fileData = Erasure.recombine(fragments, size, 5, 2);
+
+  return fileData.buffer.slice(0, size);
+}
+
+async function download(list, size) {
+  try {
+    const node = await init();
+
+    const fragments = [];
+    for (const item of list) { /* eslint-disable-line */
+      const blocks = await node.get(item.cid); /* eslint-disable-line */
+
+      const data = blocks.map(block => block.content).join('');
+      const raw = Crypto.AES.decrypt(data, item.key);
+      fragments.push(wordArrayToU8Array(raw));
+    }
+
+    return decode(fragments, size);
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   init,
   upload,
+  download,
 };

@@ -59,7 +59,9 @@
             <i
                 class="iconfont icon-share"
                 @click="rowCommand('share', scope.row)"></i>
-            <i class="iconfont icon-download"></i>
+            <i
+                class="iconfont icon-download"
+                @click="rowCommand('download', scope.row)"></i>
             <el-dropdown
                 placement="bottom"
                 @command="rowCommand($event, scope.row)">
