@@ -122,6 +122,17 @@ function copy(from, to) {
   });
 }
 
+function search(text) {
+  const data = new FormData();
+  data.append('search', text);
+
+  return HTTP({
+    method: 'POST',
+    url: '/search/search',
+    data,
+  });
+}
+
 export default {
   getPath,
   createPath,
@@ -131,4 +142,5 @@ export default {
   deletePath,
   move,
   copy,
+  search,
 };

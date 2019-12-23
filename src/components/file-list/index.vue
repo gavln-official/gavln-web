@@ -35,13 +35,8 @@
         </el-button>
       </template>
       <div class="right">
-        <el-input
-            type="text"
-            placeholder="搜索相关文件">
-          <i
-              class="iconfont icon-search"
-              slot="prefix"></i>
-        </el-input>
+        <search-input
+            @search="search" />
         <el-dropdown
             placement="bottom">
           <el-button
@@ -102,7 +97,6 @@
 import {
   MessageBox,
   Button,
-  Input,
   Dropdown,
   DropdownMenu,
   DropdownItem,
@@ -110,6 +104,7 @@ import {
 import FileDownload from 'js-file-download';
 
 import BreadCrumb from './bread-crumb.vue';
+import SearchInput from '../search-input/index.vue';
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -126,11 +121,11 @@ export default {
   name: 'FileList',
   components: {
     'el-button': Button,
-    'el-input': Input,
     'el-dropdown': Dropdown,
     'el-dropdown-menu': DropdownMenu,
     'el-dropdown-item': DropdownItem,
     BreadCrumb,
+    SearchInput,
     FileTable,
     FileGrid,
     FolderDialog,
@@ -188,6 +183,17 @@ export default {
     };
   },
   methods: {
+    search(text) {
+      if (this.searching) {
+        return;
+      }
+
+      if (!text) {
+        this.refresh();
+      } else {
+        this.$emit('search', text);
+      }
+    },
     toggleViewMode() {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'

@@ -5,7 +5,8 @@
           type="home"
           :path="path"
           :data="data"
-          @refresh="getPath"></file-list>
+          @refresh="getPath"
+          @search="search"></file-list>
     </div>
   </main-frame>
 </template>
@@ -54,6 +55,21 @@ export default {
       this.loading = true;
 
       FileAPI.getPath(this.path)
+        .then((res) => {
+          this.data = res.data;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    search(text) {
+      if (this.loading) {
+        return;
+      }
+
+      this.loading = true;
+
+      FileAPI.search(text)
         .then((res) => {
           this.data = res.data;
         })
