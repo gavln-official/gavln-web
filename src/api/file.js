@@ -133,6 +133,21 @@ function search(text) {
   });
 }
 
+function share(path, time, code) {
+  const data = new FormData();
+  data.append('path', path);
+  data.append('expires', time);
+  if (code) {
+    data.append('code', code);
+  }
+
+  return HTTP({
+    method: 'POST',
+    url: '/share/share',
+    data,
+  });
+}
+
 export default {
   getPath,
   createPath,
@@ -143,4 +158,5 @@ export default {
   move,
   copy,
   search,
+  share,
 };

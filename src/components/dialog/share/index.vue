@@ -3,7 +3,8 @@
       class="share-dialog"
       :visible="visible"
       width="640px"
-      :title="title">
+      :title="title"
+      @close="close">
     <el-form
         label-width="120px"
         v-if="step === 'create'">
@@ -38,10 +39,10 @@
       <div class="info">
         <i class="iconfont icon-check-o"></i>
         <div class="message">成功创建链接</div>
-        <div class="duration">7天后失效</div>
+        <div class="duration">{{ form.duration ? `${form.duration}天后失效` : '永久有效' }}</div>
       </div>
       <div class="url">
-        <span class="copy">{{ share.url }}</span>
+        <span class="copy">{{ shareData.url }}</span>
         <el-button
             @click="copyLink">{{ form.type === 'encrypt' ? '复制链接及密码' : '复制链接' }}</el-button>
       </div>
@@ -49,19 +50,24 @@
           class="code"
           v-if="form.type === 'encrypt'">
         <span>提取码:</span>
-        <span class="copy">{{ share.code }}</span>
+        <span class="copy">{{ shareData.code }}</span>
       </div>
     </div>
     <div
         slot="footer">
       <template
           v-if="step === 'create'">
-        <el-button>取消</el-button>
-        <el-button>创建链接</el-button>
+        <el-button
+            :disabled="saving"
+            @click="close">取消</el-button>
+        <el-button
+            :disabled="saving"
+            @click="share">创建链接</el-button>
       </template>
       <template
           v-if="step === 'success'">
-        <el-button>关闭</el-button>
+        <el-button
+            @click="close">关闭</el-button>
       </template>
     </div>
   </el-dialog>
@@ -69,6 +75,8 @@
 
 <script>
 import Utils from '../../../utils/index';
+
+import FileAPI from '../../../api/file';
 
 export default {
   name: 'ShareDialog',
@@ -90,15 +98,16 @@ export default {
         type: 'encrypt',
         duration: 0,
       },
-      share: {
-        url: 'https://gavln.com/s/bvhfkdsnvkjon5TsNHnKAXQ',
-        code: 'm8yw',
+      shareData: {
+        url: '',
+        code: '',
       },
+      saving: false,
     };
   },
   computed: {
     title() {
-      const type = this.data.type === 'folder'
+      const type = this.data.dir
         ? '文件夹'
         : '文件';
 
@@ -106,11 +115,45 @@ export default {
     },
   },
   methods: {
-    copyLink() {
-      let text = this.share.url;
-      if (this.form.type === 'encrypt') {
-        text = `${this.share.url} ${this.share.code}`;
+    close() {
+      if (this.saving) {
+        return;
       }
+
+      this.$emit('close');
+    },
+    share() {
+      if (this.saving) {
+        return;
+      }
+
+      const time = !this.form.duration
+        ? 0
+        : Math.round((Date.now()
+          + this.form.duration * 1000 * 60 * 60 * 24) / 1000);
+      const code = this.form.type === 'encrypt'
+        ? Utils.randomCode(4)
+        : '';
+
+      this.saving = true;
+
+      FileAPI.share(this.data.path, time, code)
+        .then((res) => {
+          this.shareData = {
+            url: `${window.location.origin}/s/${res.data.rand}`,
+            code,
+          };
+
+          this.step = 'success';
+        })
+        .finally(() => {
+          this.saving = false;
+        });
+    },
+    copyLink() {
+      const text = this.form.type === 'encrypt'
+        ? `${this.shareData.url} ${this.shareData.code}`
+        : this.shareData.url;
 
       try {
         Utils.copyToClipboard(text);

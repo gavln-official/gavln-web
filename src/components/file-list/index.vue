@@ -81,8 +81,11 @@
         @close="folderDialogClose"
         @success="folderDialogSuccess" />
     <share-dialog
+        v-if="showShareDialog"
         :visible="showShareDialog"
-        :data="shareData" />
+        :data="shareData"
+        @close="hideShareDialog"
+        @success="hideShareDialog" />
     <!-- <ui-progress
         :percentage="50"
         message="正在删除...50%" /> -->
@@ -234,7 +237,7 @@ export default {
     onCommand(data) {
       switch (data.command) {
         case 'share':
-          this.toggleShareDialog();
+          this.toggleShareDialog(data.row);
           break;
         case 'download':
           this.download(data.row);
@@ -261,17 +264,20 @@ export default {
     // share dialog
     toggleShareDialog(data) {
       const {
-        id,
+        path,
         name,
-        type,
+        dir,
       } = data;
 
       this.shareData = {
-        id,
+        path,
         name,
-        type,
+        dir,
       };
       this.showShareDialog = true;
+    },
+    hideShareDialog() {
+      this.showShareDialog = false;
     },
 
     // download file
@@ -332,7 +338,7 @@ export default {
 
     // delete folder/file
     deletePath(item) {
-      const message = `删除该${item.dir ? '目录' : '文件'}？`;
+      const message = `删除该${item.dir ? '文件夹' : '文件'}？`;
       this.$confirm(message, '提示', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',

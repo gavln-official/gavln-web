@@ -158,7 +158,7 @@ export default {
       let target = this.path;
       if (this.selected) {
         if (!this.selected.dir) {
-          this.$message.error('请选择目标目录');
+          this.$message.error('请选择目标文件夹');
           return;
         }
 
@@ -166,10 +166,9 @@ export default {
       }
       const to = `${target === '/' ? '' : target}/${this.data.name}`;
 
-      console.log(from, to);
       if (from === to
           || to.indexOf(from) === 0) {
-        this.$message.error('请选择其他目录');
+        this.$message.error('请选择其他文件夹');
         return;
       }
 
