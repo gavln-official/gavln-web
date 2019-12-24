@@ -59,10 +59,12 @@
     </div>
     <file-table
         v-if="viewMode === 'list'"
+        v-loading="loading"
         :data="data"
         @command="onCommand" />
     <file-grid
         v-else
+        v-loading="loading"
         :data="data" />
     <upload-dialog
         v-if="showUploadDialog"
@@ -110,6 +112,8 @@ import NameDialog from '../dialog/name.vue';
 import FileAPI from '../../api/file';
 import FavoriteAPI from '../../api/favorite';
 
+import Storage from '../../utils/storage';
+
 export default {
   name: 'FileList',
   components: {
@@ -138,6 +142,7 @@ export default {
     },
     // current path
     path: String,
+    loading: Boolean,
     // content list
     data: Array,
   },
@@ -171,6 +176,10 @@ export default {
       folderData: null,
     };
   },
+  created() {
+    const viewMode = Storage.get('view-mode');
+    this.viewMode = viewMode || 'list';
+  },
   methods: {
     search(text) {
       if (this.searching) {
@@ -187,6 +196,8 @@ export default {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'
         : 'list';
+
+      Storage.set('view-mode', this.viewMode);
     },
     refresh() {
       this.$emit('refresh');
