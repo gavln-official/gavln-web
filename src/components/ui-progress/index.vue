@@ -8,15 +8,8 @@
 </template>
 
 <script>
-import {
-  Progress,
-} from 'element-ui';
-
 export default {
   name: 'UiProgress',
-  components: {
-    'el-progress': Progress,
-  },
   props: {
     percentage: Number,
     message: String,

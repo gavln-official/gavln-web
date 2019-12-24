@@ -64,15 +64,6 @@
 </template>
 
 <script>
-import {
-  Dialog,
-  ButtonGroup,
-  Table,
-  TableColumn,
-  Button,
-  Message,
-} from 'element-ui';
-
 import BreadCrumb from './bread-crumb.vue';
 
 import FileAPI from '../../../api/file';
@@ -80,11 +71,6 @@ import FileAPI from '../../../api/file';
 export default {
   name: 'FolderDialog',
   components: {
-    'el-dialog': Dialog,
-    'el-button-group': ButtonGroup,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-button': Button,
     BreadCrumb,
   },
   props: {
@@ -172,7 +158,7 @@ export default {
       let target = this.path;
       if (this.selected) {
         if (!this.selected.dir) {
-          Message.error('请选择目标目录');
+          this.$message.error('请选择目标目录');
           return;
         }
 
@@ -183,7 +169,7 @@ export default {
       console.log(from, to);
       if (from === to
           || to.indexOf(from) === 0) {
-        Message.error('请选择其他目录');
+        this.$message.error('请选择其他目录');
         return;
       }
 

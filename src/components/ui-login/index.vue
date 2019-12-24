@@ -46,23 +46,10 @@
 </template>
 
 <script>
-import {
-  Form,
-  FormItem,
-  Input,
-  Button,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 
 export default {
   name: 'FormContentLogin',
-  components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   data() {
     return {
       form: {

@@ -79,20 +79,8 @@
 </template>
 
 <script>
-import {
-  Button,
-  Table,
-  TableColumn,
-  MessageBox,
-} from 'element-ui';
-
 export default {
   name: 'ShareList',
-  components: {
-    'el-button': Button,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-  },
   props: {
     data: Array,
   },
@@ -114,7 +102,7 @@ export default {
       this.tableHeight = window.innerHeight - 124;
     },
     cancelShare() {
-      MessageBox.confirm('你要确认取消分享吗？<br>取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接', '确认取消分享', {
+      this.$confirm('你要确认取消分享吗？<br>取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接', '确认取消分享', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',

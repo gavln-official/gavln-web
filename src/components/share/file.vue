@@ -21,17 +21,10 @@
 </template>
 
 <script>
-import {
-  Button,
-} from 'element-ui';
-
 export default {
   name: 'ShareFile',
   props: {
     data: Object,
-  },
-  components: {
-    'el-button': Button,
   },
 };
 </script>

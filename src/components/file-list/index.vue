@@ -94,13 +94,6 @@
 </template>
 
 <script>
-import {
-  MessageBox,
-  Button,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from 'element-ui';
 import FileDownload from 'js-file-download';
 
 import BreadCrumb from './bread-crumb.vue';
@@ -120,10 +113,6 @@ import FavoriteAPI from '../../api/favorite';
 export default {
   name: 'FileList',
   components: {
-    'el-button': Button,
-    'el-dropdown': Dropdown,
-    'el-dropdown-menu': DropdownMenu,
-    'el-dropdown-item': DropdownItem,
     BreadCrumb,
     SearchInput,
     FileTable,
@@ -333,7 +322,7 @@ export default {
     // delete folder/file
     deletePath(item) {
       const message = `删除该${item.dir ? '目录' : '文件'}？`;
-      MessageBox.confirm(message, '提示', {
+      this.$confirm(message, '提示', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
       })

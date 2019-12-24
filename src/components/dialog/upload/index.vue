@@ -39,28 +39,11 @@
 </template>
 
 <script>
-import {
-  Dialog,
-  Form,
-  FormItem,
-  Upload,
-  Input,
-  Button,
-} from 'element-ui';
-
 import FileAPI from '../../../api/file';
 import Utils from '../../../utils/index';
 
 export default {
   name: 'UploadDialog',
-  components: {
-    'el-dialog': Dialog,
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-upload': Upload,
-    'el-input': Input,
-    'el-button': Button,
-  },
   props: {
     visible: {
       type: Boolean,

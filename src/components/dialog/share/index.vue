@@ -68,28 +68,10 @@
 </template>
 
 <script>
-import {
-  Dialog,
-  Form,
-  FormItem,
-  RadioGroup,
-  Radio,
-  Button,
-  Message,
-} from 'element-ui';
-
 import Utils from '../../../utils/index';
 
 export default {
   name: 'ShareDialog',
-  components: {
-    'el-dialog': Dialog,
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-radio-group': RadioGroup,
-    'el-radio': Radio,
-    'el-button': Button,
-  },
   props: {
     visible: {
       type: Boolean,
@@ -133,9 +115,9 @@ export default {
       try {
         Utils.copyToClipboard(text);
 
-        Message.success('复制成功');
+        this.$message.success('复制成功');
       } catch (error) {
-        Message.error('复制失败，请手动复制');
+        this.$message.error('复制失败，请手动复制');
       }
     },
   },

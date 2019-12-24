@@ -24,17 +24,8 @@
 </template>
 
 <script>
-import {
-  Input,
-  Button,
-} from 'element-ui';
-
 export default {
   name: 'ShareVerify',
-  components: {
-    'el-input': Input,
-    'el-button': Button,
-  },
 };
 </script>
 

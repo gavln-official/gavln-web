@@ -61,19 +61,8 @@
 </template>
 
 <script>
-import {
-  Button,
-  Table,
-  TableColumn,
-} from 'element-ui';
-
 export default {
   name: 'FinishedList',
-  components: {
-    'el-button': Button,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-  },
   props: {
     data: Array,
   },

@@ -21,23 +21,8 @@
 </template>
 
 <script>
-import {
-  Dialog,
-  Form,
-  FormItem,
-  Input,
-  Button,
-} from 'element-ui';
-
 export default {
   name: 'UrlDialog',
-  components: {
-    'el-dialog': Dialog,
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   props: {
     visible: {
       type: Boolean,

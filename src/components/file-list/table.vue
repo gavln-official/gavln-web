@@ -88,23 +88,8 @@
 </template>
 
 <script>
-import {
-  Table,
-  TableColumn,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from 'element-ui';
-
 export default {
   name: 'FileTable',
-  components: {
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-dropdown': Dropdown,
-    'el-dropdown-menu': DropdownMenu,
-    'el-dropdown-item': DropdownItem,
-  },
   props: {
     data: Array,
   },
