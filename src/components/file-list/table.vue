@@ -5,12 +5,8 @@
         :data="data"
         :height="tableHeight">
       <el-table-column
-          type="selection"
-          width="64"></el-table-column>
-      <el-table-column
           prop="type"
-          label="全选"
-          width="48">
+          width="70">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
