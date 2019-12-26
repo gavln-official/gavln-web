@@ -133,19 +133,39 @@ function search(text) {
   });
 }
 
-function share(path, time, code) {
-  const data = new FormData();
-  data.append('path', path);
-  data.append('expires', time);
-  if (code) {
-    data.append('code', code);
-  }
-
+function timestamp() {
   return HTTP({
-    method: 'POST',
-    url: '/share/share',
-    data,
+    method: 'GET',
+    url: '/timestamp',
   });
+}
+
+async function share(path, duration, code) {
+  try {
+    let time = 0;
+    if (duration) {
+      const timeRes = await timestamp();
+
+      time = timeRes.data.unix + duration * 60 * 60 * 24;
+    }
+
+    const data = new FormData();
+    data.append('path', path);
+    data.append('expires', time);
+    if (code) {
+      data.append('code', code);
+    }
+
+    const shareRes = await HTTP({
+      method: 'POST',
+      url: '/share/share',
+      data,
+    });
+
+    return shareRes;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export default {

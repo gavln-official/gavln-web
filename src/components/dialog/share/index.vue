@@ -127,17 +127,13 @@ export default {
         return;
       }
 
-      const time = !this.form.duration
-        ? 0
-        : Math.round((Date.now()
-          + this.form.duration * 1000 * 60 * 60 * 24) / 1000);
       const code = this.form.type === 'encrypt'
         ? Utils.randomCode(4)
         : '';
 
       this.saving = true;
 
-      FileAPI.share(this.data.path, time, code)
+      FileAPI.share(this.data.path, this.form.duration, code)
         .then((res) => {
           this.shareData = {
             url: `${window.location.origin}/s/${res.data.rand}`,
