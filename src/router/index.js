@@ -35,7 +35,7 @@ const routes = [
     component: () => import('../pages/reset.vue'),
   },
   {
-    path: '/s/:shareId',
+    path: '/s/:rand',
     name: 'open-share',
     component: () => import('../pages/open-share/index.vue'),
   },

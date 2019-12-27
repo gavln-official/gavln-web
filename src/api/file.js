@@ -53,7 +53,7 @@ function addFile(path, name, size, blocks) {
 function getUploadKey() {
   return HTTP({
     method: 'GET',
-    url: '/file/key',
+    url: '/file/key/1',
   });
 }
 
@@ -61,9 +61,7 @@ async function upload(file, path, name) {
   try {
     const keyRes = await getUploadKey();
 
-    const {
-      key,
-    } = keyRes.data;
+    const key = keyRes.data.key[0];
 
     const list = await IPFS.upload(key, file);
     const blocks = list.map(item => ({
