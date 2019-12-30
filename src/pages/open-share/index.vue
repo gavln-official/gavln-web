@@ -128,7 +128,8 @@ export default {
         return;
       }
 
-      if (!code) {
+      if (this.encrypted
+          && !code) {
         this.verifyError = '请输入提取码';
         return;
       }
@@ -142,7 +143,10 @@ export default {
             this.type = 'file';
             this.data = res.data.file;
             this.verified = true;
-          }
+          } // TODO: folder
+
+          this.data.rand = this.rand;
+          this.data.code = code;
         })
         .catch((error) => {
           if (error.response

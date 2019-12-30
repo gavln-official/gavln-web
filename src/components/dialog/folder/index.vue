@@ -58,7 +58,7 @@
           @click="close">取消</el-button>
       <el-button
           :disabled="saving"
-          @click="save">{{ actionLabel }}</el-button>
+          @click="ok">{{ actionLabel }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -67,6 +67,7 @@
 import BreadCrumb from './bread-crumb.vue';
 
 import FileAPI from '../../../api/file';
+import ShareAPI from '../../../api/share';
 
 export default {
   name: 'FolderDialog',
@@ -148,7 +149,7 @@ export default {
           this.loading = false;
         });
     },
-    save() {
+    ok() {
       if (this.saving) {
         return;
       }
@@ -179,6 +180,9 @@ export default {
         case 'copy':
           this.copy(from, to);
           break;
+        case 'save':
+          this.save(from, to);
+          break;
         default:
       }
     },
@@ -193,6 +197,15 @@ export default {
     },
     copy(from, to) {
       FileAPI.copy(from, to)
+        .then(() => {
+          this.success();
+        })
+        .finally(() => {
+          this.saving = false;
+        });
+    },
+    save(from, to) {
+      ShareAPI.save(from, to, this.data.rand, this.data.code)
         .then(() => {
           this.success();
         })

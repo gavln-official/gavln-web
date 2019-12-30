@@ -39,9 +39,26 @@ function getShare(rand, code) {
   });
 }
 
+function save(from, to, rand, code) {
+  const data = new FormData();
+  data.append('oldPath', from);
+  data.append('newPath', to);
+  data.append('rand', rand);
+  if (code) {
+    data.append('code', code);
+  }
+
+  return HTTP({
+    method: 'POST',
+    url: '/share/save',
+    data,
+  });
+}
+
 export default {
   getList,
   cancelShare,
   check,
   getShare,
+  save,
 };
