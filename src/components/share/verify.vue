@@ -8,7 +8,7 @@
       </h2>
     </div>
     <div class="content">
-      <p class="message">{{ username }}给您分享了加密文件</p>
+      <p class="message">{{ username }} 给您分享了加密文件</p>
       <div class="form">
         <span class="label">请输入提取码：</span>
         <div class="form-item">

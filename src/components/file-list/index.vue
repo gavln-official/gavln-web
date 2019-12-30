@@ -282,7 +282,7 @@ export default {
 
     // download file
     download(item) {
-      FileAPI.download(item, item.size)
+      FileAPI.download(item)
         .then((res) => {
           FileDownload(res, item.name);
         });

@@ -103,6 +103,11 @@ export default {
             default:
           }
 
+          if (res.data.account
+              && res.data.account.name) {
+            this.username = res.data.account.name;
+          }
+
           if (!this.expired
               && !this.encrypted) {
             this.getShare();
@@ -133,7 +138,11 @@ export default {
 
       ShareAPI.getShare(this.rand, code)
         .then((res) => {
-          console.log(res);
+          if (res.data.file) {
+            this.type = 'file';
+            this.data = res.data.file;
+            this.verified = true;
+          }
         })
         .catch((error) => {
           if (error.response

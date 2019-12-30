@@ -75,9 +75,9 @@ async function upload(file, path, name) {
   }
 }
 
-async function download(file, size) {
+async function download(file) {
   try {
-    const list = await IPFS.download(file.blocks, size);
+    const list = await IPFS.download(file.blocks, file.size);
 
     return list;
   } catch (error) {
