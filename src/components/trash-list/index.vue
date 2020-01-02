@@ -67,20 +67,12 @@
 
 <script>
 import {
-  Button,
-  Table,
-  TableColumn,
-} from 'element-ui';
-import {
   VueContext,
 } from 'vue-context';
 
 export default {
   name: 'UploadList',
   components: {
-    'el-button': Button,
-    'el-table': Table,
-    'el-table-column': TableColumn,
     VueContext,
   },
   props: {

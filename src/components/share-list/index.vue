@@ -1,27 +1,13 @@
 <template>
   <div class="file-list share-list">
-    <div class="toolbar">
-      <el-button>
-        <i class="iconfont icon-trash"></i>
-        <span>清空全部记录</span>
-      </el-button>
-      <el-button
-          @click="cancelShare">
-        <i class="iconfont icon-share"></i>
-        <span>取消分享</span>
-      </el-button>
-    </div>
     <el-table
         class="file-table share-table"
+        v-loading="loading"
         :data="data"
         :height="tableHeight">
       <el-table-column
-          type="selection"
-          width="64"></el-table-column>
-      <el-table-column
           prop="type"
-          label="全选"
-          width="48">
+          width="70">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
@@ -31,7 +17,7 @@
         <template
             slot-scope="scope">
           <a
-              v-if="scope.row.type === 'folder'"
+              v-if="scope.row.dir"
               :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
           <span
               v-else>{{ scope.row.name }}</span>
@@ -42,28 +28,31 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ new Date(scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
           label="查看次数"
           width="80">
-        <template>
-          <span>1次</span>
+        <template
+            slot-scope="scope">
+          <span>{{ scope.row.watch }}次</span>
         </template>
       </el-table-column>
       <el-table-column
           label="下载次数"
           width="80">
-        <template>
-          <span>1次</span>
+        <template
+            slot-scope="scope">
+          <span>{{ scope.row.download }}次</span>
         </template>
       </el-table-column>
       <el-table-column
           label="保存次数"
           width="80">
-        <template>
-          <span>1次</span>
+        <template
+            slot-scope="scope">
+          <span>{{ scope.row.fork }}次</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -71,7 +60,25 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+          <span
+              v-if="scope.row.expires">{{ new Date(scope.row.expires * 1000) | time('yyyy/MM/dd HH:mm') }}</span> <!-- eslint-disable-line -->
+          <span
+              v-else>-</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+          label=""
+          width="120">
+        <template
+            slot-scope="scope">
+          <div class="actions">
+            <i
+                class="iconfont icon-copy"
+                @click="copyLink(scope.row)"></i>
+            <i
+                class="iconfont icon-trash"
+                @click="cancelShare(scope.row)"></i>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -79,21 +86,14 @@
 </template>
 
 <script>
-import {
-  Button,
-  Table,
-  TableColumn,
-  MessageBox,
-} from 'element-ui';
+import ShareAPI from '../../api/share';
+
+import Utils from '../../utils/index';
 
 export default {
   name: 'ShareList',
-  components: {
-    'el-button': Button,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-  },
   props: {
+    loading: Boolean,
     data: Array,
   },
   data() {
@@ -111,16 +111,38 @@ export default {
   },
   methods: {
     calcTableHeight() {
-      this.tableHeight = window.innerHeight - 124;
+      this.tableHeight = window.innerHeight - 64;
     },
-    cancelShare() {
-      MessageBox.confirm('你要确认取消分享吗？<br>取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接', '确认取消分享', {
+    refresh() {
+      this.$emit('refresh');
+    },
+    cancelShare(item) {
+      this.$confirm('你要确认取消分享吗？<br>取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接', '确认取消分享', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       })
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+          ShareAPI.cancelShare(item.rand)
+            .then(() => {
+              this.refresh();
+            });
+        });
+    },
+    copyLink(item) {
+      const url = `${window.location.origin}/s/${item.rand}`;
+
+      const text = item.code
+        ? `${url} ${item.code}`
+        : url;
+
+      try {
+        Utils.copyToClipboard(text);
+
+        this.$message.success('复制成功');
+      } catch (error) {
+        //
+      }
     },
   },
 };

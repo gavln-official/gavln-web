@@ -59,26 +59,12 @@
 </template>
 
 <script>
-import {
-  Form,
-  FormItem,
-  Input,
-  Button,
-  Message,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 
 let timer = null;
 
 export default {
   name: 'FormContentReset',
-  components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   data() {
     return {
       form: {
@@ -161,7 +147,7 @@ export default {
       UserAPI.sendRetrieve(username, email)
         .then(() => {
           this.startCountdown();
-          Message.success('验证码已发送至您的邮箱');
+          this.$message.success('验证码已发送至您的邮箱');
         });
     },
     startCountdown() {
@@ -200,14 +186,14 @@ export default {
             password,
           )
             .then(() => {
-              Message.success('密码已重置，请登录');
+              this.$message.success('密码已重置，请登录');
 
               this.$router.push({
                 name: 'login',
               });
             })
             .catch(() => {
-              Message.error('重置密码失败');
+              this.$message.error('重置密码失败');
             })
             .finally(() => {
               this.saving = false;

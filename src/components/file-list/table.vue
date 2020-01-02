@@ -5,12 +5,8 @@
         :data="data"
         :height="tableHeight">
       <el-table-column
-          type="selection"
-          width="64"></el-table-column>
-      <el-table-column
           prop="type"
-          label="全选"
-          width="48">
+          width="70">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
@@ -45,7 +41,7 @@
           label="修改时间"
           sortable
           width="160"
-          :sort-method="sortByUtime">
+          :sort-method="sortByTime">
         <template
             slot-scope="scope">
           <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
@@ -60,6 +56,7 @@
                 class="iconfont icon-share"
                 @click="rowCommand('share', scope.row)"></i>
             <i
+                v-if="!scope.row.dir"
                 class="iconfont icon-download"
                 @click="rowCommand('download', scope.row)"></i>
             <el-dropdown
@@ -88,23 +85,8 @@
 </template>
 
 <script>
-import {
-  Table,
-  TableColumn,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from 'element-ui';
-
 export default {
   name: 'FileTable',
-  components: {
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-dropdown': Dropdown,
-    'el-dropdown-menu': DropdownMenu,
-    'el-dropdown-item': DropdownItem,
-  },
   props: {
     data: Array,
   },
@@ -132,8 +114,8 @@ export default {
     sortBySize(a, b) {
       return a.size - b.size;
     },
-    sortByUtime(a, b) {
-      return new Date(a.utime) - new Date(b.utime);
+    sortByTime(a, b) {
+      return new Date(a.time) - new Date(b.time);
     },
     rowCommand(command, row) {
       this.$emit('command', {

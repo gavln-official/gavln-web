@@ -79,22 +79,11 @@
 </template>
 
 <script>
-import {
-  Button,
-  ButtonGroup,
-  Table,
-  TableColumn,
-} from 'element-ui';
-
 import FolderDialog from '../dialog/folder/index.vue';
 
 export default {
   name: 'ShareFolder',
   components: {
-    'el-button': Button,
-    'el-button-group': ButtonGroup,
-    'el-table': Table,
-    'el-table-column': TableColumn,
     FolderDialog,
   },
   props: {

@@ -1,9 +1,7 @@
 <template>
   <el-dialog
       :visible="visible"
-      :title="data.action === 'create'
-        ? '新建目录'
-        : '重命名目录'"
+      :title="title"
       width="480px"
       @close="close">
     <el-form
@@ -32,26 +30,11 @@
 </template>
 
 <script>
-import {
-  Dialog,
-  Form,
-  FormItem,
-  Input,
-  Button,
-} from 'element-ui';
-
 import FileAPI from '../../api/file';
 import Utils from '../../utils/index';
 
 export default {
   name: 'NameDialog',
-  components: {
-    'el-dialog': Dialog,
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   props: {
     visible: Boolean,
     data: Object,
@@ -65,7 +48,7 @@ export default {
       formRules: {
         name: [{
           required: true,
-          message: '请填写目录名称',
+          message: '请填写文件夹名称',
           trigger: 'blur',
         }],
       },
@@ -73,6 +56,16 @@ export default {
     };
   },
   computed: {
+    title() {
+      const action = this.data.action === 'create'
+        ? '新建'
+        : '重命名';
+      const name = this.data.dir
+        ? '文件夹'
+        : '文件';
+
+      return `${action}${name}`;
+    },
     fullName() {
       let {
         name,

@@ -35,13 +35,8 @@
         </el-button>
       </template>
       <div class="right">
-        <el-input
-            type="text"
-            placeholder="搜索相关文件">
-          <i
-              class="iconfont icon-search"
-              slot="prefix"></i>
-        </el-input>
+        <search-input
+            @search="search" />
         <el-dropdown
             placement="bottom">
           <el-button
@@ -64,10 +59,12 @@
     </div>
     <file-table
         v-if="viewMode === 'list'"
+        v-loading="loading"
         :data="data"
         @command="onCommand" />
     <file-grid
         v-else
+        v-loading="loading"
         :data="data" />
     <upload-dialog
         v-if="showUploadDialog"
@@ -84,8 +81,11 @@
         @close="folderDialogClose"
         @success="folderDialogSuccess" />
     <share-dialog
+        v-if="showShareDialog"
         :visible="showShareDialog"
-        :data="shareData" />
+        :data="shareData"
+        @close="hideShareDialog"
+        @success="hideShareDialog" />
     <!-- <ui-progress
         :percentage="50"
         message="正在删除...50%" /> -->
@@ -99,17 +99,10 @@
 </template>
 
 <script>
-import {
-  MessageBox,
-  Button,
-  Input,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from 'element-ui';
 import FileDownload from 'js-file-download';
 
 import BreadCrumb from './bread-crumb.vue';
+import SearchInput from '../search-input/index.vue';
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -122,15 +115,13 @@ import NameDialog from '../dialog/name.vue';
 import FileAPI from '../../api/file';
 import FavoriteAPI from '../../api/favorite';
 
+import Storage from '../../utils/storage';
+
 export default {
   name: 'FileList',
   components: {
-    'el-button': Button,
-    'el-input': Input,
-    'el-dropdown': Dropdown,
-    'el-dropdown-menu': DropdownMenu,
-    'el-dropdown-item': DropdownItem,
     BreadCrumb,
+    SearchInput,
     FileTable,
     FileGrid,
     FolderDialog,
@@ -154,6 +145,7 @@ export default {
     },
     // current path
     path: String,
+    loading: Boolean,
     // content list
     data: Array,
   },
@@ -187,11 +179,28 @@ export default {
       folderData: null,
     };
   },
+  created() {
+    const viewMode = Storage.get('view-mode');
+    this.viewMode = viewMode || 'list';
+  },
   methods: {
+    search(text) {
+      if (this.searching) {
+        return;
+      }
+
+      if (!text) {
+        this.refresh();
+      } else {
+        this.$emit('search', text);
+      }
+    },
     toggleViewMode() {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'
         : 'list';
+
+      Storage.set('view-mode', this.viewMode);
     },
     refresh() {
       this.$emit('refresh');
@@ -228,7 +237,7 @@ export default {
     onCommand(data) {
       switch (data.command) {
         case 'share':
-          this.toggleShareDialog();
+          this.toggleShareDialog(data.row);
           break;
         case 'download':
           this.download(data.row);
@@ -255,22 +264,25 @@ export default {
     // share dialog
     toggleShareDialog(data) {
       const {
-        id,
+        path,
         name,
-        type,
+        dir,
       } = data;
 
       this.shareData = {
-        id,
+        path,
         name,
-        type,
+        dir,
       };
       this.showShareDialog = true;
+    },
+    hideShareDialog() {
+      this.showShareDialog = false;
     },
 
     // download file
     download(item) {
-      FileAPI.download(item, item.size)
+      FileAPI.download(item)
         .then((res) => {
           FileDownload(res, item.name);
         });
@@ -326,8 +338,8 @@ export default {
 
     // delete folder/file
     deletePath(item) {
-      const message = `删除该${item.dir ? '目录' : '文件'}？`;
-      MessageBox.confirm(message, '提示', {
+      const message = `删除该${item.dir ? '文件夹' : '文件'}？`;
+      this.$confirm(message, '提示', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
       })

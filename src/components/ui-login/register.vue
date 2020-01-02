@@ -52,25 +52,11 @@
 </template>
 
 <script>
-import {
-  Form,
-  FormItem,
-  Input,
-  Button,
-  Message,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 import Validator from '../../utils/validator';
 
 export default {
   name: 'FormContentRegister',
-  components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   data() {
     return {
       form: {
@@ -166,7 +152,7 @@ export default {
             email,
           )
             .then(() => {
-              Message.success('账户注册成功，请登录');
+              this.$message.success('账户注册成功，请登录');
 
               this.$router.push({
                 name: 'login',

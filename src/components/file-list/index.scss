@@ -38,16 +38,14 @@
     .right {
       float: right;
 
-      .el-input,
       .el-dropdown,
       .el-button {
         display: inline-block;
         vertical-align: middle;
       }
 
-      .el-input {
+      .search-input {
         margin-right: 10px;
-        width: 180px;
       }
 
       .el-dropdown {

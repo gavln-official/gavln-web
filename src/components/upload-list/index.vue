@@ -82,23 +82,10 @@
 </template>
 
 <script>
-import {
-  Button,
-  Progress,
-  Table,
-  TableColumn,
-} from 'element-ui';
-
 import Utils from '../../utils/index';
 
 export default {
   name: 'UploadList',
-  components: {
-    'el-button': Button,
-    'el-progress': Progress,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-  },
   props: {
     // 类型（upload: 全部文件, download: 我的收藏）
     type: {

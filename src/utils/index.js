@@ -55,9 +55,16 @@ function parseFileName(name) {
   return data;
 }
 
+function randomCode(length = 4) {
+  return Math.random()
+    .toString(36)
+    .substring(2, 2 + length);
+}
+
 export default {
   formatTime,
   copyToClipboard,
   encodePassword,
   parseFileName,
+  randomCode,
 };

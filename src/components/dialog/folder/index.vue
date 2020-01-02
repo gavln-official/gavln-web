@@ -58,33 +58,20 @@
           @click="close">取消</el-button>
       <el-button
           :disabled="saving"
-          @click="save">{{ actionLabel }}</el-button>
+          @click="ok">{{ actionLabel }}</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import {
-  Dialog,
-  ButtonGroup,
-  Table,
-  TableColumn,
-  Button,
-  Message,
-} from 'element-ui';
-
 import BreadCrumb from './bread-crumb.vue';
 
 import FileAPI from '../../../api/file';
+import ShareAPI from '../../../api/share';
 
 export default {
   name: 'FolderDialog',
   components: {
-    'el-dialog': Dialog,
-    'el-button-group': ButtonGroup,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-button': Button,
     BreadCrumb,
   },
   props: {
@@ -162,7 +149,7 @@ export default {
           this.loading = false;
         });
     },
-    save() {
+    ok() {
       if (this.saving) {
         return;
       }
@@ -172,7 +159,7 @@ export default {
       let target = this.path;
       if (this.selected) {
         if (!this.selected.dir) {
-          Message.error('请选择目标目录');
+          this.$message.error('请选择目标文件夹');
           return;
         }
 
@@ -180,10 +167,9 @@ export default {
       }
       const to = `${target === '/' ? '' : target}/${this.data.name}`;
 
-      console.log(from, to);
       if (from === to
           || to.indexOf(from) === 0) {
-        Message.error('请选择其他目录');
+        this.$message.error('请选择其他文件夹');
         return;
       }
 
@@ -193,6 +179,9 @@ export default {
           break;
         case 'copy':
           this.copy(from, to);
+          break;
+        case 'save':
+          this.save(from, to);
           break;
         default:
       }
@@ -208,6 +197,15 @@ export default {
     },
     copy(from, to) {
       FileAPI.copy(from, to)
+        .then(() => {
+          this.success();
+        })
+        .finally(() => {
+          this.saving = false;
+        });
+    },
+    save(from, to) {
+      ShareAPI.save(from, to, this.data.rand, this.data.code)
         .then(() => {
           this.success();
         })

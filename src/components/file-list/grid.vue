@@ -32,16 +32,12 @@
 
 <script>
 import {
-  Checkbox,
-} from 'element-ui';
-import {
   VueContext,
 } from 'vue-context';
 
 export default {
   name: 'FileGrid',
   components: {
-    'el-checkbox': Checkbox,
     VueContext,
   },
   props: {
