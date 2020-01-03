@@ -5,14 +5,12 @@
           :data="data"
           @restore="restore"
           @delete="doDelete"
-          @reload="getList" />
+          @clear="clear" />
     </div>
   </main-frame>
 </template>
 
 <script>
-import Mock from '../api/mock';
-
 import MainFrame from '../components/main-frame/index.vue';
 import TrashList from '../components/trash-list/index.vue';
 import TrashAPI from '../api/trash';
@@ -35,13 +33,12 @@ export default {
         return;
       }
       this.loading = true;
-      this.data = Mock.data;
-      // const r = await TrashAPI.getList();
-      // if (r.code !== 0) {
-      //   this.$message(r.msg);
-      // } else {
-      //   this.data = r.data;
-      // }
+      const r = await TrashAPI.getList();
+      if (r.code !== 0) {
+        this.$message(r.msg);
+      } else {
+        this.data = r.data;
+      }
       this.loading = false;
     },
     async restore(file) {
@@ -62,6 +59,21 @@ export default {
         this.$message.error(r.msg);
       } else {
         this.getList();
+      }
+    },
+    async clear() {
+      try {
+        await this.$confirm('确定要清空回收站吗？');
+        this.loading = true;
+        const r = await TrashAPI.clear();
+        this.loading = false;
+        if (r.code !== 0) {
+          this.$message.error(r.msg);
+        } else {
+          this.getList();
+        }
+      } catch (err) {
+        // cancel
       }
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="file-list trash-list">
     <div class="toolbar">
-      <el-button>
+      <el-button :disabled="!data.length" @click="clear">
         <i class="iconfont icon-trash"></i>
         <span>清空回收站</span>
       </el-button>
@@ -98,6 +98,9 @@ export default {
     },
     doRemove() {
       this.$emit('delete', this.contextRow);
+    },
+    clear() {
+      this.$emit('clear');
     },
   },
   mounted() {

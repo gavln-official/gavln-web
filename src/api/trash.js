@@ -31,4 +31,11 @@ export default {
       data,
     });
   },
+
+  clear() {
+    return HTTP({
+      method: 'POST',
+      url: '/file/emptyAll',
+    });
+  },
 };
