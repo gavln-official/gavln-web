@@ -5,40 +5,22 @@
     <div class="header">
       <el-button
           @click="toggleFolderDialog">
-        <i class="iconfont icon-download"></i>
+        <i class="iconfont icon-file-copy"></i>
         <span>保存到网盘</span>
-      </el-button>
-      <el-button>
-        <i class="iconfont icon-download"></i>
-        <span>下载</span>
       </el-button>
     </div>
     <div class="content">
-      <el-button-group>
-        <el-button
-            type="text">
-          <i class="iconfont icon-arrow-l-left"></i>
-        </el-button>
-        <el-button
-            type="text">
-          <i class="iconfont icon-arrow-l-right"></i>
-        </el-button>
-      </el-button-group>
-      <div class="name">
-        <i class="iconfont icon-folder-add"></i>
-        <span>{{ data.name }}</span>
-      </div>
+      <bread-crumb
+          :path="path"
+          :rootPath="data && data.path"
+          @switch="switchPath" />
       <el-table
           class="file-table"
-          :data="data.content"
+          :data="list"
           :height="tableHeight">
         <el-table-column
-            type="selection"
-            width="64"></el-table-column>
-        <el-table-column
             prop="type"
-            label="全选"
-            width="48">
+            width="64">
           <template>
             <i class="iconfont icon-folder-add"></i>
           </template>
@@ -47,9 +29,10 @@
             label="文件名称">
           <template
               slot-scope="scope">
-            <a
-                v-if="scope.row.type === 'folder'"
-                :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
+            <span
+                v-if="scope.row.dir"
+                class="link"
+                @click="switchPath(scope.row.path)">{{ scope.row.name }}</span>
             <span
                 v-else>{{ scope.row.name }}</span>
           </template>
@@ -67,7 +50,22 @@
             width="160">
           <template
               slot-scope="scope">
-            <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+            <span>{{ scope.row.time * 1000 | time('yyyy/MM/dd HH:mm') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            width="110">
+          <template
+              slot-scope="scope">
+            <div class="actions">
+              <i
+                  class="iconfont icon-file-copy"
+                  @click="rowCommand('save', scope.row)"></i>
+              <i
+                  v-if="!scope.row.dir"
+                  class="iconfont icon-download"
+                  @click="rowCommand('download', scope.row)"></i>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -79,11 +77,13 @@
 </template>
 
 <script>
+import BreadCrumb from '../dialog/folder/bread-crumb.vue';
 import FolderDialog from '../dialog/folder/index.vue';
 
 export default {
   name: 'ShareFolder',
   components: {
+    BreadCrumb,
     FolderDialog,
   },
   props: {
@@ -92,8 +92,18 @@ export default {
   data() {
     return {
       tableHeight: null,
+      path: '',
+      list: [],
       showFolderDialog: false,
     };
+  },
+  watch: {
+    data(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.path = this.data.path;
+        this.getPath();
+      }
+    },
   },
   mounted() {
     window.addEventListener('resize', this.calcTableHeight);
@@ -110,6 +120,30 @@ export default {
       } = this.$refs.container.getBoundingClientRect();
 
       this.tableHeight = height - 143;
+    },
+    switchPath(path) {
+      this.path = path.endsWith('/')
+        ? path.substring(0, path.length - 1)
+        : path;
+
+      this.getPath();
+    },
+    getPath() {
+      this.list = this.getChild(this.path, [this.data]);
+    },
+    getChild(path, list) {
+      for (const item of list) { /* eslint-disable-line */
+        if (item.path === path) {
+          return item.child;
+        }
+
+        if (item.dir
+            && item.child) {
+          return this.getChild(path, item.child);
+        }
+      }
+
+      return [];
     },
     toggleFolderDialog() {
       this.showFolderDialog = !this.showFolderDialog;
