@@ -20,6 +20,7 @@
       <div class="info">文件大小: {{ data.size | filesize }}</div>
     </div>
     <folder-dialog
+        v-if="showFolderDialog"
         :visible="showFolderDialog"
         :data="data"
         type="save"
