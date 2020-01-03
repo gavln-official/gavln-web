@@ -167,8 +167,10 @@ export default {
       }
       const to = `${target === '/' ? '' : target}/${this.data.name}`;
 
-      if (from === to
-          || to.indexOf(from) === 0) {
+      if ((this.type === 'copy'
+          || this.type === 'move')
+        && (from === to
+          || to.indexOf(from) === 0)) {
         this.$message.error('请选择其他文件夹');
         return;
       }

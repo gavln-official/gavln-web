@@ -4,7 +4,7 @@
       ref="container">
     <div class="header">
       <el-button
-          @click="toggleFolderDialog">
+          @click="save()">
         <i class="iconfont icon-file-copy"></i>
         <span>保存到网盘</span>
       </el-button>
@@ -60,23 +60,31 @@
             <div class="actions">
               <i
                   class="iconfont icon-file-copy"
-                  @click="rowCommand('save', scope.row)"></i>
+                  @click="save(scope.row)"></i>
               <i
                   v-if="!scope.row.dir"
                   class="iconfont icon-download"
-                  @click="rowCommand('download', scope.row)"></i>
+                  @click="download(scope.row)"></i>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <folder-dialog
+        v-if="showFolderDialog"
         :visible="showFolderDialog"
-        type="save" />
+        :data="folderData"
+        type="save"
+        @close="folderDialogClose"
+        @success="folderDialogSuccess" />
   </div>
 </template>
 
 <script>
+import FileDownload from 'js-file-download';
+
+import FileAPI from '../../api/file';
+
 import BreadCrumb from '../dialog/folder/bread-crumb.vue';
 import FolderDialog from '../dialog/folder/index.vue';
 
@@ -94,6 +102,7 @@ export default {
       tableHeight: null,
       path: '',
       list: [],
+      folderData: null,
       showFolderDialog: false,
     };
   },
@@ -145,8 +154,50 @@ export default {
 
       return [];
     },
-    toggleFolderDialog() {
-      this.showFolderDialog = !this.showFolderDialog;
+    getTarget(path, list) {
+      for (const item of list) { /* eslint-disable-line */
+        if (item.path === path) {
+          return item;
+        }
+
+        if (item.dir
+            && item.child) {
+          return this.getTarget(path, item.child);
+        }
+      }
+
+      return null;
+    },
+    save(target) {
+      const data = target
+        || this.getTarget(this.path, [this.data]);
+
+      const {
+        rand,
+        code,
+      } = this.data;
+
+      this.folderData = {
+        rand,
+        code,
+        ...data,
+      };
+
+      this.showFolderDialog = true;
+    },
+    folderDialogClose() {
+      this.showFolderDialog = false;
+    },
+    folderDialogSuccess() {
+      this.showFolderDialog = false;
+
+      this.$message.success('已保存至我的网盘');
+    },
+    download(target) {
+      FileAPI.download(target)
+        .then((res) => {
+          FileDownload(res, this.data.name);
+        });
     },
   },
 };
