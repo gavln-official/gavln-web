@@ -60,6 +60,7 @@
     <file-table
         v-if="viewMode === 'list'"
         v-loading="loading"
+        :type="type"
         :data="data"
         @command="onCommand" />
     <file-grid
@@ -237,7 +238,6 @@ export default {
 
     // child command
     onCommand(data) {
-      console.log(data);
       switch (data.command) {
         case 'share':
           this.toggleShareDialog(data.row);
