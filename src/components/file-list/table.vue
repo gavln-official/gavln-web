@@ -89,6 +89,7 @@ export default {
   name: 'FileTable',
   props: {
     data: Array,
+    contextRow: null,
   },
   data() {
     return {
