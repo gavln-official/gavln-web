@@ -113,7 +113,7 @@ export default {
   },
   filters: {
     timeDistance(expireDate) {
-      const expire = new Date(expireDate);
+      const expire = new Date(expireDate * 1000);
       const now = new Date();
       const distance = (expire - now) / 1000;
       const day = distance / 3600 / 24;
