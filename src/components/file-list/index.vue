@@ -65,7 +65,9 @@
     <file-grid
         v-else
         v-loading="loading"
-        :data="data" />
+        :type="type"
+        :data="data"
+        @command="onCommand" />
     <upload-dialog
         v-if="showUploadDialog"
         :visible="showUploadDialog"
@@ -235,6 +237,7 @@ export default {
 
     // child command
     onCommand(data) {
+      console.log(data);
       switch (data.command) {
         case 'share':
           this.toggleShareDialog(data.row);
