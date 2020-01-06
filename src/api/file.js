@@ -120,9 +120,22 @@ function copy(from, to) {
   });
 }
 
-function search(text) {
+function search(config) {
   const data = new FormData();
-  data.append('search', text);
+  data.append('search', config.text);
+  if (config.path) {
+    data.append('path', config.path);
+  }
+  if (config.suffixs
+      && config.suffixs.length) {
+    data.append('suffixs', config.suffixs);
+  }
+  if (config.startTime) {
+    data.append('startTime', config.startTime);
+  }
+  if (config.endTime) {
+    data.append('endTime', config.endTime);
+  }
 
   return HTTP({
     method: 'POST',

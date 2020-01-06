@@ -63,14 +63,30 @@ export default {
           this.loading = false;
         });
     },
-    search(text) {
+    search(text, config) {
       if (this.loading) {
         return;
       }
 
       this.loading = true;
 
-      FileAPI.search(text)
+      const data = {
+        text,
+        path: config.path === 'all'
+          ? '/'
+          : this.path,
+        suffixs: config.suffixs.trim()
+          ? config.suffixs.trim().split(' ')
+          : null,
+        startTime: config.start
+          ? Math.round(config.start.getTime() / 1000)
+          : null,
+        endTime: config.end
+          ? Math.round(config.end.getTime() / 1000)
+          : null,
+      };
+
+      FileAPI.search(data)
         .then((res) => {
           this.data = res.data;
         })

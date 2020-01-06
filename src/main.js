@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Element from 'element-ui';
+import vClickOutside from 'v-click-outside';
 
 import router from './router';
 import store from './store';
@@ -16,6 +17,7 @@ import './style/reset/index.scss';
 import './style/vue-context.scss';
 
 Vue.use(Element);
+Vue.use(vClickOutside);
 Vue.use(filters);
 
 Vue.config.productionTip = false;
