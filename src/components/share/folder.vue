@@ -109,7 +109,7 @@ export default {
   watch: {
     data(newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.path = this.data.path;
+        this.path = newValue.path;
         this.getPath();
       }
     },
@@ -118,6 +118,12 @@ export default {
     window.addEventListener('resize', this.calcTableHeight);
 
     this.calcTableHeight();
+
+    if (this.data
+        && this.data.path) {
+      this.path = this.data.path;
+      this.getPath();
+    }
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.calcTableHeight);
@@ -196,7 +202,7 @@ export default {
     download(target) {
       FileAPI.download(target)
         .then((res) => {
-          FileDownload(res, this.data.name);
+          FileDownload(res, target.name);
         });
     },
   },
