@@ -184,7 +184,7 @@ export default {
     this.viewMode = viewMode || 'list';
   },
   methods: {
-    search(text) {
+    search(text, config) {
       if (this.searching) {
         return;
       }
@@ -192,7 +192,7 @@ export default {
       if (!text) {
         this.refresh();
       } else {
-        this.$emit('search', text);
+        this.$emit('search', text, config);
       }
     },
     toggleViewMode() {
