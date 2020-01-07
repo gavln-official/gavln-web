@@ -22,7 +22,7 @@
               v-if="scope.row.mark"
               class="iconfont icon-star-o"></i>
           <a
-              v-if="scope.row.dir"
+              v-if="type !== 'favorite' && scope.row.dir"
               :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
           <span
               v-else>{{ scope.row.name }}</span>

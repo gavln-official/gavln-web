@@ -10,7 +10,7 @@
           @contextmenu.prevent="showContextMenu($event, item)">
         <i class="iconfont icon-folder-add"></i>
         <a
-            v-if="item.dir"
+            v-if="type !== 'favorite' && item.dir"
             :href="`/?path=${item.path}`">{{ item.name }}</a>
         <span
             v-else>{{ item.name }}</span>
