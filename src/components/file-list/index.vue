@@ -188,6 +188,9 @@ export default {
   },
   computed: {
     fileList() {
+      if (!this.data || !this.data.length) {
+        return null;
+      }
       if (this.orderBy === '') {
         return this.data;
       }
