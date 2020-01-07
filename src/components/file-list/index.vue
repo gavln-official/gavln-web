@@ -35,8 +35,7 @@
         </el-button>
       </template>
       <div class="right">
-        <search-input
-            @search="search" />
+        <search-input />
         <el-dropdown
             placement="bottom"
             @command="orderFileList">
@@ -218,17 +217,6 @@ export default {
     this.viewMode = viewMode || 'list';
   },
   methods: {
-    search(text, config) {
-      if (this.searching) {
-        return;
-      }
-
-      if (!text) {
-        this.refresh();
-      } else {
-        this.$emit('search', text, config);
-      }
-    },
     toggleViewMode() {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'

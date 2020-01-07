@@ -80,6 +80,14 @@ const routes = [
     },
   },
   {
+    path: '/search',
+    name: 'search',
+    component: () => import('../pages/search/index.vue'),
+    meta: {
+      login: true,
+    },
+  },
+  {
     path: '/trash',
     name: 'trash',
     component: () => import('../pages/trash.vue'),
