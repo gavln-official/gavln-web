@@ -34,12 +34,16 @@ export default {
       }
     },
     search() {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: this.value,
-        },
-      });
+      if (this.$route.name === 'search') {
+        this.$emit('search', this.value);
+      } else {
+        this.$router.push({
+          name: 'search',
+          query: {
+            q: this.value,
+          },
+        });
+      }
     },
   },
 };
