@@ -9,7 +9,8 @@
             label="位置">
           <el-select
               v-model="filter.source"
-              multiple>
+              multiple
+              @change="search">
             <el-option
                 v-for="item in sourceOptions"
                 :key="item.value"
@@ -23,7 +24,8 @@
               v-model="filter.suffixs"
               multiple
               clearable
-              placeholder="不限">
+              placeholder="不限"
+              @change="search">
             <el-option
                 v-for="item in suffixOptions"
                 :key="item"
@@ -36,7 +38,8 @@
           <el-select
               v-model="filter.time"
               clearable
-              placeholder="不限">
+              placeholder="不限"
+              @change="search">
             <el-option
                 v-for="item in timeOptions"
                 :key="item.value"
@@ -63,10 +66,10 @@
                 v-if="scope.row.mark"
                 class="iconfont icon-star-o"></i>
             <a
-                v-if="scope.row.dir"
-                :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
+                v-if="scope.row.file.dir"
+                :href="`/?path=${scope.row.file.path}`">{{ scope.row.file.name }}</a>
             <span
-                v-else>{{ scope.row.name }}</span>
+                v-else>{{ scope.row.file.name }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -74,7 +77,7 @@
             width="100">
           <template
               slot-scope="scope">
-            <span>{{ scope.row.size | filesize }}</span>
+            <span>{{ scope.row.file.size | filesize }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -82,7 +85,7 @@
             width="160">
           <template
               slot-scope="scope">
-            <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+            <span>{{ (scope.row.file.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -90,7 +93,7 @@
             width="140">
           <template
               slot-scope="scope">
-            <span>{{ scope.origin }}</span>
+            <span>{{ scope.row.type }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -134,13 +137,14 @@
           :current-page="page"
           :total="total"
           :pager-count="5"
-          :disabled="loading" />
+          :disabled="loading"
+          @current-change="search" />
     </div>
   </main-frame>
 </template>
 
 <script>
-// import FileAPI from '../../api/file';
+import FileAPI from '../../api/file';
 
 import MainFrame from '../../components/main-frame/index.vue';
 import SearchInput from '../../components/search-input/index.vue';
@@ -237,16 +241,58 @@ export default {
     this.search();
   },
   methods: {
+    daysBefore(days) {
+      let time = new Date();
+      time.setHours(0, 0, 0, 0);
+      time = time.getTime();
+
+      time -= 1000 * 60 * 60 * 24 * days;
+
+      return Math.round(time / 1000);
+    },
     sourceChecked(type) {
       return this.filter.source
         .indexOf(type) >= 0;
     },
     getStartTime() {
-      return null;
+      let time = null;
+
+      switch (this.filter.time) {
+        case 'today':
+          time = this.daysBefore(0);
+          break;
+        case 'yesterday':
+          time = this.daysBefore(1);
+          break;
+        case 'recent-7-days':
+          time = this.daysBefore(7);
+          break;
+        case 'recent-30-days':
+          time = this.daysBefore(30);
+          break;
+        case 'recent-90-days':
+          time = this.daysBefore(90);
+          break;
+        default:
+      }
+
+      return time;
     },
     getEndTime() {
-      const time = null;
-      // Math.round(Date.now() / 1000)
+      let time = null;
+
+      switch (this.filter.time) {
+        case 'yesterday':
+          time = this.daysBefore(0);
+          break;
+        case 'today':
+        case 'recent-7-days':
+        case 'recent-30-days':
+        case 'recent-90-days':
+          time = Math.round(Date.now() / 1000);
+          break;
+        default:
+      }
 
       return time;
     },
@@ -264,28 +310,32 @@ export default {
         trash: this.sourceChecked('trash'),
       };
 
+      console.log(config);
+
       return config;
     },
     search() {
-      console.log('search', this.q);
-      // if (this.loading) {
-      //   return;
-      // }
+      if (this.loading) {
+        return;
+      }
 
-      // this.loading = true;
+      this.loading = true;
 
-      // const data = {
-      //   text,
-      //   ...this.getConfig(),
-      // };
+      const data = {
+        text: this.q,
+        ...this.getConfig(),
+        limit: this.size,
+        offset: this.size * (this.page - 1),
+      };
 
-      // FileAPI.search(data)
-      //   .then((res) => {
-      //     this.data = res.data;
-      //   })
-      //   .finally(() => {
-      //     this.loading = false;
-      //   });
+      FileAPI.search(data)
+        .then((res) => {
+          this.data = res.data.list;
+          this.total = res.data.total;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };

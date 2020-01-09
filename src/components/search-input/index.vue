@@ -41,12 +41,18 @@ export default {
       }
     },
     search() {
-      this.$router.push({
+      const data = {
         name: 'search',
         query: {
           q: this.value,
         },
-      });
+      };
+
+      if (this.$route.name === 'search') {
+        this.$router.replace(data);
+      } else {
+        this.$router.push(data);
+      }
     },
   },
 };
