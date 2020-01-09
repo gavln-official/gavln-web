@@ -35,7 +35,8 @@
         </el-button>
       </template>
       <div class="right">
-        <search-input />
+        <search-input
+            :source="['all']" />
         <el-dropdown
             placement="bottom"
             @command="orderFileList">
