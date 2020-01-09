@@ -63,7 +63,7 @@
           <template
               slot-scope="scope">
             <i
-                v-if="scope.row.mark"
+                v-if="scope.row.file.mark"
                 class="iconfont icon-star-o"></i>
             <a
                 v-if="scope.row.file.dir"
@@ -93,7 +93,7 @@
             width="140">
           <template
               slot-scope="scope">
-            <span>{{ scope.row.type }}</span>
+            <span>{{ sourceLabel(scope.row.type) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -102,15 +102,21 @@
               slot-scope="scope">
             <div class="actions">
               <i
-                  class="iconfont icon-share"
-                  @click="rowCommand('share', scope.row)"></i>
+                  v-if="scope.row.type === 2"
+                  class="iconfont icon-copy"
+                  @click="copyLink(scope.row)"></i>
               <i
-                  v-if="!scope.row.dir"
+                  v-if="scope.row.type !== 2"
+                  class="iconfont icon-share"
+                  @click="rowCommand('share', scope.row.file)"></i>
+              <i
+                  v-if="scope.row.type !== 2 && !scope.row.file.dir"
                   class="iconfont icon-download"
-                  @click="rowCommand('download', scope.row)"></i>
+                  @click="rowCommand('download', scope.row.file)"></i>
               <el-dropdown
+                  v-if="scope.row.type !== 2"
                   placement="bottom"
-                  @command="rowCommand($event, scope.row)">
+                  @command="rowCommand($event, scope.row.file)">
                 <i class="iconfont icon-menu-circle el-dropdown-link"></i>
                 <el-dropdown-menu
                     slot="dropdown">
@@ -121,7 +127,9 @@
                   <el-dropdown-item
                       command="rename">重命名</el-dropdown-item>
                   <el-dropdown-item
-                      command="favorite">{{ scope.row.mark ? '取消收藏' : '收藏' }}</el-dropdown-item>
+                      command="favorite">{{ scope.row.file.mark
+                        ? '取消收藏'
+                        : '收藏' }}</el-dropdown-item>
                   <el-dropdown-item
                       command="delete">删除</el-dropdown-item>
                 </el-dropdown-menu>
@@ -140,20 +148,56 @@
           :disabled="loading"
           @current-change="search" />
     </div>
+    <url-dialog
+        :visible="showUrlDialog" />
+    <folder-dialog
+        :visible="showFolderDialog"
+        :data="folderData"
+        :type="folderDialogType"
+        @close="folderDialogClose"
+        @success="folderDialogSuccess" />
+    <share-dialog
+        v-if="showShareDialog"
+        :visible="showShareDialog"
+        :data="shareData"
+        @close="hideShareDialog"
+        @success="hideShareDialog" />
+    <!-- <ui-progress
+        :percentage="50"
+        message="正在删除...50%" /> -->
+    <name-dialog
+        v-if="showNameDialog"
+        :visible="showNameDialog"
+        :data="nameData"
+        @close="nameDialogClose"
+        @success="nameDialogSuccess" />
   </main-frame>
 </template>
 
 <script>
-import FileAPI from '../../api/file';
+import FileDownload from 'js-file-download';
 
 import MainFrame from '../../components/main-frame/index.vue';
 import SearchInput from '../../components/search-input/index.vue';
+import FolderDialog from '../../components/dialog/folder/index.vue';
+import UrlDialog from '../../components/dialog/url/index.vue';
+import ShareDialog from '../../components/dialog/share/index.vue';
+import NameDialog from '../../components/dialog/name.vue';
+
+import FileAPI from '../../api/file';
+import FavoriteAPI from '../../api/favorite';
+
+import Utils from '../../utils/index';
 
 export default {
   name: 'Home',
   components: {
     MainFrame,
     SearchInput,
+    FolderDialog,
+    UrlDialog,
+    ShareDialog,
+    NameDialog,
   },
   data() {
     return {
@@ -175,7 +219,7 @@ export default {
           label: '全部',
           value: 'all',
         }, {
-          label: '个人',
+          label: '个人文件',
           value: 'inbox',
         }, {
           label: '书签',
@@ -222,6 +266,29 @@ export default {
           value: 'recent-90-days',
         },
       ],
+
+      showNameDialog: false,
+      nameData: {
+        // full path
+        path: '',
+        // folder/file name
+        name: '',
+        // form action
+        action: 'create',
+        // is dir
+        dir: true,
+      },
+
+      showUrlDialog: false,
+      showShareDialog: false,
+      shareData: {
+        id: null,
+        name: '',
+        type: '',
+      },
+      showFolderDialog: false,
+      folderDialogType: '',
+      folderData: null,
     };
   },
   computed: {
@@ -241,6 +308,20 @@ export default {
     this.search();
   },
   methods: {
+    sourceLabel(type) {
+      const labels = [
+        '个人文件',
+        '回收站',
+        '他人分享',
+        '书签',
+      ];
+
+      if (labels[type]) {
+        return labels[type];
+      }
+
+      return '';
+    },
     daysBefore(days) {
       let time = new Date();
       time.setHours(0, 0, 0, 0);
@@ -310,12 +391,16 @@ export default {
         trash: this.sourceChecked('trash'),
       };
 
-      console.log(config);
-
       return config;
     },
     search() {
       if (this.loading) {
+        return;
+      }
+
+      if (!this.filter.source
+          || !this.filter.source.length) {
+        this.$message.error('请选择搜索位置');
         return;
       }
 
@@ -335,6 +420,140 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+        });
+    },
+    copyLink(item) {
+      const url = `链接 ${window.location.origin}/s/${item.rand}`;
+
+      const text = item.code
+        ? `${url} \n提取码 ${item.code}`
+        : url;
+
+      try {
+        Utils.copyToClipboard(text);
+
+        this.$message.success('复制成功');
+      } catch (error) {
+        //
+      }
+    },
+    rowCommand(command, data) {
+      switch (command) {
+        case 'share':
+          this.toggleShareDialog(data);
+          break;
+        case 'download':
+          this.download(data);
+          break;
+        case 'move':
+          this.toggleFolderDialog(command, data);
+          break;
+        case 'copy':
+          this.toggleFolderDialog(command, data);
+          break;
+        case 'rename':
+          this.toggleNameDialog(data);
+          break;
+        case 'favorite':
+          this.toggleFavorite(data);
+          break;
+        case 'delete':
+          this.deletePath(data);
+          break;
+        default:
+      }
+    },
+
+    // share dialog
+    toggleShareDialog(data) {
+      const {
+        path,
+        name,
+        dir,
+      } = data;
+
+      this.shareData = {
+        path,
+        name,
+        dir,
+      };
+      this.showShareDialog = true;
+    },
+    hideShareDialog() {
+      this.showShareDialog = false;
+    },
+
+    // download file
+    download(item) {
+      FileAPI.download(item)
+        .then((res) => {
+          FileDownload(res, item.name);
+        });
+    },
+
+    // folder dialog
+    toggleFolderDialog(type, item) {
+      this.folderDialogType = type;
+      this.folderData = item;
+
+      this.showFolderDialog = true;
+    },
+    folderDialogClose() {
+      this.showFolderDialog = false;
+    },
+    folderDialogSuccess() {
+      this.showFolderDialog = false;
+      this.search();
+    },
+
+    // folder name dialog
+    toggleNameDialog(item) {
+      const {
+        path,
+        name,
+      } = item;
+      this.nameData = {
+        path,
+        name,
+        action: 'update',
+        dir: item.dir
+            || false,
+      };
+
+      this.showNameDialog = true;
+    },
+    nameDialogClose() {
+      this.showNameDialog = false;
+    },
+    nameDialogSuccess() {
+      this.showNameDialog = false;
+      this.search();
+    },
+
+    // delete folder/file
+    deletePath(item) {
+      const message = `删除该${item.dir ? '文件夹' : '文件'}？`;
+      this.$confirm(message, '提示', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+      })
+        .then(() => {
+          FileAPI.deletePath(item.path)
+            .then(() => {
+              this.search();
+            });
+        });
+    },
+
+    // toggle favorite
+    toggleFavorite(item) {
+      const request = item.mark
+        ? FavoriteAPI.remove
+        : FavoriteAPI.add;
+
+      request(item.path)
+        .then(() => {
+          this.search();
         });
     },
   },

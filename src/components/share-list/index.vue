@@ -130,10 +130,10 @@ export default {
         });
     },
     copyLink(item) {
-      const url = `${window.location.origin}/s/${item.rand}`;
+      const url = `链接 ${window.location.origin}/s/${item.rand}`;
 
       const text = item.code
-        ? `${url} ${item.code}`
+        ? `${url} \n提取码 ${item.code}`
         : url;
 
       try {
