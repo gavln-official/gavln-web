@@ -14,6 +14,9 @@
 <script>
 export default {
   name: 'SearchInput',
+  props: {
+    text: String,
+  },
   data() {
     return {
       value: '',
@@ -27,6 +30,10 @@ export default {
       }
     },
   },
+  created() {
+    this.value = this.text
+      || '';
+  },
   methods: {
     keydown(event) {
       if (event.key === 'Enter') {
@@ -34,16 +41,12 @@ export default {
       }
     },
     search() {
-      if (this.$route.name === 'search') {
-        this.$emit('search', this.value);
-      } else {
-        this.$router.push({
-          name: 'search',
-          query: {
-            q: this.value,
-          },
-        });
-      }
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.value,
+        },
+      });
     },
   },
 };

@@ -4,7 +4,7 @@
       <el-form
           class="toolbar">
         <search-input
-            @search="search" />
+            :text="q" />
         <el-form-item
             label="位置">
           <el-select
@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import FileAPI from '../../api/file';
+// import FileAPI from '../../api/file';
 
 import MainFrame from '../../components/main-frame/index.vue';
 import SearchInput from '../../components/search-input/index.vue';
@@ -168,7 +168,7 @@ export default {
       },
       sourceOptions: [
         {
-          label: '全盘',
+          label: '全部',
           value: 'all',
         }, {
           label: '个人',
@@ -220,6 +220,22 @@ export default {
       ],
     };
   },
+  computed: {
+    q() {
+      return this.$route.query.q
+        || '';
+    },
+  },
+  watch: {
+    q(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.search();
+      }
+    },
+  },
+  mounted() {
+    this.search();
+  },
   methods: {
     sourceChecked(type) {
       return this.filter.source
@@ -250,25 +266,26 @@ export default {
 
       return config;
     },
-    search(text) {
-      if (this.loading) {
-        return;
-      }
+    search() {
+      console.log('search', this.q);
+      // if (this.loading) {
+      //   return;
+      // }
 
-      this.loading = true;
+      // this.loading = true;
 
-      const data = {
-        text,
-        ...this.getConfig(),
-      };
+      // const data = {
+      //   text,
+      //   ...this.getConfig(),
+      // };
 
-      FileAPI.search(data)
-        .then((res) => {
-          this.data = res.data;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      // FileAPI.search(data)
+      //   .then((res) => {
+      //     this.data = res.data;
+      //   })
+      //   .finally(() => {
+      //     this.loading = false;
+      //   });
     },
   },
 };
