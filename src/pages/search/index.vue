@@ -4,13 +4,14 @@
       <el-form
           class="toolbar">
         <search-input
-            :text="q" />
+            :text="q"
+            :source="filter.source" />
         <el-form-item
             label="位置">
           <el-select
               v-model="filter.source"
               multiple
-              @change="search">
+              @change="sourceChanged">
             <el-option
                 v-for="item in sourceOptions"
                 :key="item.value"
@@ -50,6 +51,7 @@
       </el-form>
       <el-table
           class="file-table"
+          v-loading="loading"
           :data="data">
         <el-table-column
             prop="type"
@@ -292,13 +294,24 @@ export default {
     };
   },
   computed: {
+    // search text
     q() {
       return this.$route.query.q
+        || '';
+    },
+    // search source
+    s() {
+      return this.$route.query.s
         || '';
     },
   },
   watch: {
     q(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.search();
+      }
+    },
+    s(newValue, oldValue) {
       if (newValue !== oldValue) {
         this.search();
       }
@@ -332,8 +345,12 @@ export default {
       return Math.round(time / 1000);
     },
     sourceChecked(type) {
-      return this.filter.source
-        .indexOf(type) >= 0;
+      const source = this.s
+          && this.s.split(',');
+      return source
+          && source.length
+        ? source.indexOf(type) >= 0
+        : false;
     },
     getStartTime() {
       let time = null;
@@ -393,13 +410,27 @@ export default {
 
       return config;
     },
+
+    sourceChanged() {
+      const data = {
+        name: 'search',
+        query: {
+          q: this.q,
+          s: this.filter.source
+            ? this.filter.source.join(',')
+            : '',
+        },
+      };
+
+      this.$router.replace(data);
+    },
     search() {
       if (this.loading) {
         return;
       }
 
-      if (!this.filter.source
-          || !this.filter.source.length) {
+      if (!this.s
+          || !this.s.length) {
         this.$message.error('请选择搜索位置');
         return;
       }
@@ -422,6 +453,7 @@ export default {
           this.loading = false;
         });
     },
+
     copyLink(item) {
       const url = `链接 ${window.location.origin}/s/${item.rand}`;
 

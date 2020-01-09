@@ -16,6 +16,7 @@ export default {
   name: 'SearchInput',
   props: {
     text: String,
+    source: Array,
   },
   data() {
     return {
@@ -45,6 +46,9 @@ export default {
         name: 'search',
         query: {
           q: this.value,
+          s: this.source
+            ? this.source.join(',')
+            : 'all',
         },
       };
 
