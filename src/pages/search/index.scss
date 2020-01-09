@@ -29,6 +29,12 @@
     /deep/ .el-form-item__content {
       width: 180px;
     }
+
+    /deep/ .el-select .el-input__inner {
+      border: none;
+      box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.06);
+      border-radius: 4px;
+    }
   }
 
   .el-pagination {
