@@ -5,11 +5,14 @@
         <i class="iconfont icon-trash"></i>
         <span>清空回收站</span>
       </el-button>
+      <div class="right">
+        <search-input
+            :source="['trash']" />
+      </div>
     </div>
     <el-table
         class="file-table trash-table"
         :data="data"
-        :height="tableHeight"
         @row-contextmenu="showContextMenu">
       <el-table-column
           type="selection"
@@ -67,24 +70,23 @@ import {
   VueContext,
 } from 'vue-context';
 
+import SearchInput from '../search-input/index.vue';
+
 export default {
   name: 'TrashList',
   components: {
     VueContext,
+    SearchInput,
   },
   props: {
     data: Array,
   },
   data() {
     return {
-      tableHeight: null,
       contextRow: null,
     };
   },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 124;
-    },
     showContextMenu(row, column, event) {
       if (event) {
         event.preventDefault();
@@ -102,14 +104,6 @@ export default {
     clear() {
       this.$emit('clear');
     },
-  },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
   },
   filters: {
     timeDistance(expireDate) {

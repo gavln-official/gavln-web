@@ -318,6 +318,13 @@ export default {
     },
   },
   mounted() {
+    const source = this.s
+        && this.s.split(',');
+    if (source
+        && source.length) {
+      this.filter.source = source;
+    }
+
     this.search();
   },
   methods: {

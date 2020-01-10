@@ -3,8 +3,7 @@
     <el-table
         class="file-table share-table"
         v-loading="loading"
-        :data="data"
-        :height="tableHeight">
+        :data="data">
       <el-table-column
           prop="type"
           width="70">
@@ -98,21 +97,9 @@ export default {
   },
   data() {
     return {
-      tableHeight: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 64;
-    },
     refresh() {
       this.$emit('refresh');
     },

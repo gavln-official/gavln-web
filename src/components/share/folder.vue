@@ -16,8 +16,7 @@
           @switch="switchPath" />
       <el-table
           class="file-table"
-          :data="list"
-          :height="tableHeight">
+          :data="list">
         <el-table-column
             prop="type"
             width="64">
@@ -99,7 +98,6 @@ export default {
   },
   data() {
     return {
-      tableHeight: null,
       path: '',
       list: [],
       folderData: null,
@@ -115,27 +113,13 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-
     if (this.data
         && this.data.path) {
       this.path = this.data.path;
       this.getPath();
     }
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      const {
-        height,
-      } = this.$refs.container.getBoundingClientRect();
-
-      this.tableHeight = height - 143;
-    },
     switchPath(path) {
       this.path = path.endsWith('/')
         ? path.substring(0, path.length - 1)
