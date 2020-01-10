@@ -87,7 +87,7 @@
             width="160">
           <template
               slot-scope="scope">
-            <span>{{ (scope.row.file.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+            <span>{{ scope.row.file.time | time('yyyy/MM/dd HH:mm') }}</span>
           </template>
         </el-table-column>
         <el-table-column
