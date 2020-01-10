@@ -3,7 +3,8 @@
     <el-table
         class="file-table"
         :data="data"
-        :height="tableHeight">
+        :height="tableHeight"
+        @row-contextmenu="showContextMenu">
       <el-table-column
           prop="type"
           width="70">
@@ -21,7 +22,7 @@
               v-if="scope.row.mark"
               class="iconfont icon-star-o"></i>
           <a
-              v-if="scope.row.dir"
+              v-if="type !== 'favorite' && scope.row.dir"
               :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
           <span
               v-else>{{ scope.row.name }}</span>
@@ -74,6 +75,7 @@
                 <el-dropdown-item
                     command="favorite">{{ scope.row.mark ? '取消收藏' : '收藏' }}</el-dropdown-item>
                 <el-dropdown-item
+                    v-if="type === 'home'"
                     command="delete">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -81,17 +83,53 @@
         </template>
       </el-table-column>
     </el-table>
+    <vue-context
+        ref="menu">
+      <template v-if="type === 'home'">
+        <li
+            v-if="contextRow.dir"
+            @click="goPath">打开</li>
+        <li
+            v-else
+            @click="rowCommand('download')">下载</li>
+        <li
+            @click="rowCommand('share')">分享</li>
+      </template>
+      <li
+          @click="rowCommand('move')">移动到</li>
+      <li
+          @click="rowCommand('copy')">复制到</li>
+      <li
+          @click="rowCommand('rename')">重命名</li>
+      <li
+          @click="rowCommand('favorite')">{{ contextRow.mark ? '取消' : '' }}收藏</li>
+      <li
+          v-if="type === 'home'"
+          @click="rowCommand('delete')">删除</li>
+    </vue-context>
   </div>
 </template>
 
 <script>
+import {
+  VueContext,
+} from 'vue-context';
+
 export default {
   name: 'FileTable',
+  components: {
+    VueContext,
+  },
   props: {
     data: Array,
+    type: {
+      type: String,
+      default: 'home',
+    },
   },
   data() {
     return {
+      contextRow: {},
       tableHeight: null,
     };
   },
@@ -117,7 +155,19 @@ export default {
     sortByTime(a, b) {
       return new Date(a.time) - new Date(b.time);
     },
-    rowCommand(command, row) {
+    showContextMenu(row, col, event) {
+      if (event) {
+        event.preventDefault();
+      }
+      this.$refs.menu.open(event);
+      this.contextRow = row;
+    },
+    goPath() {
+      const { path } = this.contextRow;
+      this.$router.push(`/?path=${path}`);
+    },
+    rowCommand(command, _row) {
+      const row = _row || this.contextRow;
       this.$emit('command', {
         command,
         row,

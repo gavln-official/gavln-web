@@ -10,7 +10,7 @@
           @contextmenu.prevent="showContextMenu($event, item)">
         <i class="iconfont icon-folder-add"></i>
         <a
-            v-if="item.dir"
+            v-if="type !== 'favorite' && item.dir"
             :href="`/?path=${item.path}`">{{ item.name }}</a>
         <span
             v-else>{{ item.name }}</span>
@@ -18,14 +18,27 @@
     </ul>
     <vue-context
         ref="menu">
-      <li>打开</li>
-      <li>下载</li>
-      <li>分享</li>
-      <li>收藏</li>
-      <li>移动到</li>
-      <li>复制到</li>
-      <li>重命名</li>
-      <li>删除</li>
+      <template v-if="type === 'home'">
+        <li
+            v-if="contextRow.dir"
+            @click="goPath">打开</li>
+        <li
+            v-else
+            @click="rowCommand('download')">下载</li>
+        <li
+            @click="rowCommand('share')">分享</li>
+      </template>
+      <li
+          @click="rowCommand('move')">移动到</li>
+      <li
+          @click="rowCommand('copy')">复制到</li>
+      <li
+          @click="rowCommand('rename')">重命名</li>
+      <li
+          @click="rowCommand('favorite')">{{ contextRow.mark ? '取消' : '' }}收藏</li>
+      <li
+          v-if="type === 'home'"
+          @click="rowCommand('delete')">删除</li>
     </vue-context>
   </div>
 </template>
@@ -41,13 +54,33 @@ export default {
     VueContext,
   },
   props: {
+    type: {
+      type: String,
+      default: 'home',
+    },
     data: Array,
+  },
+  data() {
+    return {
+      contextRow: {},
+    };
   },
   methods: {
     showContextMenu(event, item) {
       this.$refs.menu.open(event);
-
+      this.contextRow = item;
       return item;
+    },
+    goPath() {
+      const { path } = this.contextRow;
+      this.$router.push(`/?path=${path}`);
+    },
+    rowCommand(command) {
+      const row = this.contextRow;
+      this.$emit('command', {
+        command,
+        row,
+      });
     },
   },
 };

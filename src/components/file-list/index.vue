@@ -38,17 +38,19 @@
         <search-input
             :source="['all']" />
         <el-dropdown
-            placement="bottom">
+            placement="bottom"
+            @command="orderFileList">
           <el-button
               class="el-dropdown-link">
-            <span>排序方式</span>
-            <i class="iconfont icon-sort"></i>
+            <span>排序方式</span>&nbsp;
+            <i class="el-icon-bottom" v-if="orderIn === 'DESC'"></i>
+            <i class="el-icon-top" v-else></i>
           </el-button>
           <el-dropdown-menu
               slot="dropdown">
-            <el-dropdown-item>AAA</el-dropdown-item>
-            <el-dropdown-item>BBB</el-dropdown-item>
-            <el-dropdown-item>CCC</el-dropdown-item>
+            <el-dropdown-item command="time">时间</el-dropdown-item>
+            <el-dropdown-item command="size">大小</el-dropdown-item>
+            <el-dropdown-item command="name">文件名</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button
@@ -60,12 +62,15 @@
     <file-table
         v-if="viewMode === 'list'"
         v-loading="loading"
-        :data="data"
+        :type="type"
+        :data="fileList"
         @command="onCommand" />
     <file-grid
         v-else
         v-loading="loading"
-        :data="data" />
+        :type="type"
+        :data="fileList"
+        @command="onCommand" />
     <upload-dialog
         v-if="showUploadDialog"
         :visible="showUploadDialog"
@@ -177,7 +182,36 @@ export default {
       showFolderDialog: false,
       folderDialogType: '',
       folderData: null,
+      orderBy: '', // ['', 'time', 'size', 'name']
+      orderIn: 'DESC', // ['DESC', 'ASC']
     };
+  },
+  computed: {
+    fileList() {
+      if (!this.data || !this.data.length) {
+        return null;
+      }
+      if (this.orderBy === '') {
+        return this.data;
+      }
+      const orderBy = this.orderBy;
+      const orderIn = this.orderIn;
+      return this.data.sort((a, b) => { /* eslint-disable-line */
+        let compareResult = true;
+        if (orderBy === 'name') {
+          compareResult = String(b.name)[0] > String(a.name)[0];
+        } else {
+          compareResult = b[orderBy] > a[orderBy];
+        }
+        let compareReturn = 0;
+        if (orderIn === 'DESC') {
+          compareReturn = compareResult ? 1 : -1;
+        } else {
+          compareReturn = compareResult ? -1 : 1;
+        }
+        return compareReturn;
+      });
+    },
   },
   created() {
     const viewMode = Storage.get('view-mode');
@@ -193,6 +227,15 @@ export default {
     },
     refresh() {
       this.$emit('refresh');
+    },
+
+    orderFileList(orderBy) {
+      if (this.orderBy === orderBy) {
+        this.orderIn = this.orderIn === 'DESC' ? 'ASC' : 'DESC';
+      } else {
+        this.orderIn = 'DESC';
+      }
+      this.orderBy = orderBy;
     },
 
     // upload
