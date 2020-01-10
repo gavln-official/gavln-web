@@ -3,7 +3,6 @@
     <el-table
         class="file-table"
         :data="data"
-        :height="tableHeight"
         @row-contextmenu="showContextMenu">
       <el-table-column
           prop="type"
@@ -130,21 +129,9 @@ export default {
   data() {
     return {
       contextRow: {},
-      tableHeight: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 168;
-    },
     sortByName(a, b) {
       return a.name
         .localeCompare(b.name);
