@@ -1,5 +1,6 @@
 import HTTP from './http';
 import IPFS from '../utils/ipfs';
+import Transmission from '../utils/transmission';
 
 function getPath(path) {
   const data = new FormData();
@@ -50,29 +51,44 @@ function addFile(path, name, size, blocks) {
   });
 }
 
-function getUploadKey() {
+function getUploadKey(number = 1) {
   return HTTP({
     method: 'GET',
-    url: '/file/key/1',
+    url: `/file/key/${number}`,
   });
 }
 
-async function upload(file, path, name) {
+async function upload(file, path, name, blockSize, fragments) {
+  const keyRes = await getUploadKey(blockSize.totalBlocks);
+  const keys = keyRes.data.key;
+
+  let list = null;
   try {
-    const keyRes = await getUploadKey();
-
-    const key = keyRes.data.key[0];
-
-    const list = await IPFS.upload(key, file);
-    const blocks = list.map(item => ({
-      key,
-      cid: item.hash,
-    }));
-
-    return await addFile(path, name, file.size, blocks);
+    list = await IPFS.upload(file.fid, keys, fragments);
   } catch (error) {
-    throw error;
+    console.error(`IPFS上传报错：${error}`);
+    return false;
   }
+  try {
+    const r = await addFile(path, name, file.size, list);
+    Transmission.fileComplete('upload', file.fid);
+  } catch (err) {
+    console.log(err.detail);
+  }
+  return true;
+}
+
+async function prepareUpload(file, path, name) {
+  file.fid = `${path}//${name}//${file.size}`; /* eslint-disable-line */
+  const blockSize = IPFS.getBlockSize(file);
+  // encode file, this step can take a long time
+  // so make sure to inform user it's in progress
+  const fragments = await IPFS.encode(file);
+  Transmission.addFile('upload', file, blockSize);
+  // start upload
+  // we don't wait for the upload procedure, return immediately
+  upload(file, path, name, blockSize, fragments);
+  return true;
 }
 
 async function download(file) {
@@ -171,10 +187,13 @@ export default {
   createPath,
   updatePath,
   upload,
+  prepareUpload,
   download,
   deletePath,
   move,
   copy,
   search,
   share,
+  getBlockSize: IPFS.getBlockSize,
+  decode: IPFS.decode,
 };

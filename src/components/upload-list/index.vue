@@ -62,10 +62,12 @@
         <template
             slot-scope="scope">
           <el-progress
-              :percentage="50"
+              :percentage="scope.row.percentage"
               :show-text="false" />
-          <strong>{{ scope.row.speed | filesize }}/s</strong>
-          <span> 剩余 {{ pendingTime(scope.row) }}</span>
+          <strong
+              v-if="scope.row.usize < scope.row.size">
+              {{ scope.row.speed | filesize }}/s</strong>
+          <span>{{ pendingTime(scope.row) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -118,9 +120,15 @@ export default {
       this.tableHeight = window.innerHeight - 124;
     },
     pendingTime(data) {
+      const remaining = data.size - data.usize;
+      if (remaining <= 0) {
+        return '传输完成';
+      }
+      if (!data.speed) {
+        return '-';
+      }
       const seconds = (data.size - data.usize) / data.speed;
-
-      return Utils.formatTime(seconds);
+      return ` 剩余 ${Utils.formatTime(seconds)}`;
     },
   },
 };
