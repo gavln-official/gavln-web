@@ -45,7 +45,7 @@
           :sort-method="sortByTime">
         <template
             slot-scope="scope">
-          <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column

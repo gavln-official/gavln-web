@@ -28,7 +28,7 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ new Date(scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -61,7 +61,7 @@
         <template
             slot-scope="scope">
           <span
-              v-if="scope.row.expires">{{ new Date(scope.row.expires * 1000) | time('yyyy/MM/dd HH:mm') }}</span> <!-- eslint-disable-line -->
+              v-if="scope.row.expires">{{ scope.row.expires | time('yyyy/MM/dd HH:mm') }}</span> <!-- eslint-disable-line -->
           <span
               v-else>-</span>
         </template>

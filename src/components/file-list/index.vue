@@ -194,8 +194,8 @@ export default {
       if (this.orderBy === '') {
         return this.data;
       }
-      const orderBy = this.orderBy;
-      const orderIn = this.orderIn;
+      const { orderBy } = this;
+      const { orderIn } = this;
       return this.data.sort((a, b) => { /* eslint-disable-line */
         let compareResult = true;
         if (orderBy === 'name') {
