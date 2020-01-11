@@ -61,6 +61,13 @@ export default {
     document.dispatchEvent(evt);
   },
 
+  removeFile(type, fid) {
+    const list = this.readList(type);
+    const index = list.findIndex(f => f.fid === fid);
+    list.splice(index, 1);
+    this.updateList(type, list);
+  },
+
   readList(type) {
     const LIST_KEY = getListKey(type);
     return storage.get(LIST_KEY) || [];

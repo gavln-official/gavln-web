@@ -75,7 +75,7 @@ async function upload(fid, keys, fragments) {
       const res = await node.add(data.toString()); /* eslint-disable-line */
       const block = {
         key: keys[i],
-        cid: res.hash,
+        cid: res[0].hash,
       };
       list.push(block);
       Transmission.addBlock('upload', fid, block);

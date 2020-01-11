@@ -2,7 +2,9 @@
   <main-frame>
     <div class="page-upload">
       <upload-list
-          :data="data" />
+          :data="data"
+          :status="status"
+          @deleteRow="deleteRow" />
     </div>
   </main-frame>
 </template>
@@ -21,6 +23,13 @@ export default {
   data() {
     return {
       data: null,
+      status: {
+        speed: 0,
+        percentage: 0,
+        usize: 0,
+        size: 0,
+      },
+      transmissionStartTime: null,
     };
   },
   methods: {
@@ -29,10 +38,21 @@ export default {
       this.data = list.map((item) => {  /* eslint-disable-line */
         return {
           speed: 0,
-          percentage: 0,
+          percentage: Math.min((item.usize / item.size), 1) * 100,
           ...item,
         };
       });
+    },
+    overallProgress(deltaSize) {
+      const s = this.status;
+      s.usize += deltaSize;
+      if (s.usize > s.size) {
+        s.usize = s.size;
+      }
+      s.percentage = Number((s.usize / s.size * 100).toFixed(1));
+      s.speed = this.data.reduce((accumulateSpeed, file) => { /* eslint-disable-line */
+        return accumulateSpeed + file.speed;
+      }, 0);
     },
     onTransmissionProgress(evt) {
       const d = evt.detail;
@@ -51,7 +71,9 @@ export default {
         item.startTime = new Date();
         item.finishedBlocks = 0;
         item.blockSize = d.progress.blockSize;
+        this.status.size += item.size;
       }
+      this.overallProgress(item.blockSize);
     },
     initTransmissionListeners() {
       document.addEventListener('upload-start', this.getUploadList);
@@ -62,6 +84,10 @@ export default {
       document.removeEventListener('upload-start', this.getUploadList);
       document.removeEventListener('upload-complete', this.getUploadList);
       document.removeEventListener('block-upload-complete', this.onTransmissionProgress);
+    },
+    deleteRow(row) {
+      Transmission.removeFile('upload', row.fid);
+      this.getUploadList();
     },
   },
   mounted() {
