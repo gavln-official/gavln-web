@@ -3,6 +3,7 @@
     <input
         type="search"
         v-model="value"
+        ref="input"
         @keydown="keydown">
     <i
         class="iconfont icon-search"
@@ -13,6 +14,10 @@
 <script>
 export default {
   name: 'SearchInput',
+  props: {
+    text: String,
+    source: Array,
+  },
   data() {
     return {
       value: '',
@@ -26,6 +31,10 @@ export default {
       }
     },
   },
+  created() {
+    this.value = this.text
+      || '';
+  },
   methods: {
     keydown(event) {
       if (event.key === 'Enter') {
@@ -33,7 +42,21 @@ export default {
       }
     },
     search() {
-      this.$emit('search', this.value);
+      const data = {
+        name: 'search',
+        query: {
+          q: this.value,
+          s: this.source
+            ? this.source.join(',')
+            : 'all',
+        },
+      };
+
+      if (this.$route.name === 'search') {
+        this.$router.replace(data);
+      } else {
+        this.$router.push(data);
+      }
     },
   },
 };

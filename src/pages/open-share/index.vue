@@ -140,10 +140,16 @@ export default {
       ShareAPI.getShare(this.rand, code)
         .then((res) => {
           if (res.data.file) {
-            this.type = 'file';
-            this.data = res.data.file;
-            this.verified = true;
-          } // TODO: folder
+            if (res.data.file.dir) {
+              this.type = 'folder';
+              this.data = res.data.file;
+              this.verified = true;
+            } else {
+              this.type = 'file';
+              this.data = res.data.file;
+              this.verified = true;
+            }
+          }
 
           this.data.rand = this.rand;
           this.data.code = code;

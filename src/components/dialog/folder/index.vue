@@ -45,7 +45,7 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -167,8 +167,10 @@ export default {
       }
       const to = `${target === '/' ? '' : target}/${this.data.name}`;
 
-      if (from === to
-          || to.indexOf(from) === 0) {
+      if ((this.type === 'copy'
+          || this.type === 'move')
+        && (from === to
+          || to.indexOf(from) === 0)) {
         this.$message.error('请选择其他文件夹');
         return;
       }

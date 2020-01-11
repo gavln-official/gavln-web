@@ -24,8 +24,7 @@
     </div>
     <el-table
         class="file-table upload-table"
-        :data="data"
-        :height="tableHeight">
+        :data="data">
       <el-table-column
           type="selection"
           width="64"></el-table-column>
@@ -104,21 +103,9 @@ export default {
   },
   data() {
     return {
-      tableHeight: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 124;
-    },
     pendingTime(data) {
       const remaining = data.size - data.usize;
       if (remaining <= 0) {

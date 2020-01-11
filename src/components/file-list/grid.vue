@@ -1,8 +1,5 @@
 <template>
   <div class="file-grid">
-    <div class="check">
-      <el-checkbox>全选</el-checkbox>
-    </div>
     <ul class="grids">
       <li
           v-for="item in data"

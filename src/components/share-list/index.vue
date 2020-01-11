@@ -3,8 +3,7 @@
     <el-table
         class="file-table share-table"
         v-loading="loading"
-        :data="data"
-        :height="tableHeight">
+        :data="data">
       <el-table-column
           prop="type"
           width="70">
@@ -28,7 +27,7 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ new Date(scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -61,7 +60,7 @@
         <template
             slot-scope="scope">
           <span
-              v-if="scope.row.expires">{{ new Date(scope.row.expires * 1000) | time('yyyy/MM/dd HH:mm') }}</span> <!-- eslint-disable-line -->
+              v-if="scope.row.expires">{{ scope.row.expires | time('yyyy/MM/dd HH:mm') }}</span> <!-- eslint-disable-line -->
           <span
               v-else>-</span>
         </template>
@@ -98,21 +97,9 @@ export default {
   },
   data() {
     return {
-      tableHeight: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 64;
-    },
     refresh() {
       this.$emit('refresh');
     },
@@ -130,10 +117,10 @@ export default {
         });
     },
     copyLink(item) {
-      const url = `${window.location.origin}/s/${item.rand}`;
+      const url = `链接 ${window.location.origin}/s/${item.rand}`;
 
       const text = item.code
-        ? `${url} ${item.code}`
+        ? `${url} \n提取码 ${item.code}`
         : url;
 
       try {

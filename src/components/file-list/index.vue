@@ -27,16 +27,9 @@
           <span>新建文件夹</span>
         </el-button>
       </template>
-      <template
-          v-if="type === 'favorite'">
-        <el-button>
-          <i class="iconfont icon-star-o"></i>
-          <span>我的收藏</span>
-        </el-button>
-      </template>
       <div class="right">
         <search-input
-            @search="search" />
+            :source="searchSource" />
         <el-dropdown
             placement="bottom"
             @command="orderFileList">
@@ -212,23 +205,19 @@ export default {
         return compareReturn;
       });
     },
+    searchSource() {
+      if (this.$route.name === 'favorite') {
+        return ['mark'];
+      }
+
+      return ['all'];
+    },
   },
   created() {
     const viewMode = Storage.get('view-mode');
     this.viewMode = viewMode || 'list';
   },
   methods: {
-    search(text) {
-      if (this.searching) {
-        return;
-      }
-
-      if (!text) {
-        this.refresh();
-      } else {
-        this.$emit('search', text);
-      }
-    },
     toggleViewMode() {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'

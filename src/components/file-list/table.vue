@@ -45,7 +45,7 @@
           :sort-method="sortByTime">
         <template
             slot-scope="scope">
-          <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -133,18 +133,7 @@ export default {
       tableHeight: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 168;
-    },
     sortByName(a, b) {
       return a.name
         .localeCompare(b.name);

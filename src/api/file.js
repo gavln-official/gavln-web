@@ -136,9 +136,39 @@ function copy(from, to) {
   });
 }
 
-function search(text) {
+function search(config) {
   const data = new FormData();
-  data.append('search', text);
+  data.append('search', config.text);
+  data.append('limit', config.limit);
+  data.append('offset', config.offset);
+  if (config.path) {
+    data.append('path', config.path);
+  }
+  if (config.suffixs
+      && config.suffixs.length) {
+    data.append('suffixs', config.suffixs);
+  }
+  if (config.startTime) {
+    data.append('startTime', config.startTime);
+  }
+  if (config.endTime) {
+    data.append('endTime', config.endTime);
+  }
+  if (config.all) {
+    data.append('all', config.all);
+  }
+  if (config.inbox) {
+    data.append('inbox', config.inbox);
+  }
+  if (config.mark) {
+    data.append('mark', config.mark);
+  }
+  if (config.other) {
+    data.append('other', config.other);
+  }
+  if (config.trash) {
+    data.append('trash', config.trash);
+  }
 
   return HTTP({
     method: 'POST',
