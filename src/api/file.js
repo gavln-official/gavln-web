@@ -70,10 +70,11 @@ async function upload(file, path, name, blockSize, fragments) {
     return false;
   }
   try {
-    const r = await addFile(path, name, file.size, list);
-    Transmission.fileComplete('upload', file.fid);
+    await addFile(path, name, file.size, list);
   } catch (err) {
     console.log(err.detail);
+  } finally {
+    Transmission.fileComplete('upload', file.fid);
   }
   return true;
 }
