@@ -59,10 +59,9 @@ function wordArrayToU8Array(wordArray) {
 }
 /* eslint-enable */
 
-let node = null;
 async function upload(fid, keys, fragments) {
-  if (!node) {
-    node = await init();
+  if (!rootNode) {
+    rootNode = await init();
   }
   try {
     const list = [];
@@ -72,7 +71,7 @@ async function upload(fid, keys, fragments) {
         keys[i],
       );
 
-      const res = await node.add(data.toString()); /* eslint-disable-line */
+      const res = await rootNode.add(data.toString()); /* eslint-disable-line */
       const block = {
         key: keys[i],
         cid: res[0].hash,
@@ -80,36 +79,41 @@ async function upload(fid, keys, fragments) {
       list.push(block);
       Transmission.addBlock('upload', fid, block);
     }
-    await node.stop();
-    node = null;
+    await rootNode.stop();
+    rootNode = null;
     return list;
   } catch (error) {
     throw error;
   }
 }
 
-function decode(fragments, size) {
-  const fileData = Erasure.recombine(fragments, size, 5, 2);
+function decode(fragments, size, originalBlocks, extraBlocks) {
+  const fileData = Erasure.recombine(fragments, size, originalBlocks, extraBlocks);
 
   return fileData.buffer.slice(0, size);
 }
 
-async function download(list, size) {
-  if (!node) {
-    node = await init();
+async function download(file) {
+  const list = file.blocks;
+  const size = file.size;
+  const originalBlocks = file.data_shard;
+  const extraBlocks = file.parity_shard;
+
+  if (!rootNode) {
+    rootNode = await init();
   }
   try {
     const fragments = [];
     for (const item of list) { /* eslint-disable-line */
-      const blocks = await node.get(item.cid); /* eslint-disable-line */
+      const blocks = await rootNode.get(item.cid); /* eslint-disable-line */
 
       const data = blocks.map(block => block.content).join('');
       const raw = Crypto.AES.decrypt(data, item.key);
       fragments.push(wordArrayToU8Array(raw));
     }
-    await node.stop();
-    node = null;
-    return decode(fragments, size);
+    await rootNode.stop();
+    rootNode = null;
+    return decode(fragments, size, originalBlocks, extraBlocks);
   } catch (error) {
     throw error;
   }

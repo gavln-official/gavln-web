@@ -36,12 +36,14 @@ function updatePath(path, name) {
   });
 }
 
-function addFile(path, name, size, blocks) {
+function addFile(path, name, size, blocks, blockSize) {
   const data = {
     path,
     name,
     size,
     blocks,
+    data_shard: blockSize.originalBlocks,
+    parity_shard: blockSize.extraBlocks,
   };
 
   return HTTP({
@@ -70,7 +72,7 @@ async function upload(file, path, name, blockSize, fragments) {
     return false;
   }
   try {
-    await addFile(path, name, file.size, list);
+    await addFile(path, name, file.size, list, blockSize);
   } catch (err) {
     console.log(err.detail);
   } finally {
@@ -94,7 +96,7 @@ async function prepareUpload(file, path, name) {
 
 async function download(file) {
   try {
-    const list = await IPFS.download(file.blocks, file.size);
+    const list = await IPFS.download(file);
 
     return list;
   } catch (error) {
