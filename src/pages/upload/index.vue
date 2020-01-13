@@ -4,7 +4,8 @@
       <upload-list
           :data="data"
           :status="status"
-          @deleteRow="deleteRow" />
+          @deleteRow="deleteRow"
+          @pauseAll="pauseAll" />
     </div>
   </main-frame>
 </template>
@@ -71,7 +72,11 @@ export default {
         item.startTime = new Date();
         item.finishedBlocks = 0;
         item.blockSize = d.progress.blockSize;
+        this.status.usize += item.usize;
         this.status.size += item.size;
+      }
+      if (item.paused) {
+        item.speed = 0;
       }
       this.overallProgress(item.blockSize);
     },
@@ -88,6 +93,12 @@ export default {
     deleteRow(row) {
       Transmission.removeFile('upload', row.fid);
       this.getUploadList();
+    },
+    pauseAll() {
+      this.data.forEach((file) => {
+        file.paused = true; /* eslint-disable-line */
+        Transmission.pasueFile('upload', file.fid);
+      });
     },
   },
   mounted() {

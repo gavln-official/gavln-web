@@ -59,16 +59,20 @@ function wordArrayToU8Array(wordArray) {
 }
 /* eslint-enable */
 
-async function upload(fid, keys, fragments) {
+async function upload(fid, keys, fragments, finishedBlocks) {
   if (!rootNode) {
     rootNode = await init();
   }
   try {
-    const list = [];
-    for (let i = 0; i < fragments.length; i++) { /* eslint-disable-line */
+    const list = finishedBlocks;
+    for (let i = list.length; i < fragments.length; i++) { /* eslint-disable-line */
+      const file = Transmission.getFile('upload', fid);
+      if (file.paused) {
+        return 'User pasued upload';
+      }
       const data = Crypto.AES.encrypt(
         Crypto.lib.WordArray.create(fragments[i]),
-        keys[i],
+        keys[i - list.length],
       );
 
       const res = await rootNode.add(data.toString()); /* eslint-disable-line */
