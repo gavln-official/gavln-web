@@ -1,7 +1,7 @@
 <template>
   <div class="file-list upload-list">
     <div class="toolbar">
-      <el-button>
+      <el-button @click="pauseAll">
         <i class="iconfont icon-upload"></i>
         <span>全部暂停</span>
       </el-button>
@@ -121,6 +121,9 @@ export default {
     },
     deleteRow(row) {
       this.$emit('deleteRow', row);
+    },
+    pauseAll() {
+      this.$emit('pauseAll');
     },
   },
 };

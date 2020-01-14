@@ -36,12 +36,14 @@ function updatePath(path, name) {
   });
 }
 
-function addFile(path, name, size, blocks) {
+function addFile(path, name, size, blocks, blockSize) {
   const data = {
     path,
     name,
     size,
     blocks,
+    data_shard: blockSize.originalBlocks,
+    parity_shard: blockSize.extraBlocks,
   };
 
   return HTTP({
@@ -59,23 +61,29 @@ function getUploadKey(number = 1) {
 }
 
 async function upload(file, path, name, blockSize, fragments) {
-  const keyRes = await getUploadKey(blockSize.totalBlocks);
+  const progress = Transmission.getFileProgress('upload', file.fid);
+  const remainingBlocks = blockSize.totalBlocks - progress.finishedBlocks.length;
+  const keyRes = await getUploadKey(remainingBlocks);
   const keys = keyRes.data.key;
 
   let list = null;
   try {
-    list = await IPFS.upload(file.fid, keys, fragments);
+    list = await IPFS.upload(file.fid, keys, fragments, progress.finishedBlocks);
   } catch (error) {
     console.error(`IPFS上传报错：${error}`);
     return false;
   }
-  try {
-    await addFile(path, name, file.size, list);
-  } catch (err) {
-    console.log(err.detail);
-  } finally {
-    Transmission.fileComplete('upload', file.fid);
+  if (!Array.isArray(list)) {
+    return false;
   }
+  try {
+    await addFile(path, name, file.size, list, blockSize);
+  } catch (err) {
+    if (err.detail !== 'file exists') {
+      console.log(`file/add报错：${err.detail}`);
+    }
+  }
+  Transmission.fileComplete('upload', file.fid);
   return true;
 }
 
@@ -94,7 +102,7 @@ async function prepareUpload(file, path, name) {
 
 async function download(file) {
   try {
-    const list = await IPFS.download(file.blocks, file.size);
+    const list = await IPFS.download(file);
 
     return list;
   } catch (error) {
