@@ -13,13 +13,13 @@
         <i class="iconfont icon-trash"></i>
         <span>全部删除</span>
       </el-button>
-      <div class="right">
+      <div class="right" v-show="status.percentage">
         <strong>当前进度</strong>
         <el-progress
-            :percentage="50"
+            :percentage="status.percentage"
             :show-text="false" />
-        <span>已完成50%</span>
-        <strong>，2.11MB/s</strong>
+        <span>已完成 {{ status.percentage }}%</span>
+        <strong>，{{ status.speed | filesize }}/s</strong>
       </div>
     </div>
     <el-table
@@ -61,18 +61,28 @@
         <template
             slot-scope="scope">
           <el-progress
-              :percentage="50"
+              :percentage="scope.row.percentage"
               :show-text="false" />
-          <strong>{{ scope.row.speed | filesize }}/s</strong>
-          <span> 剩余 {{ pendingTime(scope.row) }}</span>
+          <template v-if="scope.row.usize < scope.row.size">
+            <template v-if="scope.row.speed">
+              <strong
+                  v-if="scope.row.usize < scope.row.size">
+                  {{ scope.row.speed | filesize }}/s </strong>
+              <span>{{ pendingTime(scope.row) }}</span>
+            </template>
+            <span v-else>准备传输</span>
+          </template>
+          <span v-else>传输完成</span>
         </template>
       </el-table-column>
       <el-table-column
           width="100">
-        <template>
+        <template
+            slot-scope="scope">
           <div>
             <i class="iconfont icon-menu-circle"></i>
-            <i class="iconfont icon-trash"></i>
+            <i class="iconfont icon-trash"
+                @click="deleteRow(scope.row)"></i>
           </div>
         </template>
       </el-table-column>
@@ -98,6 +108,7 @@ export default {
       },
     },
     data: Array,
+    status: Object,
   },
   data() {
     return {
@@ -106,8 +117,10 @@ export default {
   methods: {
     pendingTime(data) {
       const seconds = (data.size - data.usize) / data.speed;
-
-      return Utils.formatTime(seconds);
+      return `剩余 ${Utils.formatTime(seconds)}`;
+    },
+    deleteRow(row) {
+      this.$emit('deleteRow', row);
     },
   },
 };

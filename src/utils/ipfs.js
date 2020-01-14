@@ -1,6 +1,7 @@
 import IPFS from 'ipfs';
 import Crypto from 'crypto-js';
 import Erasure from './erasure';
+import Transmission from './transmission';
 
 let rootNode = null;
 
@@ -12,10 +13,28 @@ async function init() {
   return rootNode;
 }
 
+function getBlockSize(file) {
+  let blockSize = 1e6;
+  let originalBlocks = Math.ceil(file.size / blockSize);
+  let extraBlocks = Math.ceil(originalBlocks / 3);
+  if (originalBlocks + 2 * extraBlocks > 255) {
+    originalBlocks = 171;
+    extraBlocks = 42;
+  }
+  const totalBlocks = originalBlocks + 2 * extraBlocks;
+  blockSize = Number((file.size / totalBlocks).toFixed(2));
+  return {
+    blockSize,
+    originalBlocks,
+    extraBlocks,
+    totalBlocks,
+  };
+}
+
 async function encode(file) {
   const buffer = new Uint8Array(await file.arrayBuffer());
-
-  return Erasure.split(buffer, 5, 2);
+  const blockSize = getBlockSize(file);
+  return Erasure.split(buffer, blockSize.originalBlocks, blockSize.extraBlocks);
 }
 
 /* eslint-disable */
@@ -40,22 +59,29 @@ function wordArrayToU8Array(wordArray) {
 }
 /* eslint-enable */
 
-async function upload(key, file) {
+let node = null;
+async function upload(fid, keys, fragments) {
+  if (!node) {
+    node = await init();
+  }
   try {
-    const node = await init();
-    const fragments = await encode(file);
-
     const list = [];
-    for (const i in fragments) { /* eslint-disable-line */
+    for (let i = 0; i < fragments.length; i++) { /* eslint-disable-line */
       const data = Crypto.AES.encrypt(
         Crypto.lib.WordArray.create(fragments[i]),
-        key,
+        keys[i],
       );
 
       const res = await node.add(data.toString()); /* eslint-disable-line */
-      list.push(...res);
+      const block = {
+        key: keys[i],
+        cid: res[0].hash,
+      };
+      list.push(block);
+      Transmission.addBlock('upload', fid, block);
     }
-
+    await node.stop();
+    node = null;
     return list;
   } catch (error) {
     throw error;
@@ -69,9 +95,10 @@ function decode(fragments, size) {
 }
 
 async function download(list, size) {
+  if (!node) {
+    node = await init();
+  }
   try {
-    const node = await init();
-
     const fragments = [];
     for (const item of list) { /* eslint-disable-line */
       const blocks = await node.get(item.cid); /* eslint-disable-line */
@@ -80,7 +107,8 @@ async function download(list, size) {
       const raw = Crypto.AES.decrypt(data, item.key);
       fragments.push(wordArrayToU8Array(raw));
     }
-
+    await node.stop();
+    node = null;
     return decode(fragments, size);
   } catch (error) {
     throw error;
@@ -89,6 +117,9 @@ async function download(list, size) {
 
 export default {
   init,
+  encode,
+  decode,
   upload,
   download,
+  getBlockSize,
 };
