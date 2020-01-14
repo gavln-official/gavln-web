@@ -5,6 +5,7 @@ import {
 } from 'element-ui';
 
 import Storage from '../utils/storage';
+import Utils from '../utils/index';
 
 import Home from '../pages/home/index.vue';
 
@@ -109,6 +110,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const everVisited = Storage.get('ever-visited');
+  const locale = Storage.get('locale');
 
   Notification.closeAll();
 
@@ -132,6 +134,10 @@ router.beforeEach((to, from, next) => {
         Notification.closeAll();
       },
     });
+  }
+
+  if (!locale) {
+    Storage.set('locale', Utils.getLocale());
   }
 
   const hasLogin = Storage.getToken();
