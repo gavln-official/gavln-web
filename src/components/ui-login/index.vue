@@ -11,14 +11,14 @@
       <el-form-item
           prop="username">
         <el-input
-            :placeholder="$t('login.username')"
+            :placeholder="$t('username')"
             v-model="form.username" />
       </el-form-item>
       <el-form-item
           prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
-            :placeholder="$t('login.password')"
+            :placeholder="$t('password')"
             v-model="form.password">
           <i
               class="iconfont"
@@ -60,14 +60,14 @@ export default {
         username: [
           {
             required: true,
-            message: this.$t('login.messages.username-required'),
+            message: this.$t('form-message.username-required'),
             trigger: 'blur',
           },
         ],
         password: [
           {
             required: true,
-            message: this.$t('login.messages.password-required'),
+            message: this.$t('form-message.password-required'),
             trigger: 'blur',
           },
         ],
