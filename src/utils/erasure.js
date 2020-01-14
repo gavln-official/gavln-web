@@ -325,6 +325,7 @@
   let f = new Galois();
 
   // (Uint8Array, int, int)-> Uint8Array
+  // originalBlobs + 2 * allowedFailures must be < 256
   exports.split = function (ints, originalBlobs, allowedFailures) {
     let n = originalBlobs + allowedFailures * 2;
     let bouts = [];

@@ -3,6 +3,7 @@
     <el-table
         class="file-table"
         :data="data"
+        :height="tableHeight"
         @row-contextmenu="showContextMenu">
       <el-table-column
           prop="type"
@@ -129,6 +130,7 @@ export default {
   data() {
     return {
       contextRow: {},
+      tableHeight: null,
     };
   },
   methods: {
