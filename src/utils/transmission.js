@@ -8,7 +8,10 @@ export default {
   addFile(type, file, blockSize) {
     const list = this.readList(type);
     const fid = file.fid;
-    if (list.some(i => i.fid === fid)) {
+    const existed = list.find(f => f.fid === fid);
+    if (existed) {
+      existed.paused = false;
+      this.updateList('upload', list);
       return false;
     }
     list.push({
@@ -27,6 +30,46 @@ export default {
     });
     document.dispatchEvent(evt);
     return true;
+  },
+
+  getFile(type, fid) {
+    const list = this.readList(type);
+    const file = list.find(f => f.fid === fid);
+    return file;
+  },
+
+  getFileProgress(type, fid) {
+    const file = this.getFile(type, fid);
+    return {
+      finishedBlocks: file.blockList,
+      totalBlocks: file.blockSize.totalBlocks,
+    };
+  },
+
+  pasueFile(type, fid) {
+    const list = this.readList(type);
+    const file = list.find(f => f.fid === fid);
+    file.paused = true;
+    this.updateList('upload', list);
+  },
+
+  fileComplete(type, fid, delay = 0) {
+    const evt = new CustomEvent(`${type}-complete`, {
+      detail: {
+        fid,
+      },
+    });
+    document.dispatchEvent(evt);
+    setTimeout(() => {
+      this.removeFile('upload', fid);
+    }, delay);
+  },
+
+  removeFile(type, fid) {
+    const list = this.readList(type);
+    const index = list.findIndex(f => f.fid === fid);
+    list.splice(index, 1);
+    this.updateList(type, list);
   },
 
   addBlock(type, fid, block) {
@@ -50,22 +93,6 @@ export default {
     });
     document.dispatchEvent(evt);
     return progress;
-  },
-
-  fileComplete(type, fid) {
-    const evt = new CustomEvent(`${type}-complete`, {
-      detail: {
-        fid,
-      },
-    });
-    document.dispatchEvent(evt);
-  },
-
-  removeFile(type, fid) {
-    const list = this.readList(type);
-    const index = list.findIndex(f => f.fid === fid);
-    list.splice(index, 1);
-    this.updateList(type, list);
   },
 
   readList(type) {
