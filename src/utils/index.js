@@ -61,10 +61,21 @@ function randomCode(length = 4) {
     .substring(2, 2 + length);
 }
 
+function getLocale() {
+  const lang = window.navigator.language;
+
+  if (/^zh-/.test(lang)) {
+    return 'cn';
+  }
+
+  return 'en';
+}
+
 export default {
   formatTime,
   copyToClipboard,
   encodePassword,
   parseFileName,
   randomCode,
+  getLocale,
 };

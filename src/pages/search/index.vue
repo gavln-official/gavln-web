@@ -436,6 +436,11 @@ export default {
         return;
       }
 
+      if (!this.q) {
+        this.$message.error('请输入搜索内容');
+        return;
+      }
+
       if (!this.s
           || !this.s.length) {
         this.$message.error('请选择搜索位置');
