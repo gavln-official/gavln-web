@@ -5,7 +5,7 @@
         href="/">Gavln</a>
     <ul class="links">
       <li>
-        <a href="/">产品介绍</a>
+        <a href="/">{{ $t('page-frame.intro') }}</a>
       </li>
       <li>
         <el-dropdown
@@ -25,7 +25,7 @@
             v-if="username">{{ username }}</span>
         <a
             v-else
-            href="/login">登录</a>
+            href="/login">{{ $t('login') }}</a>
       </li>
     </ul>
   </header>

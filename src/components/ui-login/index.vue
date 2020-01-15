@@ -1,6 +1,6 @@
 <template>
   <div class="form-content login">
-    <h2>{{ $t('login.welcome-back') }}</h2>
+    <h2>{{ $t('login-form.welcome-back') }}</h2>
     <el-form
         class="login-form"
         label-position="top"
@@ -32,14 +32,14 @@
       </el-form-item>
     </el-form>
     <div class="links">
-      <a href="/reset">{{ $t('login.forget-password') }}</a>
-      <a href="/register" class="right">{{ $t('login.go-register') }}</a>
+      <a href="/reset">{{ $t('login-form.forget-password') }}</a>
+      <a href="/register" class="right">{{ $t('login-form.go-register') }}</a>
     </div>
     <el-button
         type="text"
         :disabled="saving"
         @click="login">
-      <span>{{ $t('login.login') }}</span>
+      <span>{{ $t('login-form.login') }}</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
   </div>

@@ -5,6 +5,16 @@ export default {
   password: '密码',
   email: '邮箱',
   'verification-code': '验证码',
+  login: '登录',
+  upload: '上传',
+  url: '链接',
+  time: '时间',
+  size: '大小',
+  file: '文件',
+  'file-name': '文件名',
+  folder: '文件夹',
+  delete: '删除',
+  cancel: '取消',
 
   // form messages
   'form-message': {
@@ -18,8 +28,15 @@ export default {
     'verification-code-required': '请输入验证码',
   },
 
+  // page-frame
+  'page-frame': {
+    intro: '产品介绍',
+    eula: '服务条款',
+    privacy: '隐私政策',
+  },
+
   // login form
-  login: {
+  'login-form': {
     'welcome-back': '欢迎回来',
     'forget-password': '忘记密码？',
     'go-register': '去注册',
@@ -42,5 +59,14 @@ export default {
     done: '完成',
     'reset-success': '密码已重置，请登录',
     'reset-fail': '重置密码失败',
+  },
+
+  // file-list
+  'file-list': {
+    local: '本地文件',
+    'create-folder': '新建文件夹',
+    sort: '排序方式',
+    'delete-this': '删除该{0}？',
+    info: '提示',
   },
 };
