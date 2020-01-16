@@ -7,14 +7,27 @@ export default {
   'verification-code': '验证码',
   login: '登录',
   upload: '上传',
+  download: '下载',
   url: '链接',
   time: '时间',
+  'modify-time': '修改时间',
   size: '大小',
   file: '文件',
   'file-name': '文件名',
+  'file-size': '文件大小',
   folder: '文件夹',
   delete: '删除',
   cancel: '取消',
+  'move-to': '移动到',
+  'copy-to': '复制到',
+  rename: '重命名',
+  'add-to-fav': '收藏',
+  'remove-from-fav': '取消收藏',
+  share: '分享',
+  open: '打开',
+  all: '全部',
+  privacy: '隐私政策',
+  ok: '好',
 
   // form messages
   'form-message': {
@@ -32,7 +45,6 @@ export default {
   'page-frame': {
     intro: '产品介绍',
     eula: '服务条款',
-    privacy: '隐私政策',
   },
 
   // login form
@@ -68,5 +80,12 @@ export default {
     sort: '排序方式',
     'delete-this': '删除该{0}？',
     info: '提示',
+  },
+
+  // cookie-notification
+  'cookie-notification': {
+    message: '我们使用cookie来确保您在我们的网站上获得最佳的体验。',
+    'please-read': '请阅读我们的',
+    'for-more-infomation': '以了解更多的信息。',
   },
 };

@@ -4,6 +4,8 @@ import {
   Notification,
 } from 'element-ui';
 
+import i18n from '../i18n';
+
 import Storage from '../utils/storage';
 import Utils from '../utils/index';
 
@@ -122,11 +124,11 @@ router.beforeEach((to, from, next) => {
       dangerouslyUseHTMLString: true,
       message: `
         <div class="cookie-notification">
-          <p>我们使用cookie来确保您在我们的网站上获得最佳的体验。</p>
+          <p>${i18n.t('cookie-notification.message')}</p>
           <p>
-            <span>请阅读我们的</span><a href="/">隐私政策</a><span>以了解更多的信息。</span>
+            <span>${i18n.t('cookie-notification.please-read')}</span><a href="/">${i18n.t('privacy')}</a><span>${i18n.t('cookie-notification.for-more-infomation')}</span>
           </p>
-          <button type="button" class="el-button el-button--primary">好</button>
+          <button type="button" class="el-button el-button--primary">${i18n.t('ok')}</button>
         </div>
       `,
       onClick: () => {

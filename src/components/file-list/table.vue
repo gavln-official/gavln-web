@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div>
     <el-table
@@ -13,7 +14,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件名称"
+          :label="$t('file-name')"
           sortable
           :sort-method="sortByName">
         <template
@@ -29,7 +30,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件大小"
+          :label="$t('file-size')"
           sortable
           width="100"
           :sort-method="sortBySize">
@@ -39,7 +40,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="修改时间"
+          :label="$t('modify-time')"
           sortable
           width="160"
           :sort-method="sortByTime">
@@ -67,16 +68,16 @@
               <el-dropdown-menu
                   slot="dropdown">
                 <el-dropdown-item
-                    command="move">移动到</el-dropdown-item>
+                    command="move">{{ $t('move-to') }}</el-dropdown-item>
                 <el-dropdown-item
-                    command="copy">复制到</el-dropdown-item>
+                    command="copy">{{ $t('copy-to') }}</el-dropdown-item>
                 <el-dropdown-item
-                    command="rename">重命名</el-dropdown-item>
+                    command="rename">{{ $t('rename') }}</el-dropdown-item>
                 <el-dropdown-item
-                    command="favorite">{{ scope.row.mark ? '取消收藏' : '收藏' }}</el-dropdown-item>
+                    command="favorite">{{ scope.row.mark ? $t('remove-from-fav') : $t('add-to-fav') }}</el-dropdown-item>
                 <el-dropdown-item
                     v-if="type === 'home'"
-                    command="delete">删除</el-dropdown-item>
+                    command="delete">{{ $t('delete') }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -88,27 +89,28 @@
       <template v-if="type === 'home'">
         <li
             v-if="contextRow.dir"
-            @click="goPath">打开</li>
+            @click="goPath">{{ $t('open') }}</li>
         <li
             v-else
-            @click="rowCommand('download')">下载</li>
+            @click="rowCommand('download')">{{ $t('download') }}</li>
         <li
-            @click="rowCommand('share')">分享</li>
+            @click="rowCommand('share')">{{ $t('share') }}</li>
       </template>
       <li
-          @click="rowCommand('move')">移动到</li>
+          @click="rowCommand('move')">{{ $t('move-to') }}</li>
       <li
-          @click="rowCommand('copy')">复制到</li>
+          @click="rowCommand('copy')">{{ $t('copy-to') }}</li>
       <li
-          @click="rowCommand('rename')">重命名</li>
+          @click="rowCommand('rename')">{{ $t('rename') }}</li>
       <li
-          @click="rowCommand('favorite')">{{ contextRow.mark ? '取消' : '' }}收藏</li>
+          @click="rowCommand('favorite')">{{ contextRow.mark ? $t('remove-from-fav') : $t('add-to-fav') }}</li>
       <li
           v-if="type === 'home'"
-          @click="rowCommand('delete')">删除</li>
+          @click="rowCommand('delete')">{{ $t('delete') }}</li>
     </vue-context>
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script>
 import {

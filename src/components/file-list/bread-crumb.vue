@@ -5,7 +5,7 @@
       <el-breadcrumb-item
           :to="{
             name: 'home',
-          }">全部</el-breadcrumb-item>
+          }">{{ $t('all') }}</el-breadcrumb-item>
       <el-breadcrumb-item
           v-for="(item, index) in list"
           :key="index"

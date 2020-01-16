@@ -5,7 +5,7 @@
         <a href="/">{{ $t('page-frame.eula') }}</a>
       </li>
       <li>
-        <a href="/">{{ $t('page-frame.privacy') }}</a>
+        <a href="/">{{ $t('privacy') }}</a>
       </li>
     </ul>
   </footer>

@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div class="file-grid">
     <ul class="grids">
@@ -18,27 +19,28 @@
       <template v-if="type === 'home'">
         <li
             v-if="contextRow.dir"
-            @click="goPath">打开</li>
+            @click="goPath">{{ $t('open') }}</li>
         <li
             v-else
-            @click="rowCommand('download')">下载</li>
+            @click="rowCommand('download')">{{ $t('download') }}</li>
         <li
-            @click="rowCommand('share')">分享</li>
+            @click="rowCommand('share')">{{ $t('share') }}</li>
       </template>
       <li
-          @click="rowCommand('move')">移动到</li>
+          @click="rowCommand('move')">{{ $t('move-to') }}</li>
       <li
-          @click="rowCommand('copy')">复制到</li>
+          @click="rowCommand('copy')">{{ $t('copy-to') }}</li>
       <li
-          @click="rowCommand('rename')">重命名</li>
+          @click="rowCommand('rename')">{{ $t('rename') }}</li>
       <li
-          @click="rowCommand('favorite')">{{ contextRow.mark ? '取消' : '' }}收藏</li>
+          @click="rowCommand('favorite')">{{ contextRow.mark ? $t('remove-from-fav') : $t('add-to-fav') }}</li>
       <li
           v-if="type === 'home'"
-          @click="rowCommand('delete')">删除</li>
+          @click="rowCommand('delete')">{{ $t('delete') }}</li>
     </vue-context>
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script>
 import {
