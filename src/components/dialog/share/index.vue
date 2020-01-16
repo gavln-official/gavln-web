@@ -156,7 +156,7 @@ export default {
       try {
         Utils.copyToClipboard(text);
 
-        this.$message.success(this.$t('share-dialog.copy-success'));
+        this.$message.success(this.$t('copy-success'));
       } catch (error) {
         this.$message.error(this.$t('share-dialog.copy-fail'));
       }

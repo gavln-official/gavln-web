@@ -3,22 +3,22 @@
     <div class="toolbar">
       <el-button @click="pauseAll">
         <i class="iconfont icon-upload"></i>
-        <span>全部暂停</span>
+        <span>{{ $t('upload-list.pause-all') }}</span>
       </el-button>
       <el-button>
         <i class="iconfont icon-folder-add"></i>
-        <span>全部开始</span>
+        <span>{{ $t('upload-list.start-all') }}</span>
       </el-button>
       <el-button>
         <i class="iconfont icon-trash"></i>
-        <span>全部删除</span>
+        <span>{{ $t('upload-list.delete-all') }}</span>
       </el-button>
       <div class="right" v-show="status.percentage">
-        <strong>当前进度</strong>
+        <strong>{{ $t('upload-list.current-progress') }}</strong>
         <el-progress
             :percentage="status.percentage"
             :show-text="false" />
-        <span>已完成 {{ status.percentage }}%</span>
+        <span>{{ $t('upload-list.done') }} {{ status.percentage }}%</span>
         <strong>，{{ status.speed | filesize }}/s</strong>
       </div>
     </div>
@@ -30,14 +30,14 @@
           width="64"></el-table-column>
       <el-table-column
           prop="type"
-          label="全选"
+          :label="$t('check-all')"
           width="48">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
       </el-table-column>
       <el-table-column
-          label="文件名称">
+          :label="$t('file-name')">
         <template
             slot-scope="scope">
           <a
@@ -48,7 +48,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件大小"
+          :label="$t('file-size')"
           width="180">
         <template
             slot-scope="scope">
@@ -56,7 +56,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="状态"
+          :label="$t('status')"
           width="200">
         <template
             slot-scope="scope">
@@ -70,9 +70,11 @@
                   {{ scope.row.speed | filesize }}/s </strong>
               <span>{{ pendingTime(scope.row) }}</span>
             </template>
-            <span v-else>准备传输</span>
+            <span
+                v-else>{{ $t('upload-list.ready') }}</span>
           </template>
-          <span v-else>传输完成</span>
+          <span
+              v-else>{{ $t('upload-list.finished') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -110,14 +112,10 @@ export default {
     data: Array,
     status: Object,
   },
-  data() {
-    return {
-    };
-  },
   methods: {
     pendingTime(data) {
       const seconds = (data.size - data.usize) / data.speed;
-      return `剩余 ${Utils.formatTime(seconds)}`;
+      return `${this.$t('upload-list.remaing')} ${Utils.formatTime(seconds)}`;
     },
     deleteRow(row) {
       this.$emit('deleteRow', row);

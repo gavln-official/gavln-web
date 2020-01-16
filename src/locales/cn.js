@@ -31,11 +31,16 @@ export default {
   all: '全部',
   privacy: '隐私政策',
   ok: '好',
+  confirm: '确定',
   name: '名称',
   save: '保存',
   create: '新建',
   days: '天',
   close: '关闭',
+  'check-all': '全选',
+  status: '状态',
+  'verify-code': '提取码',
+  'copy-success': '复制成功',
 
   // form messages
   'form-message': {
@@ -128,7 +133,6 @@ export default {
     'copy-url-and-code': '复制链接及密码',
     code: '提取码：',
     'create-url': '创建链接',
-    'copy-success': '复制成功',
     'copy-fail': '复制失败，请手动复制',
   },
 
@@ -137,5 +141,30 @@ export default {
     'move-file': '移动文件',
     'copy-file': '复制文件',
     'save-file': '保存到网盘',
+  },
+
+  // upload-list
+  'upload-list': {
+    'pause-all': '全部暂停',
+    'start-all': '全部开始',
+    'delete-all': '全部删除',
+    'current-progress': '当前进度',
+    done: '已完成',
+    ready: '准备传输',
+    finished: '传输完成',
+    remaining: '剩余',
+  },
+
+  // share-list
+  'share-list': {
+    'share-time': '分享时间',
+    'share-file': '分享文件',
+    'visit-count': '查看次数',
+    'download-count': '查看次数',
+    'save-count': '查看次数',
+    'expired-time': '失效时间',
+    'confirm-cancel': '你要确认取消分享吗？',
+    'confirm-info': '取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接',
+    'cancel-share': '确认取消分享',
   },
 };
