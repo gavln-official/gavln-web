@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <el-dialog
       class="share-dialog"
@@ -9,27 +10,27 @@
         label-width="120px"
         v-if="step === 'create'">
       <el-form-item
-          label="分享形式:">
+          :label="$t('share-dialog.type')">
         <el-radio-group
             class="type"
             v-model="form.type">
           <el-radio
-              label="encrypt">有密码&nbsp;&nbsp;仅限拥有密码者可查看，更加隐私安全</el-radio>
+              label="encrypt">{{ $t('share-dialog.encrypt') }}&nbsp;&nbsp;{{ $t('share-dialog.encrypt-info') }}</el-radio>
           <el-radio
-              label="open">无密码&nbsp;&nbsp;无需密码，仅拥有链接的用户可以查看</el-radio>
+              label="open">{{ $t('share-dialog.open') }}&nbsp;&nbsp;{{ $t('share-dialog.open-info') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item
-          label="有效期:">
+          :label="$t('share-dialog.duration')">
         <el-radio-group
             class="duration"
             v-model="form.duration">
           <el-radio
-              :label="0">永久有效</el-radio>
+              :label="0">{{ $t('share-dialog.forever') }}</el-radio>
           <el-radio
-              :label="30">30天</el-radio>
+              :label="30">30{{ $t('days') }}</el-radio>
           <el-radio
-              :label="7">7天</el-radio>
+              :label="7">7{{ $t('days') }}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -38,18 +39,18 @@
         v-if="step === 'success'">
       <div class="info">
         <i class="iconfont icon-check-o"></i>
-        <div class="message">成功创建链接</div>
-        <div class="duration">{{ form.duration ? `${form.duration}天后失效` : '永久有效' }}</div>
+        <div class="message">{{ $t('share-dialog.create-success') }}</div>
+        <div class="duration">{{ form.duration ? $t('share-dialog.expired-in', [form.duration]) : $t('share-dialog.forever') }}</div>
       </div>
       <div class="url">
         <span class="copy">{{ shareData.url }}</span>
         <el-button
-            @click="copyLink">{{ form.type === 'encrypt' ? '复制链接及密码' : '复制链接' }}</el-button>
+            @click="copyLink">{{ form.type === 'encrypt' ? $t('share-dialog.copy-url-and-code') : $t('share-dialog.copy-url') }}</el-button>
       </div>
       <div
           class="code"
           v-if="form.type === 'encrypt'">
-        <span>提取码:</span>
+        <span>{{ $t('share-dialog.code') }}</span>
         <span class="copy">{{ shareData.code }}</span>
       </div>
     </div>
@@ -59,19 +60,20 @@
           v-if="step === 'create'">
         <el-button
             :disabled="saving"
-            @click="close">取消</el-button>
+            @click="close">{{ $t('cancel') }}</el-button>
         <el-button
             :disabled="saving"
-            @click="share">创建链接</el-button>
+            @click="share">{{ $t('share-dialog.create-url') }}</el-button>
       </template>
       <template
           v-if="step === 'success'">
         <el-button
-            @click="close">关闭</el-button>
+            @click="close">{{ $t('close') }}</el-button>
       </template>
     </div>
   </el-dialog>
 </template>
+<!-- eslint-enable -->
 
 <script>
 import Utils from '../../../utils/index';
@@ -108,10 +110,10 @@ export default {
   computed: {
     title() {
       const type = this.data.dir
-        ? '文件夹'
-        : '文件';
+        ? this.$t('folder')
+        : this.$t('file');
 
-      return `分享${type}: ${this.data.name}`;
+      return `${this.$t('share')}${type}: ${this.data.name}`;
     },
   },
   methods: {
@@ -154,9 +156,9 @@ export default {
       try {
         Utils.copyToClipboard(text);
 
-        this.$message.success('复制成功');
+        this.$message.success(this.$t('share-dialog.copy-success'));
       } catch (error) {
-        this.$message.error('复制失败，请手动复制');
+        this.$message.error(this.$t('share-dialog.copy-fail'));
       }
     },
   },

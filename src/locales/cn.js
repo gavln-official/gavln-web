@@ -16,9 +16,12 @@ export default {
   'file-name': '文件名',
   'file-size': '文件大小',
   folder: '文件夹',
+  'create-folder': '新建文件夹',
   delete: '删除',
   cancel: '取消',
+  move: '移动',
   'move-to': '移动到',
+  copy: '复制',
   'copy-to': '复制到',
   rename: '重命名',
   'add-to-fav': '收藏',
@@ -28,6 +31,11 @@ export default {
   all: '全部',
   privacy: '隐私政策',
   ok: '好',
+  name: '名称',
+  save: '保存',
+  create: '新建',
+  days: '天',
+  close: '关闭',
 
   // form messages
   'form-message': {
@@ -39,6 +47,10 @@ export default {
     'password-required': '请输入密码',
     'invalid-password': '密码格式错误',
     'verification-code-required': '请输入验证码',
+    'filename-required': '请填写文件名',
+    'foldername-required': '请填写文件夹名称',
+    'target-folder-required': '请选择目标文件夹',
+    'select-another-folder': '请选择其他文件夹',
   },
 
   // page-frame
@@ -76,7 +88,6 @@ export default {
   // file-list
   'file-list': {
     local: '本地文件',
-    'create-folder': '新建文件夹',
     sort: '排序方式',
     'delete-this': '删除该{0}？',
     info: '提示',
@@ -87,5 +98,44 @@ export default {
     message: '我们使用cookie来确保您在我们的网站上获得最佳的体验。',
     'please-read': '请阅读我们的',
     'for-more-infomation': '以了解更多的信息。',
+  },
+
+  // upload-dialog
+  'upload-dialog': {
+    'upload-local-file': '上传本地文件',
+    'no-file-selected': '未选择文件',
+    'prepare-upload': '正在准备上传',
+  },
+
+  // url-dialog
+  'url-dialog': {
+    'upload-from-url': '上传链接',
+    url: '输入链接',
+  },
+
+  // share-dialog
+  'share-dialog': {
+    type: '分享形式：',
+    encrypt: '有密码',
+    'encrypt-info': '仅限拥有密码者可查看，更加隐私安全',
+    open: '无密码',
+    'open-info': '无需密码，仅拥有链接的用户可以查看',
+    duration: '有效期：',
+    forever: '永久有效',
+    'create-success': '成功创建链接',
+    'expired-in': '{0}天后失效',
+    'copy-url': '复制链接',
+    'copy-url-and-code': '复制链接及密码',
+    code: '提取码：',
+    'create-url': '创建链接',
+    'copy-success': '复制成功',
+    'copy-fail': '复制失败，请手动复制',
+  },
+
+  // folder-dialog
+  'folder-dialog': {
+    'move-file': '移动文件',
+    'copy-file': '复制文件',
+    'save-file': '保存到网盘',
   },
 };

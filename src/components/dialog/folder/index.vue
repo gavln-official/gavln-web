@@ -41,7 +41,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="修改时间"
+          :label="$t('modify-time')"
           width="160">
         <template
             slot-scope="scope">
@@ -52,10 +52,10 @@
     <div
         slot="footer">
       <el-button
-          class="left">新建文件夹</el-button>
+          class="left">{{ $t('create-folder') }}</el-button>
       <el-button
           :disabled="saving"
-          @click="close">取消</el-button>
+          @click="close">{{ $t('cancel') }}</el-button>
       <el-button
           :disabled="saving"
           @click="ok">{{ actionLabel }}</el-button>
@@ -98,18 +98,18 @@ export default {
   computed: {
     defaultTitle() {
       const titles = {
-        move: '移动文件',
-        copy: '复制文件',
-        save: '保存到网盘',
+        move: this.$t('folder-dialog.move-file'),
+        copy: this.$t('folder-dialog.copy-file'),
+        save: this.$t('folder-dialog.save-file'),
       };
 
       return titles[this.type];
     },
     actionLabel() {
       const labels = {
-        move: '移动',
-        copy: '复制',
-        save: '保存',
+        move: this.$t('move'),
+        copy: this.$t('copy'),
+        save: this.$t('save'),
       };
 
       return labels[this.type];
@@ -159,7 +159,7 @@ export default {
       let target = this.path;
       if (this.selected) {
         if (!this.selected.dir) {
-          this.$message.error('请选择目标文件夹');
+          this.$message.error(this.$t('form-message.target-folder-required'));
           return;
         }
 
@@ -171,7 +171,7 @@ export default {
           || this.type === 'move')
         && (from === to
           || to.indexOf(from) === 0)) {
-        this.$message.error('请选择其他文件夹');
+        this.$message.error(this.$t('form-message.select-another-folder'));
         return;
       }
 

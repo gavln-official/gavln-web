@@ -24,7 +24,7 @@
         <el-button
             @click="toggleNameDialog()">
           <i class="iconfont icon-folder-add"></i>
-          <span>{{ $t('file-list.create-folder') }}</span>
+          <span>{{ $t('create-folder') }}</span>
         </el-button>
       </template>
       <div class="right">
