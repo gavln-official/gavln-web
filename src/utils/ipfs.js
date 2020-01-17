@@ -67,17 +67,20 @@ async function upload(fid, keys, fragments, finishedBlocks) {
     const list = finishedBlocks;
     for (let i = list.length; i < fragments.length; i++) { /* eslint-disable-line */
       const file = Transmission.getFile('upload', fid);
+      const key = keys[i - list.length];
       if (file.paused) {
+        await rootNode.stop();
+        rootNode = null;
         return 'User pasued upload';
       }
       const data = Crypto.AES.encrypt(
         Crypto.lib.WordArray.create(fragments[i]),
-        keys[i - list.length],
+        key,
       );
 
       const res = await rootNode.add(data.toString()); /* eslint-disable-line */
       const block = {
-        key: keys[i],
+        key,
         cid: res[0].hash,
       };
       list.push(block);
@@ -109,11 +112,17 @@ async function download(file) {
   try {
     const fragments = [];
     for (const item of list) { /* eslint-disable-line */
+      const checkFileStatus = Transmission.getFile('download', file.fid);
+      if (checkFileStatus.paused) {
+        await rootNode.stop();
+        rootNode = null;
+        return 'User cancelled download';
+      }
       const blocks = await rootNode.get(item.cid); /* eslint-disable-line */
-
       const data = blocks.map(block => block.content).join('');
       const raw = Crypto.AES.decrypt(data, item.key);
       fragments.push(wordArrayToU8Array(raw));
+      Transmission.blockDownloadComplete(file.fid);
     }
     await rootNode.stop();
     rootNode = null;

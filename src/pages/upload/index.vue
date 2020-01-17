@@ -4,8 +4,11 @@
       <upload-list
           :data="data"
           :status="status"
+          type="upload"
+          @command="onRowCommand"
+          @pauseAll="pauseAll"
           @deleteRow="deleteRow"
-          @pauseAll="pauseAll" />
+          @deleteAll="deleteAll" />
     </div>
   </main-frame>
 </template>
@@ -91,14 +94,28 @@ export default {
       document.removeEventListener('block-upload-complete', this.onTransmissionProgress);
     },
     deleteRow(row) {
-      Transmission.removeFile('upload', row.fid);
+      Transmission.deleteFile('upload', row.fid);
       this.getUploadList();
     },
+    deleteAll() {
+      this.data.forEach(this.deleteRow);
+    },
+    onRowCommand(_command) {
+      const command = _command.command;
+      const row = _command.row;
+      switch (command) {
+        case 'pause':
+          this.pauseFile(row);
+          break;
+        default:
+      }
+    },
+    pauseFile(file) {
+      file.paused = true; /* eslint-disable-line */
+      Transmission.pasueFile('upload', file.fid);
+    },
     pauseAll() {
-      this.data.forEach((file) => {
-        file.paused = true; /* eslint-disable-line */
-        Transmission.pasueFile('upload', file.fid);
-      });
+      this.data.forEach(this.pasueFile);
     },
   },
   mounted() {

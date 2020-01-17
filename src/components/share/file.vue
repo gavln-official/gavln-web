@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import FileDownload from 'js-file-download';
-
 import FolderDialog from '../dialog/folder/index.vue';
 
 import FileAPI from '../../api/file';
@@ -63,10 +61,7 @@ export default {
       this.$message.success('已保存至我的网盘');
     },
     download() {
-      FileAPI.download(this.data)
-        .then((res) => {
-          FileDownload(res, this.data.name);
-        });
+      FileAPI.download(this.data);
     },
   },
 };

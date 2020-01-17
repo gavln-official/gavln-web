@@ -1,3 +1,4 @@
+import FileDownload from 'js-file-download';
 import HTTP from './http';
 import IPFS from '../utils/ipfs';
 import Transmission from '../utils/transmission';
@@ -73,7 +74,7 @@ async function upload(file, path, name, blockSize, fragments) {
     console.error(`IPFS上传报错：${error}`);
     return false;
   }
-  if (!Array.isArray(list)) {
+  if (typeof list === 'string') {
     return false;
   }
   try {
@@ -101,13 +102,20 @@ async function prepareUpload(file, path, name) {
 }
 
 async function download(file) {
+  file.fid = `${file.path}//${file.name}//${file.size}`; /* eslint-disable-line */
+  const blockSize = IPFS.getBlockSize(file);
+  Transmission.addDownloadTask(file, blockSize);
+  let r = null;
   try {
-    const list = await IPFS.download(file);
-
-    return list;
+    r = await IPFS.download(file);
   } catch (error) {
     throw error;
   }
+  if (typeof r === 'string') {
+    throw new Error(r);
+  }
+  Transmission.fileComplete('download', file.fid);
+  FileDownload(r, file.name);
 }
 
 function deletePath(path) {

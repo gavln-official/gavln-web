@@ -5,15 +5,15 @@
         <i class="iconfont icon-upload"></i>
         <span>全部暂停</span>
       </el-button>
-      <el-button>
+      <el-button @click="startAll" v-if="type === 'download'">
         <i class="iconfont icon-folder-add"></i>
         <span>全部开始</span>
       </el-button>
-      <el-button>
+      <el-button @click="deleteAll">
         <i class="iconfont icon-trash"></i>
         <span>全部删除</span>
       </el-button>
-      <div class="right" v-show="status.percentage">
+      <div class="right" v-if="status" v-show="status.percentage">
         <strong>当前进度</strong>
         <el-progress
             :percentage="status.percentage"
@@ -80,7 +80,23 @@
         <template
             slot-scope="scope">
           <div>
-            <i class="iconfont icon-menu-circle"></i>
+            <el-dropdown
+                placement="bottom"
+                @command="rowCommand($event, scope.row)">
+              <i class="iconfont icon-menu-circle"></i>
+              <el-dropdown-menu
+                  slot="dropdown">
+                <el-dropdown-item
+                    v-if="type === 'upload'"
+                    command="pause">暂停</el-dropdown-item>
+                <el-dropdown-item
+                    v-if="type === 'download' && !scope.row.paused"
+                    command="pause">取消下载</el-dropdown-item>
+                <el-dropdown-item
+                    v-if="type === 'download' && scope.row.paused"
+                    command="start">开始下载</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <i class="iconfont icon-trash"
                 @click="deleteRow(scope.row)"></i>
           </div>
@@ -103,7 +119,6 @@ export default {
           'upload',
           'download',
         ];
-
         return (values.indexOf(value) >= 0);
       },
     },
@@ -124,6 +139,18 @@ export default {
     },
     pauseAll() {
       this.$emit('pauseAll');
+    },
+    startAll() {
+      this.$emit('startAll');
+    },
+    deleteAll() {
+      this.$emit('deleteAll');
+    },
+    rowCommand(command, row) {
+      this.$emit('command', {
+        command,
+        row,
+      });
     },
   },
 };
