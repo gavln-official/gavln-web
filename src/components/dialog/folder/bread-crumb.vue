@@ -4,7 +4,7 @@
       <span class="el-breadcrumb__item">
         <span
             class="el-breadcrumb__inner is-link"
-            @click="switchPath('/')">全部</span>
+            @click="switchPath('/')">{{ rootName }}</span>
         <span class="el-breadcrumb__separator">/</span>
       </span>
       <span
@@ -26,20 +26,28 @@ export default {
   props: {
     // current path
     path: String,
+    // root path
+    rootPath: String,
   },
   computed: {
-    list() {
-      const list = [];
-      const {
-        name,
-      } = this.$route;
+    rootName() {
+      if (this.rootPath) {
+        return this.rootPath.split('/')[1];
+      }
 
-      if (this.path !== '/') {
-        const names = this.path.split('/');
+      return '全部';
+    },
+    list() {
+      const path = this.rootPath
+        ? this.path.substring(this.rootPath.length)
+        : this.path;
+      const list = [];
+
+      if (path !== '/') {
+        const names = path.split('/');
 
         for (let i = 2; i <= names.length; i += 1) {
           list.push({
-            route: name,
             name: names[i - 1],
             path: names.slice(0, i).join('/'),
           });
@@ -53,7 +61,7 @@ export default {
   },
   methods: {
     switchPath(path) {
-      this.$emit('switch', path);
+      this.$emit('switch', `${this.rootPath}${path}`);
     },
   },
 };

@@ -1,5 +1,6 @@
 import HTTP from './http';
 import IPFS from '../utils/ipfs';
+import Transmission from '../utils/transmission';
 
 function getPath(path) {
   const data = new FormData();
@@ -35,12 +36,14 @@ function updatePath(path, name) {
   });
 }
 
-function addFile(path, name, size, blocks) {
+function addFile(path, name, size, blocks, blockSize) {
   const data = {
     path,
     name,
     size,
     blocks,
+    data_shard: blockSize.originalBlocks,
+    parity_shard: blockSize.extraBlocks,
   };
 
   return HTTP({
@@ -50,36 +53,56 @@ function addFile(path, name, size, blocks) {
   });
 }
 
-function getUploadKey() {
+function getUploadKey(number = 1) {
   return HTTP({
     method: 'GET',
-    url: '/file/key',
+    url: `/file/key/${number}`,
   });
 }
 
-async function upload(file, path, name) {
+async function upload(file, path, name, blockSize, fragments) {
+  const progress = Transmission.getFileProgress('upload', file.fid);
+  const remainingBlocks = blockSize.totalBlocks - progress.finishedBlocks.length;
+  const keyRes = await getUploadKey(remainingBlocks);
+  const keys = keyRes.data.key;
+
+  let list = null;
   try {
-    const keyRes = await getUploadKey();
-
-    const {
-      key,
-    } = keyRes.data;
-
-    const list = await IPFS.upload(key, file);
-    const blocks = list.map(item => ({
-      key,
-      cid: item.hash,
-    }));
-
-    return await addFile(path, name, file.size, blocks);
+    list = await IPFS.upload(file.fid, keys, fragments, progress.finishedBlocks);
   } catch (error) {
-    throw error;
+    console.error(`IPFS上传报错：${error}`);
+    return false;
   }
+  if (!Array.isArray(list)) {
+    return false;
+  }
+  try {
+    await addFile(path, name, file.size, list, blockSize);
+  } catch (err) {
+    if (err.detail !== 'file exists') {
+      console.log(`file/add报错：${err.detail}`);
+    }
+  }
+  Transmission.fileComplete('upload', file.fid);
+  return true;
 }
 
-async function download(file, size) {
+async function prepareUpload(file, path, name) {
+  file.fid = `${path}//${name}//${file.size}`; /* eslint-disable-line */
+  const blockSize = IPFS.getBlockSize(file);
+  // encode file, this step can take a long time
+  // so make sure to inform user it's in progress
+  const fragments = await IPFS.encode(file);
+  Transmission.addFile('upload', file, blockSize);
+  // start upload
+  // we don't wait for the upload procedure, return immediately
+  upload(file, path, name, blockSize, fragments);
+  return true;
+}
+
+async function download(file) {
   try {
-    const list = await IPFS.download(file.blocks, size);
+    const list = await IPFS.download(file);
 
     return list;
   } catch (error) {
@@ -122,13 +145,94 @@ function copy(from, to) {
   });
 }
 
+function search(config) {
+  const data = new FormData();
+  data.append('search', config.text);
+  data.append('limit', config.limit);
+  data.append('offset', config.offset);
+  if (config.path) {
+    data.append('path', config.path);
+  }
+  if (config.suffixs
+      && config.suffixs.length) {
+    data.append('suffixs', config.suffixs);
+  }
+  if (config.startTime) {
+    data.append('startTime', config.startTime);
+  }
+  if (config.endTime) {
+    data.append('endTime', config.endTime);
+  }
+  if (config.all) {
+    data.append('all', config.all);
+  }
+  if (config.inbox) {
+    data.append('inbox', config.inbox);
+  }
+  if (config.mark) {
+    data.append('mark', config.mark);
+  }
+  if (config.other) {
+    data.append('other', config.other);
+  }
+  if (config.trash) {
+    data.append('trash', config.trash);
+  }
+
+  return HTTP({
+    method: 'POST',
+    url: '/search/search',
+    data,
+  });
+}
+
+function timestamp() {
+  return HTTP({
+    method: 'GET',
+    url: '/timestamp',
+  });
+}
+
+async function share(path, duration, code) {
+  try {
+    let time = 0;
+    if (duration) {
+      const timeRes = await timestamp();
+
+      time = timeRes.data.unix + duration * 60 * 60 * 24;
+    }
+
+    const data = new FormData();
+    data.append('path', path);
+    data.append('expires', time);
+    if (code) {
+      data.append('code', code);
+    }
+
+    const shareRes = await HTTP({
+      method: 'POST',
+      url: '/share/share',
+      data,
+    });
+
+    return shareRes;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   getPath,
   createPath,
   updatePath,
   upload,
+  prepareUpload,
   download,
   deletePath,
   move,
   copy,
+  search,
+  share,
+  getBlockSize: IPFS.getBlockSize,
+  decode: IPFS.decode,
 };

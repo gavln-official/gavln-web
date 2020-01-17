@@ -55,9 +55,27 @@ function parseFileName(name) {
   return data;
 }
 
+function randomCode(length = 4) {
+  return Math.random()
+    .toString(36)
+    .substring(2, 2 + length);
+}
+
+function getLocale() {
+  const lang = window.navigator.language;
+
+  if (/^zh-/.test(lang)) {
+    return 'cn';
+  }
+
+  return 'en';
+}
+
 export default {
   formatTime,
   copyToClipboard,
   encodePassword,
   parseFileName,
+  randomCode,
+  getLocale,
 };

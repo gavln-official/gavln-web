@@ -27,33 +27,23 @@
           <span>新建文件夹</span>
         </el-button>
       </template>
-      <template
-          v-if="type === 'favorite'">
-        <el-button>
-          <i class="iconfont icon-star-o"></i>
-          <span>我的收藏</span>
-        </el-button>
-      </template>
       <div class="right">
-        <el-input
-            type="text"
-            placeholder="搜索相关文件">
-          <i
-              class="iconfont icon-search"
-              slot="prefix"></i>
-        </el-input>
+        <search-input
+            :source="searchSource" />
         <el-dropdown
-            placement="bottom">
+            placement="bottom"
+            @command="orderFileList">
           <el-button
               class="el-dropdown-link">
-            <span>排序方式</span>
-            <i class="iconfont icon-sort"></i>
+            <span>排序方式</span>&nbsp;
+            <i class="el-icon-bottom" v-if="orderIn === 'DESC'"></i>
+            <i class="el-icon-top" v-else></i>
           </el-button>
           <el-dropdown-menu
               slot="dropdown">
-            <el-dropdown-item>AAA</el-dropdown-item>
-            <el-dropdown-item>BBB</el-dropdown-item>
-            <el-dropdown-item>CCC</el-dropdown-item>
+            <el-dropdown-item command="time">时间</el-dropdown-item>
+            <el-dropdown-item command="size">大小</el-dropdown-item>
+            <el-dropdown-item command="name">文件名</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button
@@ -64,11 +54,16 @@
     </div>
     <file-table
         v-if="viewMode === 'list'"
-        :data="data"
+        v-loading="loading"
+        :type="type"
+        :data="fileList"
         @command="onCommand" />
     <file-grid
         v-else
-        :data="data" />
+        v-loading="loading"
+        :type="type"
+        :data="fileList"
+        @command="onCommand" />
     <upload-dialog
         v-if="showUploadDialog"
         :visible="showUploadDialog"
@@ -84,8 +79,11 @@
         @close="folderDialogClose"
         @success="folderDialogSuccess" />
     <share-dialog
+        v-if="showShareDialog"
         :visible="showShareDialog"
-        :data="shareData" />
+        :data="shareData"
+        @close="hideShareDialog"
+        @success="hideShareDialog" />
     <!-- <ui-progress
         :percentage="50"
         message="正在删除...50%" /> -->
@@ -99,17 +97,10 @@
 </template>
 
 <script>
-import {
-  MessageBox,
-  Button,
-  Input,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from 'element-ui';
 import FileDownload from 'js-file-download';
 
 import BreadCrumb from './bread-crumb.vue';
+import SearchInput from '../search-input/index.vue';
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -122,15 +113,13 @@ import NameDialog from '../dialog/name.vue';
 import FileAPI from '../../api/file';
 import FavoriteAPI from '../../api/favorite';
 
+import Storage from '../../utils/storage';
+
 export default {
   name: 'FileList',
   components: {
-    'el-button': Button,
-    'el-input': Input,
-    'el-dropdown': Dropdown,
-    'el-dropdown-menu': DropdownMenu,
-    'el-dropdown-item': DropdownItem,
     BreadCrumb,
+    SearchInput,
     FileTable,
     FileGrid,
     FolderDialog,
@@ -154,6 +143,7 @@ export default {
     },
     // current path
     path: String,
+    loading: Boolean,
     // content list
     data: Array,
   },
@@ -185,16 +175,67 @@ export default {
       showFolderDialog: false,
       folderDialogType: '',
       folderData: null,
+      orderBy: '', // ['', 'time', 'size', 'name']
+      orderIn: 'DESC', // ['DESC', 'ASC']
     };
+  },
+  computed: {
+    fileList() {
+      if (!this.data || !this.data.length) {
+        return null;
+      }
+      if (this.orderBy === '') {
+        return this.data;
+      }
+      const orderBy = this.orderBy;
+      const orderIn = this.orderIn;
+      return this.data.sort((a, b) => { /* eslint-disable-line */
+        let compareResult = true;
+        if (orderBy === 'name') {
+          compareResult = String(b.name)[0] > String(a.name)[0];
+        } else {
+          compareResult = b[orderBy] > a[orderBy];
+        }
+        let compareReturn = 0;
+        if (orderIn === 'DESC') {
+          compareReturn = compareResult ? 1 : -1;
+        } else {
+          compareReturn = compareResult ? -1 : 1;
+        }
+        return compareReturn;
+      });
+    },
+    searchSource() {
+      if (this.$route.name === 'favorite') {
+        return ['mark'];
+      }
+
+      return ['all'];
+    },
+  },
+  created() {
+    const viewMode = Storage.get('view-mode');
+    this.viewMode = viewMode || 'list';
   },
   methods: {
     toggleViewMode() {
       this.viewMode = (this.viewMode === 'list')
         ? 'grid'
         : 'list';
+
+      Storage.set('view-mode', this.viewMode);
     },
     refresh() {
       this.$emit('refresh');
+    },
+
+    orderFileList(orderBy) {
+      if (this.orderBy === orderBy) {
+        this.orderIn = this.orderIn === 'DESC' ? 'ASC' : 'DESC';
+      } else {
+        this.orderIn = 'DESC';
+      }
+      this.orderBy = orderBy;
     },
 
     // upload
@@ -228,7 +269,7 @@ export default {
     onCommand(data) {
       switch (data.command) {
         case 'share':
-          this.toggleShareDialog();
+          this.toggleShareDialog(data.row);
           break;
         case 'download':
           this.download(data.row);
@@ -255,22 +296,25 @@ export default {
     // share dialog
     toggleShareDialog(data) {
       const {
-        id,
+        path,
         name,
-        type,
+        dir,
       } = data;
 
       this.shareData = {
-        id,
+        path,
         name,
-        type,
+        dir,
       };
       this.showShareDialog = true;
+    },
+    hideShareDialog() {
+      this.showShareDialog = false;
     },
 
     // download file
     download(item) {
-      FileAPI.download(item, item.size)
+      FileAPI.download(item)
         .then((res) => {
           FileDownload(res, item.name);
         });
@@ -326,8 +370,8 @@ export default {
 
     // delete folder/file
     deletePath(item) {
-      const message = `删除该${item.dir ? '目录' : '文件'}？`;
-      MessageBox.confirm(message, '提示', {
+      const message = `删除该${item.dir ? '文件夹' : '文件'}？`;
+      this.$confirm(message, '提示', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
       })

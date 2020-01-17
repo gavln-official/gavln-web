@@ -25,22 +25,12 @@
 </template>
 
 <script>
-import {
-  ButtonGroup,
-  Button,
-  Message,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 
 import Storage from '../../utils/storage';
 
 export default {
   name: 'FrameHeader',
-  components: {
-    'el-button-group': ButtonGroup,
-    'el-button': Button,
-  },
   data() {
     return {
       loading: false,
@@ -70,7 +60,7 @@ export default {
           this.profile = data;
         })
         .catch(() => {
-          Message.error('用户信息加载失败');
+          this.$message.error('用户信息加载失败');
         })
         .finally(() => {
           this.loading = false;
@@ -92,7 +82,7 @@ export default {
           });
         })
         .catch(() => {
-          Message.error('用户信息加载失败');
+          this.$message.error('用户信息加载失败');
         })
         .finally(() => {
           this.sending = false;

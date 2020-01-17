@@ -5,6 +5,7 @@
           type="home"
           :path="path"
           :data="data"
+          :loading="loading"
           @refresh="getPath"></file-list>
     </div>
   </main-frame>

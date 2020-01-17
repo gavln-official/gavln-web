@@ -1,6 +1,6 @@
 <template>
   <div class="form-content register">
-    <h2>忘记密码</h2>
+    <h2>{{ $t('reset.forget-password') }}</h2>
     <el-form
         class="login-form"
         label-position="top"
@@ -11,20 +11,20 @@
       <el-form-item
           prop="username">
         <el-input
-            placeholder="用户名"
+            :placeholder="$t('username')"
             v-model="form.username" />
       </el-form-item>
       <el-form-item
           prop="email">
         <el-input
-            placeholder="邮箱"
+            :placeholder="$t('email')"
             v-model="form.email" />
       </el-form-item>
       <el-form-item
           class="code"
           prop="code">
         <el-input
-            placeholder="验证码"
+            :placeholder="$t('verification-code')"
             v-model="form.code">
         </el-input>
         <el-button
@@ -36,7 +36,7 @@
           prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
-            placeholder="密码"
+            :placeholder="$t('password')"
             v-model="form.password">
           <i
               class="iconfont"
@@ -52,33 +52,19 @@
     <el-button
         type="text"
         @click="save">
-      <span>完成</span>
+      <span>{{ $t('reset.done') }}</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
   </div>
 </template>
 
 <script>
-import {
-  Form,
-  FormItem,
-  Input,
-  Button,
-  Message,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 
 let timer = null;
 
 export default {
   name: 'FormContentReset',
-  components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   data() {
     return {
       form: {
@@ -91,33 +77,33 @@ export default {
         username: [
           {
             required: true,
-            message: '请输入用户名',
+            message: this.$t('form-message.username-required'),
             trigger: 'blur',
           },
         ],
         email: [
           {
             required: true,
-            message: '请输入邮箱',
+            message: this.$t('form-message.email-required'),
             trigger: 'blur',
           },
           {
             type: 'email',
-            message: '邮箱格式错误',
+            message: this.$t('form-message.invalid-email'),
             trigger: 'blur',
           },
         ],
         code: [
           {
             required: true,
-            message: '请输入验证码',
+            message: this.$t('form-message.verification-code-required'),
             trigger: 'blur',
           },
         ],
         password: [
           {
             required: true,
-            message: '请输入密码',
+            message: this.$t('form-message.password-required'),
             trigger: 'blur',
           },
           {
@@ -135,7 +121,7 @@ export default {
     sendBtnLabel() {
       return this.waiting > 0
         ? `${this.waiting}s`
-        : '发送验证码';
+        : this.$t('reset.send');
     },
   },
   methods: {
@@ -161,7 +147,7 @@ export default {
       UserAPI.sendRetrieve(username, email)
         .then(() => {
           this.startCountdown();
-          Message.success('验证码已发送至您的邮箱');
+          this.$message.success(this.$t('reset.send-success'));
         });
     },
     startCountdown() {
@@ -200,14 +186,14 @@ export default {
             password,
           )
             .then(() => {
-              Message.success('密码已重置，请登录');
+              this.$message.success(this.$t('reset.reset-success'));
 
               this.$router.push({
                 name: 'login',
               });
             })
             .catch(() => {
-              Message.error('重置密码失败');
+              this.$message.error(this.$t('reset.reset-fail'));
             })
             .finally(() => {
               this.saving = false;

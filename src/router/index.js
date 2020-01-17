@@ -5,6 +5,7 @@ import {
 } from 'element-ui';
 
 import Storage from '../utils/storage';
+import Utils from '../utils/index';
 
 import Home from '../pages/home/index.vue';
 
@@ -35,7 +36,7 @@ const routes = [
     component: () => import('../pages/reset.vue'),
   },
   {
-    path: '/s/:shareId',
+    path: '/s/:rand',
     name: 'open-share',
     component: () => import('../pages/open-share/index.vue'),
   },
@@ -80,6 +81,14 @@ const routes = [
     },
   },
   {
+    path: '/search',
+    name: 'search',
+    component: () => import('../pages/search/index.vue'),
+    meta: {
+      login: true,
+    },
+  },
+  {
     path: '/trash',
     name: 'trash',
     component: () => import('../pages/trash.vue'),
@@ -101,6 +110,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const everVisited = Storage.get('ever-visited');
+  const locale = Storage.get('locale');
 
   Notification.closeAll();
 
@@ -124,6 +134,10 @@ router.beforeEach((to, from, next) => {
         Notification.closeAll();
       },
     });
+  }
+
+  if (!locale) {
+    Storage.set('locale', Utils.getLocale());
   }
 
   const hasLogin = Storage.getToken();

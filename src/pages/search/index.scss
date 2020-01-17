@@ -1,0 +1,44 @@
+.page-search {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .toolbar {
+    padding: 12px 24px;
+    font-size: 0;
+
+    .search-input {
+      vertical-align: top;
+    }
+
+    .el-form-item {
+      display: inline-block;
+      vertical-align: top;
+      margin-left: 12px;
+      margin-bottom: 0;
+    }
+
+    /deep/ .el-form-item__label,
+    /deep/ .el-form-item__content {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    /deep/ .el-form-item__label {
+      padding-right: 6px;
+    }
+    /deep/ .el-form-item__content {
+      width: 180px;
+    }
+
+    /deep/ .el-select .el-input__inner {
+      border: none;
+      box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.06);
+      border-radius: 4px;
+    }
+  }
+
+  .el-pagination {
+    padding: 16px 0;
+    text-align: center;
+  }
+}

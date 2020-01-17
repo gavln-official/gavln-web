@@ -8,8 +8,7 @@
     </div>
     <el-table
         class="file-table finished-table"
-        :data="data"
-        :height="tableHeight">
+        :data="data">
       <el-table-column
           type="selection"
           width="64"></el-table-column>
@@ -61,39 +60,14 @@
 </template>
 
 <script>
-import {
-  Button,
-  Table,
-  TableColumn,
-} from 'element-ui';
-
 export default {
   name: 'FinishedList',
-  components: {
-    'el-button': Button,
-    'el-table': Table,
-    'el-table-column': TableColumn,
-  },
   props: {
     data: Array,
   },
   data() {
     return {
-      tableHeight: null,
     };
-  },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
-  methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 124;
-    },
   },
 };
 </script>

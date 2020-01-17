@@ -4,6 +4,7 @@
       :visible="visible"
       width="480px"
       title="上传本地文件"
+      :close-on-click-modal="!uploading"
       @close="close">
     <el-form
         ref="form"
@@ -39,28 +40,11 @@
 </template>
 
 <script>
-import {
-  Dialog,
-  Form,
-  FormItem,
-  Upload,
-  Input,
-  Button,
-} from 'element-ui';
-
 import FileAPI from '../../../api/file';
 import Utils from '../../../utils/index';
 
 export default {
   name: 'UploadDialog',
-  components: {
-    'el-dialog': Dialog,
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-upload': Upload,
-    'el-input': Input,
-    'el-button': Button,
-  },
   props: {
     visible: {
       type: Boolean,
@@ -143,7 +127,7 @@ export default {
           && file.raw;
       this.getFileName(file);
     },
-    upload() {
+    async upload() {
       if (this.uploading
           || !this.file) {
         return;
@@ -156,10 +140,14 @@ export default {
           }
 
           this.uploading = true;
-
-          FileAPI.upload(this.file, this.fullPath, this.fullName)
+          this.$message.info('正在准备上传');
+          FileAPI.prepareUpload(this.file, this.fullPath, this.fullName)
             .then(() => {
+              this.uploading = false;
               this.$emit('success');
+              this.$message.close();
+              this.close();
+              this.$router.push('/upload');
             })
             .finally(() => {
               this.uploading = false;

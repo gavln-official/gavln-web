@@ -89,6 +89,7 @@ HTTP.interceptors.response
         if (detail) {
           errorMsg = `${errorMsg}: ${detail}`;
         }
+        error.detail = detail; /* eslint-disable-line */
       }
 
       Message.error(errorMsg);

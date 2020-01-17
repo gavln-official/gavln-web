@@ -1,6 +1,6 @@
 <template>
   <div class="form-content register">
-    <h2>欢迎加入</h2>
+    <h2>{{ $t('register.welcome-in') }}</h2>
     <el-form
         class="login-form"
         label-position="top"
@@ -11,21 +11,21 @@
       <el-form-item
           prop="username">
         <el-input
-            placeholder="用户名"
+            :placeholder="$t('username')"
             v-model="form.username" />
       </el-form-item>
       <el-form-item
           prop="email">
         <el-input
             type="email"
-            placeholder="邮箱"
+            :placeholder="$t('email')"
             v-model="form.email" />
       </el-form-item>
       <el-form-item
           prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
-            placeholder="密码"
+            :placeholder="$t('password')"
             v-model="form.password">
           <i
               class="iconfont"
@@ -39,38 +39,24 @@
       </el-form-item>
     </el-form>
     <div class="links">
-      <a href="/login" class="right">去登录</a>
+      <a href="/login" class="right">{{ $t('register.go-login') }}</a>
     </div>
     <el-button
         type="text"
         :disabled="saving"
         @click="register">
-      <span>创建账户</span>
+      <span>{{ $t('register.create-account') }}</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
   </div>
 </template>
 
 <script>
-import {
-  Form,
-  FormItem,
-  Input,
-  Button,
-  Message,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 import Validator from '../../utils/validator';
 
 export default {
   name: 'FormContentRegister',
-  components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   data() {
     return {
       form: {
@@ -82,7 +68,7 @@ export default {
         username: [
           {
             required: true,
-            message: '请输入用户名',
+            message: this.$t('form-message.username-required'),
             trigger: 'blur',
           },
           {
@@ -93,14 +79,14 @@ export default {
         email: [
           {
             type: 'email',
-            message: '邮箱格式错误',
+            message: this.$t('form-message.invalid-email'),
             trigger: 'blur',
           },
         ],
         password: [
           {
             required: true,
-            message: '请输入密码',
+            message: this.$t('form-message.password-required'),
             trigger: 'blur',
           },
           {
@@ -119,13 +105,13 @@ export default {
     },
     checkUsername(rule, value, callback) {
       if (!Validator.checkUsername(value)) {
-        callback(new Error('用户名格式错误'));
+        callback(new Error(this.$t('form-message.invalid-username')));
       }
 
       UserAPI.checkUsername(value)
         .then((res) => {
           if (res.data.exists) {
-            callback(new Error('用户名已存在'));
+            callback(new Error(this.$t('form-message.username-exist')));
           }
 
           callback();
@@ -136,7 +122,7 @@ export default {
     },
     checkPassword(rule, value, callback) {
       if (!Validator.checkPassword(value)) {
-        callback(new Error('密码格式错误'));
+        callback(new Error(this.$t('form-message.invalid-password')));
       }
 
       callback();
@@ -166,7 +152,7 @@ export default {
             email,
           )
             .then(() => {
-              Message.success('账户注册成功，请登录');
+              this.$message.success(this.$t('register.success'));
 
               this.$router.push({
                 name: 'login',

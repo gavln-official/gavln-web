@@ -1,6 +1,6 @@
 <template>
   <div class="form-content login">
-    <h2>欢迎回来</h2>
+    <h2>{{ $t('login.welcome-back') }}</h2>
     <el-form
         class="login-form"
         label-position="top"
@@ -11,14 +11,14 @@
       <el-form-item
           prop="username">
         <el-input
-            placeholder="用户名"
+            :placeholder="$t('username')"
             v-model="form.username" />
       </el-form-item>
       <el-form-item
           prop="password">
         <el-input
             :type="showPassword ? '' : 'password'"
-            placeholder="密码"
+            :placeholder="$t('password')"
             v-model="form.password">
           <i
               class="iconfont"
@@ -32,37 +32,24 @@
       </el-form-item>
     </el-form>
     <div class="links">
-      <a href="/reset">忘记密码？</a>
-      <a href="/register" class="right">去注册</a>
+      <a href="/reset">{{ $t('login.forget-password') }}</a>
+      <a href="/register" class="right">{{ $t('login.go-register') }}</a>
     </div>
     <el-button
         type="text"
         :disabled="saving"
         @click="login">
-      <span>登录账户</span>
+      <span>{{ $t('login.login') }}</span>
       <i class="iconfont icon-arrow-right"></i>
     </el-button>
   </div>
 </template>
 
 <script>
-import {
-  Form,
-  FormItem,
-  Input,
-  Button,
-} from 'element-ui';
-
 import UserAPI from '../../api/user';
 
 export default {
   name: 'FormContentLogin',
-  components: {
-    'el-form': Form,
-    'el-form-item': FormItem,
-    'el-input': Input,
-    'el-button': Button,
-  },
   data() {
     return {
       form: {
@@ -73,14 +60,14 @@ export default {
         username: [
           {
             required: true,
-            message: '请输入用户名',
+            message: this.$t('form-message.username-required'),
             trigger: 'blur',
           },
         ],
         password: [
           {
             required: true,
-            message: '请输入密码',
+            message: this.$t('form-message.password-required'),
             trigger: 'blur',
           },
         ],

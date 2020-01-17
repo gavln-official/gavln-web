@@ -89,4 +89,32 @@ export default {
       speed: 19473,
     },
   ],
+  data: [
+    {
+      id: 1,
+      file: {
+        fec_enable: false,
+        path: '/home',
+        name: 'home',
+        size: 1024,
+        time: 1573115205,
+        dir: true,
+        child: [],
+      },
+      expires: 1575707217,
+    },
+    {
+      id: 2,
+      file: {
+        fec_enable: false,
+        path: '/home',
+        name: 'ax',
+        size: 1024,
+        time: 1573115205,
+        dir: true,
+        child: [],
+      },
+      expires: 1585897200000,
+    },
+  ],
 };

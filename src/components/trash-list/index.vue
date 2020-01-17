@@ -1,15 +1,18 @@
 <template>
   <div class="file-list trash-list">
     <div class="toolbar">
-      <el-button>
+      <el-button :disabled="!data.length" @click="clear">
         <i class="iconfont icon-trash"></i>
         <span>清空回收站</span>
       </el-button>
+      <div class="right">
+        <search-input
+            :source="['trash']" />
+      </div>
     </div>
     <el-table
         class="file-table trash-table"
         :data="data"
-        :height="tableHeight"
         @row-contextmenu="showContextMenu">
       <el-table-column
           type="selection"
@@ -23,14 +26,10 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件名称">
+          label="分享文件">
         <template
             slot-scope="scope">
-          <a
-              v-if="scope.row.type === 'folder'"
-              :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
-          <span
-              v-else>{{ scope.row.name }}</span>
+          <span>{{ scope.row.file.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -38,7 +37,7 @@
           width="160">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.file.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -46,82 +45,84 @@
           width="100">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.size | filesize }}</span>
+          <span>{{ scope.row.file.size | filesize }}</span>
         </template>
       </el-table-column>
       <el-table-column
           label="有效时间"
           width="90">
-        <template>
-          <span>2 天</span>
+        <template
+            slot-scope="scope">
+          <span>{{ scope.row.expires | timeDistance }}</span>
         </template>
       </el-table-column>
     </el-table>
     <vue-context
         ref="menu">
-      <li>还原</li>
-      <li>彻底删除</li>
+      <li @click="restore">还原</li>
+      <li @click="doRemove">彻底删除</li>
     </vue-context>
   </div>
 </template>
 
 <script>
 import {
-  Button,
-  Table,
-  TableColumn,
-} from 'element-ui';
-import {
   VueContext,
 } from 'vue-context';
 
+import SearchInput from '../search-input/index.vue';
+
 export default {
-  name: 'UploadList',
+  name: 'TrashList',
   components: {
-    'el-button': Button,
-    'el-table': Table,
-    'el-table-column': TableColumn,
     VueContext,
+    SearchInput,
   },
   props: {
-    // 类型（upload: 全部文件, download: 我的收藏）
-    type: {
-      validator: (value) => {
-        const values = [
-          'upload',
-          'download',
-        ];
-
-        return (values.indexOf(value) >= 0);
-      },
-    },
     data: Array,
   },
   data() {
     return {
-      tableHeight: null,
+      contextRow: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 124;
-    },
     showContextMenu(row, column, event) {
       if (event) {
         event.preventDefault();
       }
-
       this.$refs.menu.open(event);
-
+      this.contextRow = row;
       return [row, column];
+    },
+    restore() {
+      this.$emit('restore', this.contextRow);
+    },
+    doRemove() {
+      this.$emit('delete', this.contextRow);
+    },
+    clear() {
+      this.$emit('clear');
+    },
+  },
+  filters: {
+    timeDistance(expireDate) {
+      const expire = new Date(expireDate * 1000);
+      const now = new Date();
+      const distance = (expire - now) / 1000;
+      const day = distance / 3600 / 24;
+      if (day > 1) {
+        return `${Math.floor(day)}天`;
+      }
+      const hours = distance / 3600;
+      if (hours > 1) {
+        return `${Math.floor(hours)}小时`;
+      }
+      const mins = distance / 60;
+      if (mins > 0) {
+        return `${Math.floor(mins)}分钟`;
+      }
+      return '已失效';
     },
   },
 };

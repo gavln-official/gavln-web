@@ -3,14 +3,11 @@
     <el-table
         class="file-table"
         :data="data"
-        :height="tableHeight">
-      <el-table-column
-          type="selection"
-          width="64"></el-table-column>
+        :height="tableHeight"
+        @row-contextmenu="showContextMenu">
       <el-table-column
           prop="type"
-          label="全选"
-          width="48">
+          width="70">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
@@ -25,7 +22,7 @@
               v-if="scope.row.mark"
               class="iconfont icon-star-o"></i>
           <a
-              v-if="scope.row.dir"
+              v-if="type !== 'favorite' && scope.row.dir"
               :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
           <span
               v-else>{{ scope.row.name }}</span>
@@ -45,10 +42,10 @@
           label="修改时间"
           sortable
           width="160"
-          :sort-method="sortByUtime">
+          :sort-method="sortByTime">
         <template
             slot-scope="scope">
-          <span>{{ (scope.row.time * 1000) | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,6 +57,7 @@
                 class="iconfont icon-share"
                 @click="rowCommand('share', scope.row)"></i>
             <i
+                v-if="!scope.row.dir"
                 class="iconfont icon-download"
                 @click="rowCommand('download', scope.row)"></i>
             <el-dropdown
@@ -77,6 +75,7 @@
                 <el-dropdown-item
                     command="favorite">{{ scope.row.mark ? '取消收藏' : '收藏' }}</el-dropdown-item>
                 <el-dropdown-item
+                    v-if="type === 'home'"
                     command="delete">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -84,47 +83,57 @@
         </template>
       </el-table-column>
     </el-table>
+    <vue-context
+        ref="menu">
+      <template v-if="type === 'home'">
+        <li
+            v-if="contextRow.dir"
+            @click="goPath">打开</li>
+        <li
+            v-else
+            @click="rowCommand('download')">下载</li>
+        <li
+            @click="rowCommand('share')">分享</li>
+      </template>
+      <li
+          @click="rowCommand('move')">移动到</li>
+      <li
+          @click="rowCommand('copy')">复制到</li>
+      <li
+          @click="rowCommand('rename')">重命名</li>
+      <li
+          @click="rowCommand('favorite')">{{ contextRow.mark ? '取消' : '' }}收藏</li>
+      <li
+          v-if="type === 'home'"
+          @click="rowCommand('delete')">删除</li>
+    </vue-context>
   </div>
 </template>
 
 <script>
 import {
-  Table,
-  TableColumn,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-} from 'element-ui';
+  VueContext,
+} from 'vue-context';
 
 export default {
   name: 'FileTable',
   components: {
-    'el-table': Table,
-    'el-table-column': TableColumn,
-    'el-dropdown': Dropdown,
-    'el-dropdown-menu': DropdownMenu,
-    'el-dropdown-item': DropdownItem,
+    VueContext,
   },
   props: {
     data: Array,
+    type: {
+      type: String,
+      default: 'home',
+    },
   },
   data() {
     return {
+      contextRow: {},
       tableHeight: null,
     };
   },
-  mounted() {
-    window.addEventListener('resize', this.calcTableHeight);
-
-    this.calcTableHeight();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.calcTableHeight);
-  },
   methods: {
-    calcTableHeight() {
-      this.tableHeight = window.innerHeight - 168;
-    },
     sortByName(a, b) {
       return a.name
         .localeCompare(b.name);
@@ -132,10 +141,22 @@ export default {
     sortBySize(a, b) {
       return a.size - b.size;
     },
-    sortByUtime(a, b) {
-      return new Date(a.utime) - new Date(b.utime);
+    sortByTime(a, b) {
+      return new Date(a.time) - new Date(b.time);
     },
-    rowCommand(command, row) {
+    showContextMenu(row, col, event) {
+      if (event) {
+        event.preventDefault();
+      }
+      this.$refs.menu.open(event);
+      this.contextRow = row;
+    },
+    goPath() {
+      const { path } = this.contextRow;
+      this.$router.push(`/?path=${path}`);
+    },
+    rowCommand(command, _row) {
+      const row = _row || this.contextRow;
       this.$emit('command', {
         command,
         row,
