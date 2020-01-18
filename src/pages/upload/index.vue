@@ -43,7 +43,7 @@ export default {
         return {
           speed: 0,
           percentage: Math.min((item.usize / item.size), 1) * 100,
-          status: 'STANDBY',
+          status: 'NEED-RESUME',
           ...item,
         };
       });

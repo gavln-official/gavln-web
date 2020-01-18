@@ -64,6 +64,7 @@
               :percentage="scope.row.percentage"
               :show-text="false" />
           <span v-if="scope.row.status === 'STANDBY'">准备传输</span>
+          <span v-else-if="scope.row.status === 'NEED-RESUME'">等待续传</span>
           <template v-else-if="scope.row.status === 'TRANSMITING'">
             <strong
                   v-if="scope.row.usize < scope.row.size">

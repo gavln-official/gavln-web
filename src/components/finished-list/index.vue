@@ -1,7 +1,7 @@
 <template>
   <div class="file-list finished-list">
     <div class="toolbar">
-      <el-button>
+      <el-button @click="deleteAll">
         <i class="iconfont icon-trash"></i>
         <span>清空全部记录</span>
       </el-button>
@@ -41,16 +41,18 @@
       </el-table-column>
       <el-table-column
           label="状态"
-          width="200">
+          width="230">
         <template
             slot-scope="scope">
-          <span>下载完成 {{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
+          <span>{{ scope.row.type === 'download' ? '下载' : '上传' }}完成于
+            {{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column
           width="70">
-        <template>
-          <div>
+        <template
+            slot-scope="scope">
+          <div @click="deleteRow(scope.row)">
             <i class="iconfont icon-trash"></i>
           </div>
         </template>
@@ -68,6 +70,14 @@ export default {
   data() {
     return {
     };
+  },
+  methods: {
+    deleteRow(row) {
+      this.$emit('deleteRow', row);
+    },
+    deleteAll() {
+      this.$emit('deleteAll');
+    },
   },
 };
 </script>

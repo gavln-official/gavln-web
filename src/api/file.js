@@ -62,9 +62,8 @@ function getUploadKey(number = 1) {
 }
 
 async function upload(file, path, name, blockSize, fragments) {
-  const progress = Transmission.getFileProgress('upload', file.fid);
-  const remainingBlocks = blockSize.totalBlocks - progress.finishedBlocks.length;
-  const keyRes = await getUploadKey(remainingBlocks);
+  const progress = Transmission.getUploadProgress(file.fid);
+  const keyRes = await getUploadKey(progress.remainingBlocks);
   const keys = keyRes.data.key;
 
   let list = null;
@@ -94,7 +93,7 @@ async function prepareUpload(file, path, name) {
   // encode file, this step can take a long time
   // so make sure to inform user it's in progress
   const fragments = await IPFS.encode(file);
-  Transmission.addFile('upload', file, blockSize);
+  Transmission.addUploadTask(file, blockSize);
   // start upload
   // we don't wait for the upload procedure, return immediately
   upload(file, path, name, blockSize, fragments);

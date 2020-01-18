@@ -83,7 +83,7 @@ async function upload(fid, keys, fragments, finishedBlocks) {
         cid: res[0].hash,
       };
       list.push(block);
-      Transmission.addBlock('upload', fid, block);
+      Transmission.blockUploadCompleted(fid, block);
     }
     await rootNode.stop();
     rootNode = null;

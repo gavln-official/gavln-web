@@ -72,12 +72,13 @@ export default {
     getList() {
       const list = Transmission.readList('download');
       this.data = list.map((item) => {  /* eslint-disable-line */
+        const progress = Transmission.getDownloadProgress(item.fid);
         return {
           ...item,
           paused: true,
           speed: 0,
-          usize: 0,
-          percentage: 0,
+          usize: progress.finishedBlocks * item.blockSize.blockSize,
+          percentage: progress.percentage,
           status: 'STANDBY',
         };
       });

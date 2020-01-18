@@ -2,7 +2,9 @@
   <main-frame>
     <div class="page-upload page-finished">
       <finished-list
-          :data="data" />
+          :data="data"
+          @deleteRow="deleteRow"
+          @deleteAll="deleteAll" />
     </div>
   </main-frame>
 </template>
@@ -26,11 +28,30 @@ export default {
   methods: {
     getList() {
       this.data = Transmission.readList('completed');
-      console.log(this.data);
+    },
+    deleteRow(row) {
+      Transmission.deleteFile('completed', row.fid);
+      this.getList();
+    },
+    deleteAll() {
+      Transmission.updateList('completed', []);
+      this.data = null;
+    },
+    initTransmissionListeners() {
+      document.addEventListener('upload-complete', this.getList);
+      document.addEventListener('download-complete', this.getList);
+    },
+    removeTransmissionListeners() {
+      document.removeEventListener('upload-complete', this.getList);
+      document.removeEventListener('download-complete', this.getList);
     },
   },
   mounted() {
+    this.initTransmissionListeners();
     this.getList();
+  },
+  beforeDestroy() {
+    this.removeTransmissionListeners();
   },
 };
 </script>
