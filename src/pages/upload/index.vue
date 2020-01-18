@@ -43,6 +43,7 @@ export default {
         return {
           speed: 0,
           percentage: Math.min((item.usize / item.size), 1) * 100,
+          status: 'STANDBY',
           ...item,
         };
       });
@@ -77,9 +78,11 @@ export default {
         item.blockSize = d.progress.blockSize;
         this.status.usize += item.usize;
         this.status.size += item.size;
+        item.status = 'TRANSMITING';
       }
       if (item.paused) {
         item.speed = 0;
+        item.status = 'PAUSED';
       }
       this.overallProgress(item.blockSize);
     },
@@ -112,10 +115,10 @@ export default {
     },
     pauseFile(file) {
       file.paused = true; /* eslint-disable-line */
-      Transmission.pasueFile('upload', file.fid);
+      Transmission.pauseFile('upload', file.fid);
     },
     pauseAll() {
-      this.data.forEach(this.pasueFile);
+      this.data.forEach(this.pauseFile);
     },
   },
   mounted() {

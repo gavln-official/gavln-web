@@ -3,7 +3,7 @@
     <div class="toolbar">
       <el-button @click="pauseAll">
         <i class="iconfont icon-upload"></i>
-        <span>全部暂停</span>
+        <span>全部{{ type === 'upload' ? '暂停' : '停止' }}</span>
       </el-button>
       <el-button @click="startAll" v-if="type === 'download'">
         <i class="iconfont icon-folder-add"></i>
@@ -63,16 +63,17 @@
           <el-progress
               :percentage="scope.row.percentage"
               :show-text="false" />
-          <template v-if="scope.row.usize < scope.row.size">
-            <template v-if="scope.row.speed">
-              <strong
+          <span v-if="scope.row.status === 'STANDBY'">准备传输</span>
+          <template v-else-if="scope.row.status === 'TRANSMITING'">
+            <strong
                   v-if="scope.row.usize < scope.row.size">
                   {{ scope.row.speed | filesize }}/s </strong>
               <span>{{ pendingTime(scope.row) }}</span>
-            </template>
-            <span v-else>准备传输</span>
           </template>
-          <span v-else>传输完成</span>
+          <span
+              v-else-if="scope.row.status === 'PAUSED'">
+              {{ type === 'upload' ? '暂停' : '已取消' }}</span>
+          <span v-else>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
       <el-table-column

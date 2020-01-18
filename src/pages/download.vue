@@ -50,11 +50,13 @@ export default {
         item.usize = d.progress.finishedBlocks * item.blockSize.blockSize;
         item.percentage = d.progress.percentage;
         item.finishedBlocks = 0;
+        item.status = 'TRANSMITING';
       }
       if (item.paused) {
         item.speed = 0;
         item.usize = 0;
         item.percentage = 0;
+        item.status = 'PAUSED';
       }
     },
     initTransmissionListeners() {
@@ -74,7 +76,9 @@ export default {
           ...item,
           paused: true,
           speed: 0,
+          usize: 0,
           percentage: 0,
+          status: 'STANDBY',
         };
       });
     },
@@ -98,7 +102,7 @@ export default {
       this.getList();
     },
     pauseFile(file) {
-      Transmission.pasueFile('download', file.fid);
+      Transmission.pauseFile('download', file.fid);
       /* eslint-disable */
       file.paused = true;
       file.speed = 0;

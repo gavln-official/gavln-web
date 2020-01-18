@@ -46,7 +46,7 @@ export default {
     };
   },
 
-  pasueFile(type, fid) {
+  pauseFile(type, fid) {
     const list = this.readList(type);
     const file = list.find(f => f.fid === fid);
     file.paused = true;
@@ -56,7 +56,7 @@ export default {
   fileComplete(type, fid) {
     const finishedFile = this.deleteFile(type, fid);
     const completedList = this.readList('completed');
-    completedList.push(finishedFile);
+    completedList.push(finishedFile[0]);
     this.updateList('completed', completedList);
     const evt = new CustomEvent(`${type}-complete`, {
       detail: {
@@ -67,7 +67,7 @@ export default {
   },
 
   deleteFile(type, fid) {
-    this.pasueFile(type, fid);
+    this.pauseFile(type, fid);
     const list = this.readList(type);
     const index = list.findIndex(f => f.fid === fid);
     const finishedFile = list.splice(index, 1);

@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import Mock from '../api/mock';
-
+import Transmission from '../utils/transmission';
 import MainFrame from '../components/main-frame/index.vue';
 import FinishedList from '../components/finished-list/index.vue';
 
@@ -21,8 +20,17 @@ export default {
   },
   data() {
     return {
-      data: Mock.files,
+      data: null,
     };
+  },
+  methods: {
+    getList() {
+      this.data = Transmission.readList('completed');
+      console.log(this.data);
+    },
+  },
+  mounted() {
+    this.getList();
   },
 };
 </script>

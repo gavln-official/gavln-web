@@ -71,13 +71,12 @@ async function upload(fid, keys, fragments, finishedBlocks) {
       if (file.paused) {
         await rootNode.stop();
         rootNode = null;
-        return 'User pasued upload';
+        return 'User paused upload';
       }
       const data = Crypto.AES.encrypt(
         Crypto.lib.WordArray.create(fragments[i]),
         key,
       );
-
       const res = await rootNode.add(data.toString()); /* eslint-disable-line */
       const block = {
         key,
