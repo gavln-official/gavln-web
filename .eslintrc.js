@@ -13,6 +13,7 @@ module.exports = {
     'prefer-destructuring': 'off',
     'linebreak-style': 'off',
     'no-named-as-default': 'off',
+    'no-await-in-loop': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',
