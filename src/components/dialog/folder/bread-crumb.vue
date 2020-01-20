@@ -35,7 +35,7 @@ export default {
         return this.rootPath.split('/')[1];
       }
 
-      return '全部';
+      return this.$t('all');
     },
     list() {
       const path = this.rootPath

@@ -1,9 +1,9 @@
 <template>
   <el-dialog
-      class="url-dialog"
+      class="upload-dialog"
       :visible="visible"
       width="480px"
-      title="上传本地文件"
+      :title="$t('upload-dialog.upload-local-file')"
       :close-on-click-modal="!uploading"
       @close="close">
     <el-form
@@ -13,7 +13,7 @@
         :rules="formRules"
         :disabled="uploading">
       <el-form-item
-          label="文件">
+          :label="$t('upload')">
         <el-upload
             action=""
             :before-upload="doNothing"
@@ -22,7 +22,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item
-          label="文件名">
+          :label="$t('file-name')">
         <el-input
             v-model="form.name" />
       </el-form-item>
@@ -31,10 +31,10 @@
         slot="footer">
       <el-button
           :disabled="uploading"
-          @click="close">取消</el-button>
+          @click="close">{{ $t('cancel') }}</el-button>
       <el-button
           :disabled="uploading"
-          @click="upload">上传</el-button>
+          @click="upload">{{ $t('upload') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -63,7 +63,7 @@ export default {
       formRules: {
         name: [{
           required: true,
-          message: '请填写文件名',
+          message: this.$t('form-message.filename-required'),
           trigger: 'blur',
         }],
       },
@@ -77,7 +77,7 @@ export default {
         return this.file.name;
       }
 
-      return '未选择文件';
+      return this.$t('upload-dialog.no-file-selected');
     },
     fullName() {
       let {
@@ -140,7 +140,8 @@ export default {
           }
 
           this.uploading = true;
-          this.$message.info('正在准备上传');
+          this.$message.info(this.$t('upload-dialog.prepare-upload'));
+
           FileAPI.prepareUpload(this.file, this.fullPath, this.fullName)
             .then(() => {
               this.uploading = false;

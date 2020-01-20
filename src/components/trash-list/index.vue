@@ -3,7 +3,7 @@
     <div class="toolbar">
       <el-button :disabled="!data.length" @click="clear">
         <i class="iconfont icon-trash"></i>
-        <span>清空回收站</span>
+        <span>{{ $t('trash-list.clear') }}</span>
       </el-button>
       <div class="right">
         <search-input
@@ -19,21 +19,21 @@
           width="64"></el-table-column>
       <el-table-column
           prop="type"
-          label="全选"
+          :label="$t('check-all')"
           width="48">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
       </el-table-column>
       <el-table-column
-          label="分享文件">
+          :label="$t('file')">
         <template
             slot-scope="scope">
           <span>{{ scope.row.file.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
-          label="删除时间"
+          :label="$t('delete-time')"
           width="160">
         <template
             slot-scope="scope">
@@ -41,7 +41,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件大小"
+          :label="$t('file-size')"
           width="100">
         <template
             slot-scope="scope">
@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="有效时间"
+          :label="$t('valid-time')"
           width="90">
         <template
             slot-scope="scope">
@@ -59,8 +59,8 @@
     </el-table>
     <vue-context
         ref="menu">
-      <li @click="restore">还原</li>
-      <li @click="doRemove">彻底删除</li>
+      <li @click="restore">{{ $t('restore') }}</li>
+      <li @click="doRemove">{{ $t('delete-permanently') }}</li>
     </vue-context>
   </div>
 </template>
@@ -69,6 +69,8 @@
 import {
   VueContext,
 } from 'vue-context';
+
+import i18n from '../../i18n';
 
 import SearchInput from '../search-input/index.vue';
 
@@ -112,17 +114,17 @@ export default {
       const distance = (expire - now) / 1000;
       const day = distance / 3600 / 24;
       if (day > 1) {
-        return `${Math.floor(day)}天`;
+        return `${Math.floor(day)} ${i18n.t('days')}`;
       }
       const hours = distance / 3600;
       if (hours > 1) {
-        return `${Math.floor(hours)}小时`;
+        return `${Math.floor(hours)} ${i18n.t('hours')}`;
       }
       const mins = distance / 60;
       if (mins > 0) {
-        return `${Math.floor(mins)}分钟`;
+        return `${Math.floor(mins)} ${i18n.t('minutes')}`;
       }
-      return '已失效';
+      return i18n.t('expired');
     },
   },
 };

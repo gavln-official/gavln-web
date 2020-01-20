@@ -63,7 +63,14 @@ export default {
     },
     async clear() {
       try {
-        await this.$confirm('确定要清空回收站吗？');
+        await this.$confirm(
+          this.$t('trash-list.message'),
+          this.$t('prompt'),
+          {
+            confirmButtonText: this.$t('clear'),
+            cancelButtonText: this.$t('cancel'),
+          },
+        );
         this.loading = true;
         const r = await TrashAPI.clear();
         this.loading = false;

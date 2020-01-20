@@ -2,10 +2,10 @@
   <footer class="page-footer">
     <ul class="links">
       <li>
-        <a href="/">服务条款</a>
+        <a href="/">{{ $t('page-frame.eula') }}</a>
       </li>
       <li>
-        <a href="/">隐私政策</a>
+        <a href="/">{{ $t('privacy') }}</a>
       </li>
     </ul>
   </footer>
