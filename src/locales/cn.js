@@ -1,4 +1,4 @@
-// lang: cn (default)
+// lang: cn
 export default {
   // common keywords
   username: '用户名',

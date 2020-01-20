@@ -222,7 +222,7 @@ export default {
           label: this.$t('page-search.mark'),
           value: 'mark',
         }, {
-          label: this.$t('page-search.other'),
+          label: this.$t('page-search.share'),
           value: 'other',
         }, {
           label: this.$t('trash'),
