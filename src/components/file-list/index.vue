@@ -104,8 +104,6 @@
 </template>
 
 <script>
-import FileDownload from 'js-file-download';
-
 import BreadCrumb from './bread-crumb.vue';
 import SearchInput from '../search-input/index.vue';
 import FileTable from './table.vue';
@@ -321,10 +319,7 @@ export default {
 
     // download file
     download(item) {
-      FileAPI.download(item)
-        .then((res) => {
-          FileDownload(res, item.name);
-        });
+      FileAPI.download(item);
     },
 
     // folder dialog

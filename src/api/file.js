@@ -1,3 +1,4 @@
+import FileDownload from 'js-file-download';
 import HTTP from './http';
 import IPFS from '../utils/ipfs';
 import Transmission from '../utils/transmission';
@@ -61,9 +62,8 @@ function getUploadKey(number = 1) {
 }
 
 async function upload(file, path, name, blockSize, fragments) {
-  const progress = Transmission.getFileProgress('upload', file.fid);
-  const remainingBlocks = blockSize.totalBlocks - progress.finishedBlocks.length;
-  const keyRes = await getUploadKey(remainingBlocks);
+  const progress = Transmission.getUploadProgress(file.fid);
+  const keyRes = await getUploadKey(progress.remainingBlocks);
   const keys = keyRes.data.key;
 
   let list = null;
@@ -73,7 +73,7 @@ async function upload(file, path, name, blockSize, fragments) {
     console.error(`IPFS上传报错：${error}`);
     return false;
   }
-  if (!Array.isArray(list)) {
+  if (typeof list === 'string') {
     return false;
   }
   try {
@@ -93,7 +93,7 @@ async function prepareUpload(file, path, name) {
   // encode file, this step can take a long time
   // so make sure to inform user it's in progress
   const fragments = await IPFS.encode(file);
-  Transmission.addFile('upload', file, blockSize);
+  Transmission.addUploadTask(file, blockSize);
   // start upload
   // we don't wait for the upload procedure, return immediately
   upload(file, path, name, blockSize, fragments);
@@ -101,13 +101,20 @@ async function prepareUpload(file, path, name) {
 }
 
 async function download(file) {
+  file.fid = `${file.path}//${file.name}//${file.size}`; /* eslint-disable-line */
+  const blockSize = IPFS.getBlockSize(file);
+  Transmission.addDownloadTask(file, blockSize);
+  let r = null;
   try {
-    const list = await IPFS.download(file);
-
-    return list;
+    r = await IPFS.download(file);
   } catch (error) {
     throw error;
   }
+  if (typeof r === 'string') {
+    throw new Error(r);
+  }
+  Transmission.fileComplete('download', file.fid);
+  FileDownload(r, file.name);
 }
 
 function deletePath(path) {

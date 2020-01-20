@@ -157,6 +157,7 @@ export default {
   // upload-list
   'upload-list': {
     'pause-all': '全部暂停',
+    'stop-all': '全部停止',
     'start-all': '全部开始',
     'delete-all': '全部删除',
     'current-progress': '当前进度',

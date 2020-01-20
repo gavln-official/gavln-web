@@ -1,19 +1,20 @@
+<!-- eslint-disable -->
 <template>
   <div class="file-list upload-list">
     <div class="toolbar">
       <el-button @click="pauseAll">
         <i class="iconfont icon-upload"></i>
-        <span>{{ $t('upload-list.pause-all') }}</span>
+        <span>{{ type === 'upload' ? $t('upload-list.pause-all') : $t('upload-list.stop-all') }}</span>
       </el-button>
-      <el-button>
+      <el-button @click="startAll" v-if="type === 'download'">
         <i class="iconfont icon-folder-add"></i>
         <span>{{ $t('upload-list.start-all') }}</span>
       </el-button>
-      <el-button>
+      <el-button @click="deleteAll">
         <i class="iconfont icon-trash"></i>
         <span>{{ $t('upload-list.delete-all') }}</span>
       </el-button>
-      <div class="right" v-show="status.percentage">
+      <div class="right" v-if="status" v-show="status.percentage">
         <strong>{{ $t('upload-list.current-progress') }}</strong>
         <el-progress
             :percentage="status.percentage"
@@ -63,18 +64,18 @@
           <el-progress
               :percentage="scope.row.percentage"
               :show-text="false" />
-          <template v-if="scope.row.usize < scope.row.size">
-            <template v-if="scope.row.speed">
-              <strong
+          <span v-if="scope.row.status === 'STANDBY'">准备传输</span>
+          <span v-else-if="scope.row.status === 'NEED-RESUME'">等待续传</span>
+          <template v-else-if="scope.row.status === 'TRANSMITING'">
+            <strong
                   v-if="scope.row.usize < scope.row.size">
                   {{ scope.row.speed | filesize }}/s </strong>
               <span>{{ pendingTime(scope.row) }}</span>
-            </template>
-            <span
-                v-else>{{ $t('upload-list.ready') }}</span>
           </template>
           <span
-              v-else>{{ $t('upload-list.finished') }}</span>
+              v-else-if="scope.row.status === 'PAUSED'">
+              {{ type === 'upload' ? '暂停' : '已取消' }}</span>
+          <span v-else>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -82,7 +83,23 @@
         <template
             slot-scope="scope">
           <div>
-            <i class="iconfont icon-menu-circle"></i>
+            <el-dropdown
+                placement="bottom"
+                @command="rowCommand($event, scope.row)">
+              <i class="iconfont icon-menu-circle"></i>
+              <el-dropdown-menu
+                  slot="dropdown">
+                <el-dropdown-item
+                    v-if="type === 'upload'"
+                    command="pause">暂停</el-dropdown-item>
+                <el-dropdown-item
+                    v-if="type === 'download' && !scope.row.paused"
+                    command="pause">取消下载</el-dropdown-item>
+                <el-dropdown-item
+                    v-if="type === 'download' && scope.row.paused"
+                    command="start">开始下载</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <i class="iconfont icon-trash"
                 @click="deleteRow(scope.row)"></i>
           </div>
@@ -91,6 +108,7 @@
     </el-table>
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script>
 import Utils from '../../utils/index';
@@ -105,7 +123,6 @@ export default {
           'upload',
           'download',
         ];
-
         return (values.indexOf(value) >= 0);
       },
     },
@@ -122,6 +139,18 @@ export default {
     },
     pauseAll() {
       this.$emit('pauseAll');
+    },
+    startAll() {
+      this.$emit('startAll');
+    },
+    deleteAll() {
+      this.$emit('deleteAll');
+    },
+    rowCommand(command, row) {
+      this.$emit('command', {
+        command,
+        row,
+      });
     },
   },
 };

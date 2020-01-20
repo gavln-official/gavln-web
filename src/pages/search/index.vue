@@ -174,8 +174,6 @@
 </template>
 
 <script>
-import FileDownload from 'js-file-download';
-
 import MainFrame from '../../components/main-frame/index.vue';
 import SearchInput from '../../components/search-input/index.vue';
 import FolderDialog from '../../components/dialog/folder/index.vue';
@@ -526,10 +524,7 @@ export default {
 
     // download file
     download(item) {
-      FileAPI.download(item)
-        .then((res) => {
-          FileDownload(res, item.name);
-        });
+      FileAPI.download(item);
     },
 
     // folder dialog
