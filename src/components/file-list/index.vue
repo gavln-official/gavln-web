@@ -10,21 +10,21 @@
             @command="uploadCommand">
           <el-button
               class="el-dropdown-link">
-            <span>上传</span>
             <i class="iconfont icon-upload"></i>
+            <span>{{ $t('upload') }}</span>
           </el-button>
           <el-dropdown-menu
               slot="dropdown">
             <el-dropdown-item
-                command="local">本地文件</el-dropdown-item>
+                command="local">{{ $t('file-list.local') }}</el-dropdown-item>
             <el-dropdown-item
-                command="url">链接</el-dropdown-item>
+                command="url">{{ $t('url') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button
             @click="toggleNameDialog()">
           <i class="iconfont icon-folder-add"></i>
-          <span>新建文件夹</span>
+          <span>{{ $t('create-folder') }}</span>
         </el-button>
       </template>
       <div class="right">
@@ -35,15 +35,22 @@
             @command="orderFileList">
           <el-button
               class="el-dropdown-link">
-            <span>排序方式</span>&nbsp;
-            <i class="el-icon-bottom" v-if="orderIn === 'DESC'"></i>
-            <i class="el-icon-top" v-else></i>
+            <span>{{ $t('file-list.sort') }}</span>&nbsp;
+            <i
+                class="el-icon-bottom"
+                v-if="orderIn === 'DESC'"></i>
+            <i
+                class="el-icon-top"
+                v-else></i>
           </el-button>
           <el-dropdown-menu
               slot="dropdown">
-            <el-dropdown-item command="time">时间</el-dropdown-item>
-            <el-dropdown-item command="size">大小</el-dropdown-item>
-            <el-dropdown-item command="name">文件名</el-dropdown-item>
+            <el-dropdown-item
+                command="time">{{ $t('time') }}</el-dropdown-item>
+            <el-dropdown-item
+                command="size">{{ $t('size') }}</el-dropdown-item>
+            <el-dropdown-item
+                command="name">{{ $t('file-name') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button
@@ -97,8 +104,6 @@
 </template>
 
 <script>
-import FileDownload from 'js-file-download';
-
 import BreadCrumb from './bread-crumb.vue';
 import SearchInput from '../search-input/index.vue';
 import FileTable from './table.vue';
@@ -314,10 +319,7 @@ export default {
 
     // download file
     download(item) {
-      FileAPI.download(item)
-        .then((res) => {
-          FileDownload(res, item.name);
-        });
+      FileAPI.download(item);
     },
 
     // folder dialog
@@ -370,10 +372,10 @@ export default {
 
     // delete folder/file
     deletePath(item) {
-      const message = `删除该${item.dir ? '文件夹' : '文件'}？`;
-      this.$confirm(message, '提示', {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
+      const message = this.$t('file-list.delete-this', [this.$t(item.dir ? 'folder' : 'file')]);
+      this.$confirm(message, this.$t('prompt'), {
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
       })
         .then(() => {
           FileAPI.deletePath(item.path)

@@ -80,8 +80,6 @@
 </template>
 
 <script>
-import FileDownload from 'js-file-download';
-
 import FileAPI from '../../api/file';
 
 import BreadCrumb from '../dialog/folder/bread-crumb.vue';
@@ -184,10 +182,7 @@ export default {
       this.$message.success('已保存至我的网盘');
     },
     download(target) {
-      FileAPI.download(target)
-        .then((res) => {
-          FileDownload(res, target.name);
-        });
+      FileAPI.download(target);
     },
   },
 };

@@ -1,24 +1,25 @@
+<!-- eslint-disable -->
 <template>
   <div class="file-list upload-list">
     <div class="toolbar">
       <el-button @click="pauseAll">
         <i class="iconfont icon-upload"></i>
-        <span>全部暂停</span>
+        <span>{{ type === 'upload' ? $t('upload-list.pause-all') : $t('upload-list.stop-all') }}</span>
       </el-button>
-      <el-button>
+      <el-button @click="startAll" v-if="type === 'download'">
         <i class="iconfont icon-folder-add"></i>
-        <span>全部开始</span>
+        <span>{{ $t('upload-list.start-all') }}</span>
       </el-button>
-      <el-button>
+      <el-button @click="deleteAll">
         <i class="iconfont icon-trash"></i>
-        <span>全部删除</span>
+        <span>{{ $t('upload-list.delete-all') }}</span>
       </el-button>
-      <div class="right" v-show="status.percentage">
-        <strong>当前进度</strong>
+      <div class="right" v-if="status" v-show="status.percentage">
+        <strong>{{ $t('upload-list.current-progress') }}</strong>
         <el-progress
             :percentage="status.percentage"
             :show-text="false" />
-        <span>已完成 {{ status.percentage }}%</span>
+        <span>{{ $t('upload-list.done') }} {{ status.percentage }}%</span>
         <strong>，{{ status.speed | filesize }}/s</strong>
       </div>
     </div>
@@ -30,14 +31,14 @@
           width="64"></el-table-column>
       <el-table-column
           prop="type"
-          label="全选"
+          :label="$t('check-all')"
           width="48">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
       </el-table-column>
       <el-table-column
-          label="文件名称">
+          :label="$t('file-name')">
         <template
             slot-scope="scope">
           <a
@@ -48,7 +49,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件大小"
+          :label="$t('file-size')"
           width="180">
         <template
             slot-scope="scope">
@@ -56,23 +57,25 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="状态"
+          :label="$t('status')"
           width="200">
         <template
             slot-scope="scope">
           <el-progress
               :percentage="scope.row.percentage"
               :show-text="false" />
-          <template v-if="scope.row.usize < scope.row.size">
-            <template v-if="scope.row.speed">
-              <strong
+          <span v-if="scope.row.status === 'STANDBY'">准备传输</span>
+          <span v-else-if="scope.row.status === 'NEED-RESUME'">等待续传</span>
+          <template v-else-if="scope.row.status === 'TRANSMITING'">
+            <strong
                   v-if="scope.row.usize < scope.row.size">
                   {{ scope.row.speed | filesize }}/s </strong>
               <span>{{ pendingTime(scope.row) }}</span>
-            </template>
-            <span v-else>准备传输</span>
           </template>
-          <span v-else>传输完成</span>
+          <span
+              v-else-if="scope.row.status === 'PAUSED'">
+              {{ type === 'upload' ? '暂停' : '已取消' }}</span>
+          <span v-else>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -80,7 +83,23 @@
         <template
             slot-scope="scope">
           <div>
-            <i class="iconfont icon-menu-circle"></i>
+            <el-dropdown
+                placement="bottom"
+                @command="rowCommand($event, scope.row)">
+              <i class="iconfont icon-menu-circle"></i>
+              <el-dropdown-menu
+                  slot="dropdown">
+                <el-dropdown-item
+                    v-if="type === 'upload'"
+                    command="pause">暂停</el-dropdown-item>
+                <el-dropdown-item
+                    v-if="type === 'download' && !scope.row.paused"
+                    command="pause">取消下载</el-dropdown-item>
+                <el-dropdown-item
+                    v-if="type === 'download' && scope.row.paused"
+                    command="start">开始下载</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <i class="iconfont icon-trash"
                 @click="deleteRow(scope.row)"></i>
           </div>
@@ -89,6 +108,7 @@
     </el-table>
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script>
 import Utils from '../../utils/index';
@@ -103,27 +123,34 @@ export default {
           'upload',
           'download',
         ];
-
         return (values.indexOf(value) >= 0);
       },
     },
     data: Array,
     status: Object,
   },
-  data() {
-    return {
-    };
-  },
   methods: {
     pendingTime(data) {
       const seconds = (data.size - data.usize) / data.speed;
-      return `剩余 ${Utils.formatTime(seconds)}`;
+      return `${this.$t('upload-list.remaing')} ${Utils.formatTime(seconds)}`;
     },
     deleteRow(row) {
       this.$emit('deleteRow', row);
     },
     pauseAll() {
       this.$emit('pauseAll');
+    },
+    startAll() {
+      this.$emit('startAll');
+    },
+    deleteAll() {
+      this.$emit('deleteAll');
+    },
+    rowCommand(command, row) {
+      this.$emit('command', {
+        command,
+        row,
+      });
     },
   },
 };

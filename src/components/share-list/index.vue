@@ -12,7 +12,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="分享文件">
+          :label="$t('share-list.share-file')">
         <template
             slot-scope="scope">
           <a
@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="分享时间"
+          :label="$t('share-list.share-time')"
           width="160">
         <template
             slot-scope="scope">
@@ -31,7 +31,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="查看次数"
+          :label="$t('share-list.visit-count')"
           width="80">
         <template
             slot-scope="scope">
@@ -39,7 +39,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="下载次数"
+          :label="$t('share-list.download-count')"
           width="80">
         <template
             slot-scope="scope">
@@ -47,7 +47,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="保存次数"
+          :label="$t('share-list.save-count')"
           width="80">
         <template
             slot-scope="scope">
@@ -55,7 +55,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="失效时间"
+          :label="$t('share-list.expired-time')"
           width="160">
         <template
             slot-scope="scope">
@@ -104,10 +104,10 @@ export default {
       this.$emit('refresh');
     },
     cancelShare(item) {
-      this.$confirm('你要确认取消分享吗？<br>取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接', '确认取消分享', {
+      this.$confirm(`${this.$t('share-list.confirm-cancel')}<br>${this.$t('share-list.confirm-info')}`, `${this.$t('share-list.cancel-share')}`, {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
       })
         .then(() => {
           ShareAPI.cancelShare(item.rand)
@@ -117,16 +117,16 @@ export default {
         });
     },
     copyLink(item) {
-      const url = `链接 ${window.location.origin}/s/${item.rand}`;
+      const url = `${this.$t('link')} ${window.location.origin}/s/${item.rand}`;
 
       const text = item.code
-        ? `${url} \n提取码 ${item.code}`
+        ? `${url} \n${this.$t('verify-code')} ${item.code}`
         : url;
 
       try {
         Utils.copyToClipboard(text);
 
-        this.$message.success('复制成功');
+        this.$message.success(this.$t('copy-success'));
       } catch (error) {
         //
       }

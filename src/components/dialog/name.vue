@@ -11,7 +11,7 @@
         :rules="formRules"
         ref="form">
       <el-form-item
-          label="名称"
+          :label="$t('name')"
           prop="name">
         <el-input
             v-model="form.name" />
@@ -21,10 +21,10 @@
         slot="footer">
       <el-button
           :disabled="saving"
-          @click="close">取消</el-button>
+          @click="close">{{ $t('cancel') }}</el-button>
       <el-button
           :disabled="saving"
-          @click="saveFolder">保存</el-button>
+          @click="saveFolder">{{ $t('save') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -48,7 +48,7 @@ export default {
       formRules: {
         name: [{
           required: true,
-          message: '请填写文件夹名称',
+          message: this.$t('form-message.foldername-required'),
           trigger: 'blur',
         }],
       },
@@ -58,11 +58,11 @@ export default {
   computed: {
     title() {
       const action = this.data.action === 'create'
-        ? '新建'
-        : '重命名';
+        ? this.$t('create')
+        : this.$t('rename');
       const name = this.data.dir
-        ? '文件夹'
-        : '文件';
+        ? this.$t('folder')
+        : this.$t('file');
 
       return `${action}${name}`;
     },
