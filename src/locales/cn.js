@@ -11,6 +11,8 @@ export default {
   url: '链接',
   time: '时间',
   'modify-time': '修改时间',
+  'delete-time': '删除时间',
+  'valid-time': '有效时间',
   size: '大小',
   file: '文件',
   'file-name': '文件名',
@@ -35,12 +37,20 @@ export default {
   name: '名称',
   save: '保存',
   create: '新建',
+  minutes: '分钟',
+  hours: '小时',
   days: '天',
   close: '关闭',
   'check-all': '全选',
   status: '状态',
   'verify-code': '提取码',
   'copy-success': '复制成功',
+  prompt: '提示',
+  clear: '清空',
+  restore: '还原',
+  'delete-permanently': '彻底删除',
+  expired: '已失效',
+  trash: '回收站',
 
   // form messages
   'form-message': {
@@ -56,6 +66,8 @@ export default {
     'foldername-required': '请填写文件夹名称',
     'target-folder-required': '请选择目标文件夹',
     'select-another-folder': '请选择其他文件夹',
+    'text-required': '请输入搜索内容',
+    'source-required': '请选择搜索位置',
   },
 
   // page-frame
@@ -95,7 +107,6 @@ export default {
     local: '本地文件',
     sort: '排序方式',
     'delete-this': '删除该{0}？',
-    info: '提示',
   },
 
   // cookie-notification
@@ -166,5 +177,27 @@ export default {
     'confirm-cancel': '你要确认取消分享吗？',
     'confirm-info': '取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接',
     'cancel-share': '确认取消分享',
+  },
+
+  // trash-list
+  'trash-list': {
+    message: '确定要清空回收站吗？',
+    clear: '清空回收站',
+  },
+
+  // page-search
+  'page-search': {
+    position: '位置',
+    type: '类型',
+    all: '不限',
+    source: '来源',
+    inbox: '个人文件',
+    mark: '收藏',
+    share: '他人分享',
+    today: '今天',
+    yesterday: '昨天',
+    'recent-7-days': '过去 7 天',
+    'recent-30-days': '过去 30 天',
+    'recent-90-days': '过去 90 天',
   },
 };

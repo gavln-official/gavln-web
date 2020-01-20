@@ -378,7 +378,7 @@ export default {
     // delete folder/file
     deletePath(item) {
       const message = this.$t('file-list.delete-this', [this.$t(item.dir ? 'folder' : 'file')]);
-      this.$confirm(message, this.$t('file-list.info'), {
+      this.$confirm(message, this.$t('prompt'), {
         confirmButtonText: this.$t('delete'),
         cancelButtonText: this.$t('cancel'),
       })

@@ -74,7 +74,9 @@
                 <el-dropdown-item
                     command="rename">{{ $t('rename') }}</el-dropdown-item>
                 <el-dropdown-item
-                    command="favorite">{{ scope.row.mark ? $t('remove-from-fav') : $t('add-to-fav') }}</el-dropdown-item>
+                    command="favorite">{{ scope.row.mark
+                      ? $t('remove-from-fav')
+                      : $t('add-to-fav') }}</el-dropdown-item>
                 <el-dropdown-item
                     v-if="type === 'home'"
                     command="delete">{{ $t('delete') }}</el-dropdown-item>

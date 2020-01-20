@@ -7,7 +7,7 @@
             :text="q"
             :source="filter.source" />
         <el-form-item
-            label="位置">
+            :label="$t('page-search.position')">
           <el-select
               v-model="filter.source"
               multiple
@@ -20,12 +20,12 @@
           </el-select>
         </el-form-item>
         <el-form-item
-            label="类型">
+            :label="$t('page-search.type')">
           <el-select
               v-model="filter.suffixs"
               multiple
               clearable
-              placeholder="不限"
+              :placeholder="$t('page-search.all')"
               @change="search">
             <el-option
                 v-for="item in suffixOptions"
@@ -35,11 +35,11 @@
           </el-select>
         </el-form-item>
         <el-form-item
-            label="时间">
+            :label="$t('time')">
           <el-select
               v-model="filter.time"
               clearable
-              placeholder="不限"
+              :placeholder="$t('page-search.all')"
               @change="search">
             <el-option
                 v-for="item in timeOptions"
@@ -61,7 +61,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="文件名称">
+            :label="$t('file-name')">
           <template
               slot-scope="scope">
             <i
@@ -75,7 +75,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="文件大小"
+            :label="$t('file-size')"
             width="100">
           <template
               slot-scope="scope">
@@ -83,7 +83,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="修改时间"
+            :label="$t('modify-time')"
             width="160">
           <template
               slot-scope="scope">
@@ -91,7 +91,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="来源"
+            :label="$t('page-search.source')"
             width="140">
           <template
               slot-scope="scope">
@@ -123,17 +123,17 @@
                 <el-dropdown-menu
                     slot="dropdown">
                   <el-dropdown-item
-                      command="move">移动到</el-dropdown-item>
+                      command="move">{{ $t('move-to') }}</el-dropdown-item>
                   <el-dropdown-item
-                      command="copy">复制到</el-dropdown-item>
+                      command="copy">{{ $t('copy-to') }}</el-dropdown-item>
                   <el-dropdown-item
-                      command="rename">重命名</el-dropdown-item>
+                      command="rename">{{ $t('rename') }}</el-dropdown-item>
                   <el-dropdown-item
                       command="favorite">{{ scope.row.file.mark
-                        ? '取消收藏'
-                        : '收藏' }}</el-dropdown-item>
+                        ? $t('remove-from-fav')
+                        : $t('add-to-fav') }}</el-dropdown-item>
                   <el-dropdown-item
-                      command="delete">删除</el-dropdown-item>
+                      command="delete">{{ $t('delete') }}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
@@ -164,9 +164,6 @@
         :data="shareData"
         @close="hideShareDialog"
         @success="hideShareDialog" />
-    <!-- <ui-progress
-        :percentage="50"
-        message="正在删除...50%" /> -->
     <name-dialog
         v-if="showNameDialog"
         :visible="showNameDialog"
@@ -218,19 +215,19 @@ export default {
       },
       sourceOptions: [
         {
-          label: '全部',
+          label: this.$t('all'),
           value: 'all',
         }, {
-          label: '个人文件',
+          label: this.$t('page-search.inbox'),
           value: 'inbox',
         }, {
-          label: '书签',
+          label: this.$t('page-search.mark'),
           value: 'mark',
         }, {
-          label: '他人分享',
+          label: this.$t('page-search.other'),
           value: 'other',
         }, {
-          label: '回收站',
+          label: this.$t('trash'),
           value: 'trash',
         },
       ],
@@ -252,19 +249,19 @@ export default {
       ],
       timeOptions: [
         {
-          label: '今天',
+          label: this.$t('page-search.today'),
           value: 'today',
         }, {
-          label: '昨天',
+          label: this.$t('page-search.yesterday'),
           value: 'yesterday',
         }, {
-          label: '过去 7 天',
+          label: this.$t('page-search.recent-7-days'),
           value: 'recent-7-days',
         }, {
-          label: '最近 30 天',
+          label: this.$t('page-search.recent-30-days'),
           value: 'recent-30-days',
         }, {
-          label: '最近 90 天',
+          label: this.$t('page-search.recent-90-days'),
           value: 'recent-90-days',
         },
       ],
@@ -330,10 +327,10 @@ export default {
   methods: {
     sourceLabel(type) {
       const labels = [
-        '个人文件',
-        '回收站',
-        '他人分享',
-        '书签',
+        this.$t('page-search.inbox'),
+        this.$t('trash'),
+        this.$t('page-search.share'),
+        this.$t('page-search.mark'),
       ];
 
       if (labels[type]) {
@@ -437,13 +434,13 @@ export default {
       }
 
       if (!this.q) {
-        this.$message.error('请输入搜索内容');
+        this.$message.error(this.$t('form-message.text-required'));
         return;
       }
 
       if (!this.s
           || !this.s.length) {
-        this.$message.error('请选择搜索位置');
+        this.$message.error(this.$t('form-message.source-required'));
         return;
       }
 
@@ -467,16 +464,16 @@ export default {
     },
 
     copyLink(item) {
-      const url = `链接 ${window.location.origin}/s/${item.rand}`;
+      const url = `${this.$t('url')} ${window.location.origin}/s/${item.rand}`;
 
       const text = item.code
-        ? `${url} \n提取码 ${item.code}`
+        ? `${url} \n${this.$t('verify-code')} ${item.code}`
         : url;
 
       try {
         Utils.copyToClipboard(text);
 
-        this.$message.success('复制成功');
+        this.$message.success(this.$t('copy-success'));
       } catch (error) {
         //
       }
@@ -576,10 +573,10 @@ export default {
 
     // delete folder/file
     deletePath(item) {
-      const message = `删除该${item.dir ? '文件夹' : '文件'}？`;
-      this.$confirm(message, '提示', {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
+      const message = this.$t('file-list.delete-this', [this.$t(item.dir ? 'folder' : 'file')]);
+      this.$confirm(message, this.$t('prompt'), {
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
       })
         .then(() => {
           FileAPI.deletePath(item.path)
