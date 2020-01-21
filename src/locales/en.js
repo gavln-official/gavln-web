@@ -138,12 +138,12 @@ export default {
     'open-info': 'No password required, only users with links can view ',
     duration: 'Duration:',
     forever: 'Forever',
-    'create-success': 'create like success',
+    'create-success': 'Create like success',
     'expired-in': 'Invalid after {1} day ',
     'copy-url': 'Copy url',
     'copy-url-and-code': 'Copy url and code',
     code: 'Code：',
-    'create-url': 'create url',
+    'create-url': 'Create url',
     'copy-fail': 'Copy fail, please copy manually',
   },
 
@@ -160,7 +160,7 @@ export default {
     'stop-all': 'All stop',
     'start-all': 'All start',
     'delete-all': 'All delete',
-    'current-progress': 'Progress ',
+    'current-progress': 'Progress',
     done: 'Done',
     ready: 'Ready',
     finished: 'Finished',
@@ -176,14 +176,14 @@ export default {
     'save-count': 'Save count',
     'expired-time': 'Expired time',
     'confirm-cancel': 'Are you sure you want to cancel share?',
-    'confirm-info': 'After you cancel sharing, the sharing record will be deleted, and friends will no longer be able to access this sharing link.',
-    'cancel-share': 'Confirm to cancel share.',
+    'confirm-info': 'After you cancel sharing, the sharing record will be deleted, and friends will no longer be able to access this sharing link',
+    'cancel-share': 'Confirm to cancel share',
   },
 
   // trash-list
   'trash-list': {
     message: 'Are you sure you want to empty trash?',
-    clear: 'Empty trash.',
+    clear: 'Empty trash',
   },
 
   // page-search
