@@ -52,6 +52,16 @@ export default {
   expired: 'Expired',
   trash: 'Trash',
 
+  // main-nav
+  'main-nav': {
+    home: 'Files',
+    favorite: 'Favorite',
+    upload: 'Upload',
+    download: 'Download',
+    finished: 'Finished',
+    share: 'Share',
+    trash: 'Trash',
+  },
 
   // form messages
   'form-message': {
@@ -69,6 +79,12 @@ export default {
     'select-another-folder': 'Select other folder',
     'text-required': 'Input search keyword',
     'source-required': 'Select search path in location',
+    'code-required': 'Input code',
+  },
+
+  // request messages
+  'request-message': {
+    'load-user-info-failed': 'User info failed to load',
   },
 
   // page-frame
@@ -164,7 +180,13 @@ export default {
     'current-progress': 'Progress',
     done: 'Done',
     ready: 'Ready',
-
+    pause: 'Pause',
+    paused: 'Paused',
+    finished: 'Finished',
+    remaining: 'Remaining',
+    canceled: 'Canceled',
+    'cancel-download': 'Cancel download',
+    'start-download': 'Start download',
   },
 
   // share-list
@@ -175,7 +197,7 @@ export default {
     'download-count': 'Download count',
     'save-count': 'Save count',
     'expired-time': 'Expired time',
-
+    times: 'times',
     'confirm-cancel': 'Are you sure you want to cancel share?',
     'confirm-info': 'After you cancel sharing, the sharing record will be deleted, and friends will no longer be able to access this sharing link',
     'cancel-share': 'Confirm to cancel share',
@@ -201,6 +223,53 @@ export default {
     'recent-7-days': 'Recent 7 day',
     'recent-30-days': 'Recent 30 day',
     'recent-90-days': 'Recent 90 day',
+  },
 
+  // finished-list
+  'finished-list': {
+    'clear-records': 'Clear records',
+    'finished-at': 'Finished at',
+  },
+
+  // open-share
+  'open-share': {
+    save: 'Save',
+    'save-success': 'Save success',
+    slogan: 'Know the white, hold to the black',
+    'shared-encrypted-file': 'Shared your encrypted file with you',
+    'enter-code': 'Enter verification code:',
+    'get-file': 'Get file',
+    expired: 'Share expired',
+    invalid: 'Invalid share',
+    'invalid-code': 'Invalid verification code',
+  },
+
+  // http error
+  'http-error': {
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    404: 'Not Found',
+    429: 'Too Many Requests',
+  },
+
+  // api code
+  'api-code': {
+    1000: 'Internal Server Error',
+    1001: 'Bad Gateway',
+    '-1000': 'Invalid account',
+    '-1001': 'Invalid access token',
+    '-1002': 'Account exists',
+    '-1003': 'File exists',
+    '-1004': 'File not exists',
+    '-1005': 'Target path is file',
+    '-1006': 'Missing parameter',
+    '-1007': 'Invalid format',
+    '-1008': 'Too many requests',
+    '-1009': 'Invalid code',
+    '-1010': 'Invalid path',
+    '-1011': 'Invalid share',
+    '-1012': 'Account not exists',
+    '-1013': 'Invalid expires',
+    '-1014': 'Only support file',
   },
 };
