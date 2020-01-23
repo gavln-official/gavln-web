@@ -3,7 +3,7 @@
   <el-dialog
       class="share-dialog"
       :visible="visible"
-      width="640px"
+      width="720px"
       :title="title"
       @close="close">
     <el-form

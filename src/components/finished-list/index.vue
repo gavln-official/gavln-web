@@ -1,9 +1,10 @@
+<!-- eslint-disable -->
 <template>
   <div class="file-list finished-list">
     <div class="toolbar">
       <el-button @click="deleteAll">
         <i class="iconfont icon-trash"></i>
-        <span>清空全部记录</span>
+        <span>{{ $t('finished-list.clear-records') }}</span>
       </el-button>
     </div>
     <el-table
@@ -14,14 +15,14 @@
           width="64"></el-table-column>
       <el-table-column
           prop="type"
-          label="全选"
-          width="48">
+          :label="$t('check-all')"
+          width="100">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
       </el-table-column>
       <el-table-column
-          label="文件名称">
+          :label="$t('file-name')">
         <template
             slot-scope="scope">
           <a
@@ -32,7 +33,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="文件大小"
+          :label="$t('file-size')"
           width="100">
         <template
             slot-scope="scope">
@@ -40,11 +41,11 @@
         </template>
       </el-table-column>
       <el-table-column
-          label="状态"
+          :label="$t('status')"
           width="230">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.type === 'download' ? '下载' : '上传' }}完成于
+          <span>{{ scope.row.type === 'download' ? $t('download') : $t('upload') }}{{ $t('finished-list.finished-at') }}
             {{ scope.row.utime | time('yyyy/MM/dd HH:mm') }}</span>
         </template>
       </el-table-column>
@@ -60,6 +61,7 @@
     </el-table>
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script>
 export default {

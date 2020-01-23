@@ -32,37 +32,37 @@ export default {
       menus: [
         {
           name: 'home',
-          label: '全部文件',
+          label: this.$t('main-nav.home'),
           icon: 'file',
         },
         {
           name: 'favorite',
-          label: '我的收藏',
+          label: this.$t('main-nav.favorite'),
           icon: 'star-o',
         },
         {
           name: 'upload',
-          label: '正在上传',
+          label: this.$t('main-nav.upload'),
           icon: 'upload',
         },
         {
           name: 'download',
-          label: '正在下载',
+          label: this.$t('main-nav.download'),
           icon: 'download',
         },
         {
           name: 'finished',
-          label: '传输完成',
+          label: this.$t('main-nav.finished'),
           icon: 'check-o',
         },
         {
           name: 'share',
-          label: '我的分享',
+          label: this.$t('main-nav.share'),
           icon: 'share',
         },
         {
           name: 'trash',
-          label: '回收站',
+          label: this.$t('main-nav.trash'),
           icon: 'trash',
         },
       ],

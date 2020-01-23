@@ -52,6 +52,7 @@ export default {
   expired: 'Expired',
   trash: 'Trash',
 
+
   // form messages
   'form-message': {
     'username-required': 'Input user name',
@@ -163,8 +164,7 @@ export default {
     'current-progress': 'Progress',
     done: 'Done',
     ready: 'Ready',
-    finished: 'Finished',
-    remaining: 'Remaining',
+
   },
 
   // share-list
@@ -175,6 +175,7 @@ export default {
     'download-count': 'Download count',
     'save-count': 'Save count',
     'expired-time': 'Expired time',
+
     'confirm-cancel': 'Are you sure you want to cancel share?',
     'confirm-info': 'After you cancel sharing, the sharing record will be deleted, and friends will no longer be able to access this sharing link',
     'cancel-share': 'Confirm to cancel share',
@@ -200,5 +201,6 @@ export default {
     'recent-7-days': 'Recent 7 day',
     'recent-30-days': 'Recent 30 day',
     'recent-90-days': 'Recent 90 day',
+
   },
 };

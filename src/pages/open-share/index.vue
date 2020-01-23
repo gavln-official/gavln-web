@@ -7,9 +7,9 @@
           class="error"
           v-if="expired || invalid">
         <span
-            v-if="expired">分享已过期</span>
+            v-if="expired">{{ $t('open-share.expired') }}</span>
         <span
-            v-if="invalid">无效的分享链接</span>
+            v-if="invalid">{{ $t('open-share.invalid') }}</span>
       </div>
       <template
           v-else>
@@ -130,7 +130,7 @@ export default {
 
       if (this.encrypted
           && !code) {
-        this.verifyError = '请输入提取码';
+        this.verifyError = this.$t('form-message.code-required');
         return;
       }
 
@@ -159,7 +159,7 @@ export default {
               && error.response.data
               && error.response.data.code
               && error.response.data.code === -1009) {
-            this.verifyError = '无效的提取码';
+            this.verifyError = this.$t('open-share.invalid-code');
           }
         })
         .finally(() => {
