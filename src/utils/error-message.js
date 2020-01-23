@@ -1,29 +1,30 @@
-// TODO: i18n
+import i18n from '../i18n';
+
 const http = {
-  400: 'Bad Request',
-  401: 'Unauthorized',
-  404: 'Not Found',
-  429: 'Too Many Requests',
+  400: i18n.t('http-error.400'),
+  401: i18n.t('http-error.401'),
+  404: i18n.t('http-error.404'),
+  429: i18n.t('http-error.429'),
 };
 
 const code = {
-  1000: 'server  error',
-  1001: 'server unavailable',
-  '-1000': 'invalid account',
-  '-1001': 'invalid access token',
-  '-1002': 'account exists',
-  '-1003': 'file exists',
-  '-1004': 'file not exists',
-  '-1005': 'target path is file',
-  '-1006': 'missing parameter',
-  '-1007': 'invalid format',
-  '-1008': 'too many requests',
-  '-1009': 'invalid code',
-  '-1010': 'invalid path',
-  '-1011': 'invalid share',
-  '-1012': 'account not exists',
-  '-1013': 'invalid expires',
-  '-1014': 'only support file',
+  1000: i18n.t('api-code.1000'),
+  1001: i18n.t('api-code.1001'),
+  '-1000': i18n.t('api-code.-1000'),
+  '-1001': i18n.t('api-code.-1001'),
+  '-1002': i18n.t('api-code.-1002'),
+  '-1003': i18n.t('api-code.-1003'),
+  '-1004': i18n.t('api-code.-1004'),
+  '-1005': i18n.t('api-code.-1005'),
+  '-1006': i18n.t('api-code.-1006'),
+  '-1007': i18n.t('api-code.-1007'),
+  '-1008': i18n.t('api-code.-1008'),
+  '-1009': i18n.t('api-code.-1009'),
+  '-1010': i18n.t('api-code.-1010'),
+  '-1011': i18n.t('api-code.-1011'),
+  '-1012': i18n.t('api-code.-1012'),
+  '-1013': i18n.t('api-code.-1013'),
+  '-1014': i18n.t('api-code.-1014'),
 };
 
 export default {

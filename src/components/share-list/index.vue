@@ -32,26 +32,26 @@
       </el-table-column>
       <el-table-column
           :label="$t('share-list.visit-count')"
-          width="80">
+          width="100">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.watch }}次</span>
+          <span>{{ scope.row.watch }} {{ $t('share-list.times') }}</span>
         </template>
       </el-table-column>
       <el-table-column
           :label="$t('share-list.download-count')"
-          width="80">
+          width="140">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.download }}次</span>
+          <span>{{ scope.row.download }} {{ $t('share-list.times') }}</span>
         </template>
       </el-table-column>
       <el-table-column
           :label="$t('share-list.save-count')"
-          width="80">
+          width="100">
         <template
             slot-scope="scope">
-          <span>{{ scope.row.fork }}次</span>
+          <span>{{ scope.row.fork }} {{ $t('share-list.times') }}</span>
         </template>
       </el-table-column>
       <el-table-column

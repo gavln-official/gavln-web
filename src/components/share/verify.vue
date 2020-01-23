@@ -4,13 +4,13 @@
       <img src="" />
       <h2>
         <strong>Gavln</strong>
-        <span>知其白，守其黑</span>
+        <span>{{ $t('open-share.slogan') }}</span>
       </h2>
     </div>
     <div class="content">
-      <p class="message">{{ username }} 给您分享了加密文件</p>
+      <p class="message">{{ username }} {{ $t('open-share.shared-encrypted-file') }}</p>
       <div class="form">
-        <span class="label">请输入提取码：</span>
+        <span class="label">{{ $t('open-share.enter-code') }}</span>
         <div class="form-item">
           <div class="input">
             <el-input
@@ -18,7 +18,7 @@
           </div>
           <el-button
               type="primary"
-              @click="submit">提取文件</el-button>
+              @click="submit">{{ $t('open-share.get-file') }}</el-button>
         </div>
         <span
             v-if="error"

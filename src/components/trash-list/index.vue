@@ -20,7 +20,7 @@
       <el-table-column
           prop="type"
           :label="$t('check-all')"
-          width="48">
+          width="100">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
@@ -50,7 +50,7 @@
       </el-table-column>
       <el-table-column
           :label="$t('valid-time')"
-          width="90">
+          width="120">
         <template
             slot-scope="scope">
           <span>{{ scope.row.expires | timeDistance }}</span>

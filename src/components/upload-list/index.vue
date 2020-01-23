@@ -32,7 +32,7 @@
       <el-table-column
           prop="type"
           :label="$t('check-all')"
-          width="48">
+          width="100">
         <template>
           <i class="iconfont icon-folder-add"></i>
         </template>
@@ -64,8 +64,8 @@
           <el-progress
               :percentage="scope.row.percentage"
               :show-text="false" />
-          <span v-if="scope.row.status === 'STANDBY'">准备传输</span>
-          <span v-else-if="scope.row.status === 'NEED-RESUME'">等待续传</span>
+          <span v-if="scope.row.status === 'STANDBY'">{{ $('upload-list.ready') }}</span>
+          <span v-else-if="scope.row.status === 'NEED-RESUME'">{{ $('upload-list.paused') }}</span>
           <template v-else-if="scope.row.status === 'TRANSMITING'">
             <strong
                   v-if="scope.row.usize < scope.row.size">
@@ -74,7 +74,7 @@
           </template>
           <span
               v-else-if="scope.row.status === 'PAUSED'">
-              {{ type === 'upload' ? '暂停' : '已取消' }}</span>
+              {{ type === 'upload' ? $t('upload-list.pause') : $t('upload-list.canceled') }}</span>
           <span v-else>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
@@ -91,13 +91,13 @@
                   slot="dropdown">
                 <el-dropdown-item
                     v-if="type === 'upload'"
-                    command="pause">暂停</el-dropdown-item>
+                    command="pause">{{ $t('upload-list.pause') }}</el-dropdown-item>
                 <el-dropdown-item
                     v-if="type === 'download' && !scope.row.paused"
-                    command="pause">取消下载</el-dropdown-item>
+                    command="pause">{{ $t('upload-list.cancel-download') }}</el-dropdown-item>
                 <el-dropdown-item
                     v-if="type === 'download' && scope.row.paused"
-                    command="start">开始下载</el-dropdown-item>
+                    command="start">{{ $t('upload-list.start-download') }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <i class="iconfont icon-trash"
