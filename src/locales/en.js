@@ -52,6 +52,17 @@ export default {
   expired: 'Expired',
   trash: 'Trash',
 
+  // main-nav
+  'main-nav': {
+    home: '全部文件',
+    favorite: '我的收藏',
+    upload: '正在上传',
+    download: '正在下载',
+    finished: '传输完成',
+    share: '我的分享',
+    trash: '回收站',
+  },
+
   // form messages
   'form-message': {
     'username-required': 'Input user name',
@@ -68,6 +79,12 @@ export default {
     'select-another-folder': 'Select other folder',
     'text-required': 'Input search keyword',
     'source-required': 'Select search path in location',
+    'code-required': '请输入提取码',
+  },
+
+  // request-messages
+  'request-messages': {
+    'load-user-info-failed': '用户信息加载失败',
   },
 
   // page-frame
@@ -163,8 +180,13 @@ export default {
     'current-progress': 'Progress',
     done: 'Done',
     ready: 'Ready',
+    pause: '暂停',
+    paused: '等待续传',
     finished: 'Finished',
     remaining: 'Remaining',
+    canceled: '已取消',
+    'cancel-download': '取消下载',
+    'start-download': '开始下载',
   },
 
   // share-list
@@ -175,6 +197,7 @@ export default {
     'download-count': 'Download count',
     'save-count': 'Save count',
     'expired-time': 'Expired time',
+    times: '次',
     'confirm-cancel': 'Are you sure you want to cancel share?',
     'confirm-info': 'After you cancel sharing, the sharing record will be deleted, and friends will no longer be able to access this sharing link',
     'cancel-share': 'Confirm to cancel share',
@@ -200,5 +223,53 @@ export default {
     'recent-7-days': 'Recent 7 day',
     'recent-30-days': 'Recent 30 day',
     'recent-90-days': 'Recent 90 day',
+  },
+
+  // finished-list
+  'finished-list': {
+    'clear-records': '清空全部记录',
+    'finished-at': '完成于',
+  },
+
+  // open-share
+  'open-share': {
+    save: '保存到网盘',
+    'save-success': '已保存至我的网盘',
+    slogan: '知其白，守其黑',
+    'shared-encrypted-file': '给您分享了加密文件',
+    'enter-code': '请输入提取码：',
+    'get-file': '提取文件',
+    expired: '分享已过期',
+    invalid: '无效的分享链接',
+    'invalid-code': '无效的提取码',
+  },
+
+  // http error
+  'http-error': {
+    400: '无效的请求',
+    401: '未认证',
+    404: '资源不存在',
+    429: '访问过于频繁',
+  },
+
+  // api code
+  'api-code': {
+    1000: 'server error',
+    1001: 'server unavailable',
+    '-1000': 'invalid account',
+    '-1001': 'invalid access token',
+    '-1002': 'account exists',
+    '-1003': 'file exists',
+    '-1004': 'file not exists',
+    '-1005': 'target path is file',
+    '-1006': 'missing parameter',
+    '-1007': 'invalid format',
+    '-1008': 'too many requests',
+    '-1009': 'invalid code',
+    '-1010': 'invalid path',
+    '-1011': 'invalid share',
+    '-1012': 'account not exists',
+    '-1013': 'invalid expires',
+    '-1014': 'only support file',
   },
 };

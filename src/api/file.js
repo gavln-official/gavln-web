@@ -70,7 +70,7 @@ async function upload(file, path, name, blockSize, fragments) {
   try {
     list = await IPFS.upload(file.fid, keys, fragments, progress.finishedBlocks);
   } catch (error) {
-    console.error(`IPFS上传报错：${error}`);
+    // console.error(`IPFS上传报错：${error}`);
     return false;
   }
   if (typeof list === 'string') {
@@ -79,9 +79,9 @@ async function upload(file, path, name, blockSize, fragments) {
   try {
     await addFile(path, name, file.size, list, blockSize);
   } catch (err) {
-    if (err.detail !== 'file exists') {
-      console.log(`file/add报错：${err.detail}`);
-    }
+    // if (err.detail !== 'file exists') {
+    //   console.log(`file/add报错：${err.detail}`);
+    // }
   }
   Transmission.fileComplete('upload', file.fid);
   return true;

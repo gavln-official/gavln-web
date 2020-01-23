@@ -26,7 +26,7 @@
         @row-click="toggleSelected">
       <el-table-column
           prop="type"
-          label="文件名"
+          :label="$t('file-name')"
           width="68">
         <template>
           <i class="iconfont icon-folder-add"></i>

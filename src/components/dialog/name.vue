@@ -5,7 +5,7 @@
       width="480px"
       @close="close">
     <el-form
-        label-width="60px"
+        label-width="80px"
         :disabled="saving"
         :model="form"
         :rules="formRules"

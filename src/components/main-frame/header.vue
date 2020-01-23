@@ -60,7 +60,7 @@ export default {
           this.profile = data;
         })
         .catch(() => {
-          this.$message.error('用户信息加载失败');
+          this.$message.error(this.$t('request-message.load-user-info-failed'));
         })
         .finally(() => {
           this.loading = false;
@@ -80,9 +80,6 @@ export default {
           this.$router.push({
             name: 'login',
           });
-        })
-        .catch(() => {
-          this.$message.error('用户信息加载失败');
         })
         .finally(() => {
           this.sending = false;

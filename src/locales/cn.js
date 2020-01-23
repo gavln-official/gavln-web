@@ -52,6 +52,17 @@ export default {
   expired: '已失效',
   trash: '回收站',
 
+  // main-nav
+  'main-nav': {
+    home: '全部文件',
+    favorite: '我的收藏',
+    upload: '正在上传',
+    download: '正在下载',
+    finished: '传输完成',
+    share: '我的分享',
+    trash: '回收站',
+  },
+
   // form messages
   'form-message': {
     'username-required': '请输入用户名',
@@ -68,6 +79,12 @@ export default {
     'select-another-folder': '请选择其他文件夹',
     'text-required': '请输入搜索内容',
     'source-required': '请选择搜索位置',
+    'code-required': '请输入提取码',
+  },
+
+  // request messages
+  'request-message': {
+    'load-user-info-failed': '用户信息加载失败',
   },
 
   // page-frame
@@ -163,8 +180,13 @@ export default {
     'current-progress': '当前进度',
     done: '已完成',
     ready: '准备传输',
+    pause: '暂停',
+    paused: '等待续传',
     finished: '传输完成',
     remaining: '剩余',
+    canceled: '已取消',
+    'cancel-download': '取消下载',
+    'start-download': '开始下载',
   },
 
   // share-list
@@ -175,6 +197,7 @@ export default {
     'download-count': '查看次数',
     'save-count': '查看次数',
     'expired-time': '失效时间',
+    times: '次',
     'confirm-cancel': '你要确认取消分享吗？',
     'confirm-info': '取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接',
     'cancel-share': '确认取消分享',
@@ -200,5 +223,53 @@ export default {
     'recent-7-days': '过去 7 天',
     'recent-30-days': '过去 30 天',
     'recent-90-days': '过去 90 天',
+  },
+
+  // finished-list
+  'finished-list': {
+    'clear-records': '清空全部记录',
+    'finished-at': '完成于',
+  },
+
+  // open-share
+  'open-share': {
+    save: '保存到网盘',
+    'save-success': '已保存至我的网盘',
+    slogan: '知其白，守其黑',
+    'shared-encrypted-file': '给您分享了加密文件',
+    'enter-code': '请输入提取码：',
+    'get-file': '提取文件',
+    expired: '分享已过期',
+    invalid: '无效的分享链接',
+    'invalid-code': '无效的提取码',
+  },
+
+  // http error
+  'http-error': {
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    404: 'Not Found',
+    429: 'Too Many Requests',
+  },
+
+  // api code
+  'api-code': {
+    1000: 'server error',
+    1001: 'server unavailable',
+    '-1000': 'invalid account',
+    '-1001': 'invalid access token',
+    '-1002': 'account exists',
+    '-1003': 'file exists',
+    '-1004': 'file not exists',
+    '-1005': 'target path is file',
+    '-1006': 'missing parameter',
+    '-1007': 'invalid format',
+    '-1008': 'too many requests',
+    '-1009': 'invalid code',
+    '-1010': 'invalid path',
+    '-1011': 'invalid share',
+    '-1012': 'account not exists',
+    '-1013': 'invalid expires',
+    '-1014': 'only support file',
   },
 };

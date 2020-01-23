@@ -4,12 +4,12 @@
       <el-button
           @click="save">
         <i class="iconfont icon-download"></i>
-        <span>保存到网盘</span>
+        <span>{{ $t('open-share.save') }}</span>
       </el-button>
       <el-button
           @click="download">
         <i class="iconfont icon-download"></i>
-        <span>下载({{ data.size | filesize }})</span>
+        <span>{{ $t('download') }}({{ data.size | filesize }})</span>
       </el-button>
     </div>
     <div class="content">
@@ -17,7 +17,7 @@
         <i class="iconfont icon-folder-add"></i>
         <span>{{ data.name }}</span>
       </div>
-      <div class="info">文件大小: {{ data.size | filesize }}</div>
+      <div class="info">{{ $t('file-size') }}: {{ data.size | filesize }}</div>
     </div>
     <folder-dialog
         v-if="showFolderDialog"
@@ -58,7 +58,7 @@ export default {
     folderDialogSuccess() {
       this.showFolderDialog = false;
 
-      this.$message.success('已保存至我的网盘');
+      this.$message.success(this.$t('open-share.save-success'));
     },
     download() {
       FileAPI.download(this.data);

@@ -6,7 +6,7 @@
       <el-button
           @click="save()">
         <i class="iconfont icon-file-copy"></i>
-        <span>保存到网盘</span>
+        <span>{{ $t('open-share.save') }}</span>
       </el-button>
     </div>
     <div class="content">
@@ -25,7 +25,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="文件名称">
+            :label="$t('file-name')">
           <template
               slot-scope="scope">
             <span
@@ -37,7 +37,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="文件大小"
+            :label="$t('file-size')"
             width="100">
           <template
               slot-scope="scope">
@@ -45,7 +45,7 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="修改时间"
+            :label="$t('modify-time')"
             width="160">
           <template
               slot-scope="scope">
@@ -179,7 +179,7 @@ export default {
     folderDialogSuccess() {
       this.showFolderDialog = false;
 
-      this.$message.success('已保存至我的网盘');
+      this.$message.success(this.$t('open-share.save-success'));
     },
     download(target) {
       FileAPI.download(target);
