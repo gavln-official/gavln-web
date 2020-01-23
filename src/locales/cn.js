@@ -246,10 +246,10 @@ export default {
 
   // http error
   'http-error': {
-    400: 'Bad Request',
-    401: 'Unauthorized',
-    404: 'Not Found',
-    429: 'Too Many Requests',
+    400: '无效的请求',
+    401: '未认证',
+    404: '资源不存在',
+    429: '访问过于频繁',
   },
 
   // api code
