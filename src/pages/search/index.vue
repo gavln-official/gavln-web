@@ -525,6 +525,8 @@ export default {
     // download file
     download(item) {
       FileAPI.download(item);
+      this.$message.info('开始下载');
+      this.$router.push('/download');
     },
 
     // folder dialog

@@ -62,6 +62,8 @@ export default {
     },
     download() {
       FileAPI.download(this.data);
+      this.$message.info('开始下载');
+      this.$router.push('/download');
     },
   },
 };

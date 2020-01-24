@@ -64,8 +64,8 @@
           <el-progress
               :percentage="scope.row.percentage"
               :show-text="false" />
-          <span v-if="scope.row.status === 'STANDBY'">{{ $('upload-list.ready') }}</span>
-          <span v-else-if="scope.row.status === 'NEED-RESUME'">{{ $('upload-list.paused') }}</span>
+          <span v-if="scope.row.status === 'STANDBY'">{{ $t('upload-list.ready') }}</span>
+          <span v-else-if="scope.row.status === 'NEED-RESUME'">{{ $t('upload-list.paused') }}</span>
           <template v-else-if="scope.row.status === 'TRANSMITING'">
             <strong
                   v-if="scope.row.usize < scope.row.size">
