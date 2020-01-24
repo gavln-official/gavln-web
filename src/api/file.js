@@ -61,7 +61,11 @@ function getUploadKey(number = 1) {
   });
 }
 
-async function upload(file, path, name, blockSize, fragments) {
+async function upload(file, path, name) {
+  file.fid = `${path}//${name}//${file.size}`; /* eslint-disable-line */
+  const blockSize = IPFS.getBlockSize(file);
+  Transmission.addUploadTask(file, blockSize);
+  const fragments = await IPFS.encode(file);
   const progress = Transmission.getUploadProgress(file.fid);
   const keyRes = await getUploadKey(progress.remainingBlocks);
   const keys = keyRes.data.key;
@@ -87,32 +91,24 @@ async function upload(file, path, name, blockSize, fragments) {
   return true;
 }
 
-async function prepareUpload(file, path, name) {
-  file.fid = `${path}//${name}//${file.size}`; /* eslint-disable-line */
-  const blockSize = IPFS.getBlockSize(file);
-  // encode file, this step can take a long time
-  // so make sure to inform user it's in progress
-  const fragments = await IPFS.encode(file);
-  Transmission.addUploadTask(file, blockSize);
-  // start upload
-  // we don't wait for the upload procedure, return immediately
-  upload(file, path, name, blockSize, fragments);
-  return true;
-}
-
 async function download(file) {
   file.fid = `${file.path}//${file.name}//${file.size}`; /* eslint-disable-line */
   const blockSize = IPFS.getBlockSize(file);
   Transmission.addDownloadTask(file, blockSize);
-  let r = null;
+  let fragments;
   try {
-    r = await IPFS.download(file);
+    fragments = await IPFS.download(file);
   } catch (error) {
     throw error;
   }
-  if (typeof r === 'string') {
-    throw new Error(r);
+  if (typeof fragments === 'string') {
+    throw new Error(fragments);
   }
+  const r = await IPFS.decode(fragments, {
+    fileSize: file.size,
+    originalBlocks: file.data_shard,
+    extraBlocks: file.parity_shard,
+  });
   Transmission.fileComplete('download', file.fid);
   FileDownload(r, file.name);
 }
@@ -233,7 +229,6 @@ export default {
   createPath,
   updatePath,
   upload,
-  prepareUpload,
   download,
   deletePath,
   move,

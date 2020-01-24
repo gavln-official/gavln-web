@@ -14,6 +14,7 @@ module.exports = {
     'linebreak-style': 'off',
     'no-named-as-default': 'off',
     'no-await-in-loop': 'off',
+    'import/no-webpack-loader-syntax': 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',

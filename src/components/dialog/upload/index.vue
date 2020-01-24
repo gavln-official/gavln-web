@@ -138,21 +138,11 @@ export default {
           if (!valid) {
             return;
           }
-
-          this.uploading = true;
+          this.close();
           this.$message.info(this.$t('upload-dialog.prepare-upload'));
-
-          FileAPI.prepareUpload(this.file, this.fullPath, this.fullName)
-            .then(() => {
-              this.uploading = false;
-              this.$emit('success');
-              this.$message.close();
-              this.close();
-              this.$router.push('/upload');
-            })
-            .finally(() => {
-              this.uploading = false;
-            });
+          FileAPI.upload(this.file, this.fullPath, this.fullName);
+          this.$emit('success');
+          this.$router.push('/upload');
         });
     },
   },
