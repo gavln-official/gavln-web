@@ -40,10 +40,11 @@ export default {
     getUploadList() {
       const list = Transmission.readList('upload');
       this.data = list.map((item) => {  /* eslint-disable-line */
+        const percentage = Math.min((item.usize / item.size), 1) * 100;
         return {
           speed: 0,
-          percentage: Math.min((item.usize / item.size), 1) * 100,
-          status: 'NEED-RESUME',
+          percentage,
+          status: percentage > 0 ? 'NEED-RESUME' : 'STANDBY',
           ...item,
         };
       });

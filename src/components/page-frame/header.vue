@@ -2,7 +2,11 @@
   <header class="page-header">
     <a
         class="logo"
-        href="/">Gavln</a>
+        href="/">
+      <img
+          alt="Gavln"
+          :src="images.logo">
+    </a>
     <ul class="links">
       <li>
         <a href="/">{{ $t('page-frame.intro') }}</a>
@@ -34,8 +38,17 @@
 <script>
 import Storage from '../../utils/storage';
 
+import logo from '../../assets/logo.svg';
+
 export default {
   name: 'PageHeader',
+  data() {
+    return {
+      images: {
+        logo,
+      },
+    };
+  },
   computed: {
     locale() {
       return this.$store.state.app.locale

@@ -1,7 +1,11 @@
 <template>
   <nav class="main-nav">
     <div class="logo">
-      <a href="/">Gavln</a>
+      <a href="/">
+        <img
+            alt="Gavln"
+            :src="images.logo">
+      </a>
     </div>
     <ul>
       <li
@@ -25,10 +29,15 @@
 </template>
 
 <script>
+import logo from '../../assets/logo-white.svg';
+
 export default {
   name: 'MainNav',
   data() {
     return {
+      images: {
+        logo,
+      },
       menus: [
         {
           name: 'home',

@@ -1,12 +1,25 @@
 <template>
   <div class="login-anim">
-    <i class="iconfont">G</i>
+    <div class="img">
+      <img
+          alt="G"
+          :src="images.g">
+    </div>
   </div>
 </template>
 
 <script>
+import g from '../../assets/logo-g.svg';
+
 export default {
   name: 'LoginAnim',
+  data() {
+    return {
+      images: {
+        g,
+      },
+    };
+  },
 };
 </script>
 

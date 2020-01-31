@@ -183,6 +183,8 @@ export default {
     },
     download(target) {
       FileAPI.download(target);
+      this.$message.info('开始下载');
+      this.$router.push('/download');
     },
   },
 };

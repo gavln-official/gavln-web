@@ -12,7 +12,8 @@
     </el-button-group>
     <div class="right"
         v-if="!loading">
-      <img src="">
+      <img
+          :src="images.avatar">
       <span>{{ profile.name }}</span>
       <el-button
           type="text"
@@ -29,6 +30,8 @@ import UserAPI from '../../api/user';
 
 import Storage from '../../utils/storage';
 
+import avatar from '../../assets/avatar.png';
+
 export default {
   name: 'FrameHeader',
   data() {
@@ -39,6 +42,9 @@ export default {
         mail: '',
       },
       sending: false,
+      images: {
+        avatar,
+      },
     };
   },
   mounted() {
