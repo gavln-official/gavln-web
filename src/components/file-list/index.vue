@@ -59,18 +59,33 @@
         </el-button>
       </div>
     </div>
-    <file-table
-        v-if="viewMode === 'list'"
-        v-loading="loading"
-        :type="type"
-        :data="fileList"
-        @command="onCommand" />
-    <file-grid
-        v-else
-        v-loading="loading"
-        :type="type"
-        :data="fileList"
-        @command="onCommand" />
+    <div
+        v-loading="loading">
+      <ui-empty
+          v-if="!data
+              || !data.length"
+          :icon="emptyIcon">
+        <p
+            v-if="$route.name === 'favorite'">没有任何添加收藏的文件或文件夹。</p>
+        <p
+            v-else>没有上传任何文件或文件夹。</p>
+        <span
+            v-if="$route.name === 'favorite'">给您希望以后能快速找到的文件/文件夹添加为收藏。</span>
+      </ui-empty>
+      <template
+          v-else>
+        <file-table
+            v-if="viewMode === 'list'"
+            :type="type"
+            :data="fileList"
+            @command="onCommand" />
+        <file-grid
+            v-else
+            :type="type"
+            :data="fileList"
+            @command="onCommand" />
+      </template>
+    </div>
     <upload-dialog
         v-if="showUploadDialog"
         :visible="showUploadDialog"
@@ -106,6 +121,7 @@
 <script>
 import BreadCrumb from './bread-crumb.vue';
 import SearchInput from '../search-input/index.vue';
+import UiEmpty from '../ui-empty/index.vue';
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -125,6 +141,7 @@ export default {
   components: {
     BreadCrumb,
     SearchInput,
+    UiEmpty,
     FileTable,
     FileGrid,
     FolderDialog,
@@ -216,6 +233,13 @@ export default {
       }
 
       return ['all'];
+    },
+    emptyIcon() {
+      if (this.$route.name === 'favorite') {
+        return 'star';
+      }
+
+      return null;
     },
   },
   created() {

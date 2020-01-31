@@ -1,7 +1,17 @@
 <template>
   <main-frame>
-    <div class="page-upload page-trash" v-loading="loading">
+    <div
+        class="page-upload page-trash"
+        v-loading="loading">
+      <ui-empty
+          v-if="!data
+              || !data.length"
+          icon="trash">
+        <p>“回收站”中没有任何文件或者文件夹。</p>
+        <span>将不再需要的文件移动到回收站，只需清空回收站，即可永久删除内容并释放存储空间。</span>
+      </ui-empty>
       <trash-list
+          v-else
           :data="data"
           @restore="restore"
           @delete="doDelete"
@@ -11,14 +21,17 @@
 </template>
 
 <script>
-import MainFrame from '../components/main-frame/index.vue';
-import TrashList from '../components/trash-list/index.vue';
 import TrashAPI from '../api/trash';
+
+import MainFrame from '../components/main-frame/index.vue';
+import UiEmpty from '../components/ui-empty/index.vue';
+import TrashList from '../components/trash-list/index.vue';
 
 export default {
   name: 'Trash',
   components: {
     MainFrame,
+    UiEmpty,
     TrashList,
   },
   data() {

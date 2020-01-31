@@ -1,6 +1,8 @@
 <template>
   <main-frame>
-    <div class="page-favorite" v-loading="loading">
+    <div
+        class="page-favorite"
+        v-loading="loading">
       <file-list
           type="favorite"
           path="favorite"

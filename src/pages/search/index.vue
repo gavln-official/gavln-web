@@ -49,106 +49,117 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <el-table
-          class="file-table"
-          v-loading="loading"
-          :data="data">
-        <el-table-column
-            prop="type"
-            width="70">
-          <template>
-            <i class="iconfont icon-folder-add"></i>
-          </template>
-        </el-table-column>
-        <el-table-column
-            :label="$t('file-name')">
-          <template
-              slot-scope="scope">
-            <i
-                v-if="scope.row.file.mark"
-                class="iconfont icon-star-o"></i>
-            <a
-                v-if="scope.row.file.dir"
-                :href="`/?path=${scope.row.file.path}`">{{ scope.row.file.name }}</a>
-            <span
-                v-else>{{ scope.row.file.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-            :label="$t('file-size')"
-            width="100">
-          <template
-              slot-scope="scope">
-            <span>{{ scope.row.file.size | filesize }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-            :label="$t('modify-time')"
-            width="160">
-          <template
-              slot-scope="scope">
-            <span>{{ scope.row.file.time | time('yyyy/MM/dd HH:mm') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-            :label="$t('page-search.source')"
-            width="140">
-          <template
-              slot-scope="scope">
-            <span>{{ sourceLabel(scope.row.type) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-            width="140">
-          <template
-              slot-scope="scope">
-            <div class="actions">
+      <ui-empty
+          v-if="!loading
+              && (!data
+                || !data.length)"
+          icon="search">
+        <p>在您的文件或者文件夹中，找不到与此搜索条件相符的结果。</p>
+        <span>请尝试其他搜索，或者按类型等条件查找文件。</span>
+      </ui-empty>
+      <template
+          v-else>
+        <el-table
+            class="file-table"
+            v-loading="loading"
+            :data="data">
+          <el-table-column
+              prop="type"
+              width="70">
+            <template>
+              <i class="iconfont icon-folder-add"></i>
+            </template>
+          </el-table-column>
+          <el-table-column
+              :label="$t('file-name')">
+            <template
+                slot-scope="scope">
               <i
-                  v-if="scope.row.type === 2"
-                  class="iconfont icon-copy"
-                  @click="copyLink(scope.row)"></i>
-              <i
-                  v-if="scope.row.type !== 2"
-                  class="iconfont icon-share"
-                  @click="rowCommand('share', scope.row.file)"></i>
-              <i
-                  v-if="scope.row.type !== 2 && !scope.row.file.dir"
-                  class="iconfont icon-download"
-                  @click="rowCommand('download', scope.row.file)"></i>
-              <el-dropdown
-                  v-if="scope.row.type !== 2"
-                  placement="bottom"
-                  @command="rowCommand($event, scope.row.file)">
-                <i class="iconfont icon-menu-circle el-dropdown-link"></i>
-                <el-dropdown-menu
-                    slot="dropdown">
-                  <el-dropdown-item
-                      command="move">{{ $t('move-to') }}</el-dropdown-item>
-                  <el-dropdown-item
-                      command="copy">{{ $t('copy-to') }}</el-dropdown-item>
-                  <el-dropdown-item
-                      command="rename">{{ $t('rename') }}</el-dropdown-item>
-                  <el-dropdown-item
-                      command="favorite">{{ scope.row.file.mark
-                        ? $t('remove-from-fav')
-                        : $t('add-to-fav') }}</el-dropdown-item>
-                  <el-dropdown-item
-                      command="delete">{{ $t('delete') }}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-          layout="prev, pager, next"
-          background
-          :page-size="size"
-          :current-page="page"
-          :total="total"
-          :pager-count="5"
-          :disabled="loading"
-          @current-change="search" />
+                  v-if="scope.row.file.mark"
+                  class="iconfont icon-star-o"></i>
+              <a
+                  v-if="scope.row.file.dir"
+                  :href="`/?path=${scope.row.file.path}`">{{ scope.row.file.name }}</a>
+              <span
+                  v-else>{{ scope.row.file.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              :label="$t('file-size')"
+              width="100">
+            <template
+                slot-scope="scope">
+              <span>{{ scope.row.file.size | filesize }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              :label="$t('modify-time')"
+              width="160">
+            <template
+                slot-scope="scope">
+              <span>{{ scope.row.file.time | time('yyyy/MM/dd HH:mm') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              :label="$t('page-search.source')"
+              width="140">
+            <template
+                slot-scope="scope">
+              <span>{{ sourceLabel(scope.row.type) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              width="140">
+            <template
+                slot-scope="scope">
+              <div class="actions">
+                <i
+                    v-if="scope.row.type === 2"
+                    class="iconfont icon-copy"
+                    @click="copyLink(scope.row)"></i>
+                <i
+                    v-if="scope.row.type !== 2"
+                    class="iconfont icon-share"
+                    @click="rowCommand('share', scope.row.file)"></i>
+                <i
+                    v-if="scope.row.type !== 2 && !scope.row.file.dir"
+                    class="iconfont icon-download"
+                    @click="rowCommand('download', scope.row.file)"></i>
+                <el-dropdown
+                    v-if="scope.row.type !== 2"
+                    placement="bottom"
+                    @command="rowCommand($event, scope.row.file)">
+                  <i class="iconfont icon-menu-circle el-dropdown-link"></i>
+                  <el-dropdown-menu
+                      slot="dropdown">
+                    <el-dropdown-item
+                        command="move">{{ $t('move-to') }}</el-dropdown-item>
+                    <el-dropdown-item
+                        command="copy">{{ $t('copy-to') }}</el-dropdown-item>
+                    <el-dropdown-item
+                        command="rename">{{ $t('rename') }}</el-dropdown-item>
+                    <el-dropdown-item
+                        command="favorite">{{ scope.row.file.mark
+                          ? $t('remove-from-fav')
+                          : $t('add-to-fav') }}</el-dropdown-item>
+                    <el-dropdown-item
+                        command="delete">{{ $t('delete') }}</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+            layout="prev, pager, next"
+            background
+            :page-size="size"
+            :current-page="page"
+            :total="total"
+            :pager-count="5"
+            :disabled="loading"
+            @current-change="search" />
+      </template>
     </div>
     <url-dialog
         :visible="showUrlDialog" />
@@ -176,6 +187,7 @@
 <script>
 import MainFrame from '../../components/main-frame/index.vue';
 import SearchInput from '../../components/search-input/index.vue';
+import UiEmpty from '../../components/ui-empty/index.vue';
 import FolderDialog from '../../components/dialog/folder/index.vue';
 import UrlDialog from '../../components/dialog/url/index.vue';
 import ShareDialog from '../../components/dialog/share/index.vue';
@@ -191,6 +203,7 @@ export default {
   components: {
     MainFrame,
     SearchInput,
+    UiEmpty,
     FolderDialog,
     UrlDialog,
     ShareDialog,

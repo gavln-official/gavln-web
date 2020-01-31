@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="164px" height="156px" viewBox="0 0 164 156" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>编组 13</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="86 129 35.4504683 155.575462 45.1045698 99.2877308 4.2091396 59.4245385 60.7252342 51.2122692 86 0 111.274766 51.2122692 167.79086 59.4245385 126.89543 99.2877308 136.549532 155.575462"></polygon>
+    </defs>
+    <g id="网页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="云盘备份-13" transform="translate(-1038.000000, -441.000000)">
+            <g id="编组-13" transform="translate(1034.000000, 441.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="蒙版" fill-opacity="0.06" fill="#000000" xlink:href="#path-1"></use>
+                <rect id="矩形" fill="#FFFFFF" mask="url(#mask-2)" x="60" y="75" width="38" height="4" rx="2"></rect>
+                <rect id="矩形" fill="#FFFFFF" mask="url(#mask-2)" x="60" y="94" width="44" height="4" rx="2"></rect>
+                <rect id="矩形" fill="#FFFFFF" mask="url(#mask-2)" x="60" y="113" width="53" height="4" rx="2"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

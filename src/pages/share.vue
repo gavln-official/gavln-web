@@ -1,7 +1,14 @@
 <template>
   <main-frame>
     <div class="page-upload page-share">
+      <ui-empty
+          v-if="!data
+              || !data.length"
+          icon="share">
+        <p>暂无共享的文件或文件夹。</p>
+      </ui-empty>
       <share-list
+          v-else
           :loading="loading"
           :data="data"
           @refresh="getList" />
@@ -11,6 +18,7 @@
 
 <script>
 import MainFrame from '../components/main-frame/index.vue';
+import UiEmpty from '../components/ui-empty/index.vue';
 import ShareList from '../components/share-list/index.vue';
 
 import ShareAPI from '../api/share';
@@ -19,6 +27,7 @@ export default {
   name: 'share',
   components: {
     MainFrame,
+    UiEmpty,
     ShareList,
   },
   data() {

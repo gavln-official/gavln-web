@@ -18,7 +18,13 @@
     <bread-crumb
         :path="path"
         @switch="switchPath" />
+    <ui-empty
+        v-if="!list
+            || !list.length">
+      <p>没有上传任何文件或文件夹。</p>
+    </ui-empty>
     <el-table
+        v-else
         class="file-table dialog-table"
         :data="list"
         :height="360"
@@ -64,15 +70,17 @@
 </template>
 
 <script>
-import BreadCrumb from './bread-crumb.vue';
-
 import FileAPI from '../../../api/file';
 import ShareAPI from '../../../api/share';
+
+import BreadCrumb from './bread-crumb.vue';
+import UiEmpty from '../../ui-empty/index.vue';
 
 export default {
   name: 'FolderDialog',
   components: {
     BreadCrumb,
+    UiEmpty,
   },
   props: {
     visible: {
