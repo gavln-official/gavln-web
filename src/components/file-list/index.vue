@@ -37,11 +37,7 @@
               class="el-dropdown-link">
             <span>{{ $t('file-list.sort') }}</span>&nbsp;
             <i
-                class="el-icon-bottom"
-                v-if="orderIn === 'DESC'"></i>
-            <i
-                class="el-icon-top"
-                v-else></i>
+                class="iconfont icon-sort"></i>
           </el-button>
           <el-dropdown-menu
               slot="dropdown">
@@ -55,7 +51,12 @@
         </el-dropdown>
         <el-button
             @click="toggleViewMode">
-          <i class="iconfont icon-app"></i>
+          <i
+              v-if="viewMode === 'list'"
+              class="iconfont icon-list"></i>
+          <i
+              v-else
+              class="iconfont icon-blocks"></i>
         </el-button>
       </div>
     </div>

@@ -1,6 +1,8 @@
 <template>
   <main-frame>
-    <div class="page-upload page-share">
+    <div
+        class="page-upload page-share"
+        v-loading="loading">
       <ui-empty
           v-if="!data
               || !data.length"
@@ -9,7 +11,6 @@
       </ui-empty>
       <share-list
           v-else
-          :loading="loading"
           :data="data"
           @refresh="getList" />
     </div>

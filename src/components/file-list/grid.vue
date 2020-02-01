@@ -6,7 +6,12 @@
           v-for="item in data"
           :key="item.path"
           @contextmenu.prevent="showContextMenu($event, item)">
-        <i class="iconfont icon-folder-add"></i>
+        <i
+            v-if="item.dir"
+            class="iconfont icon-folder"></i>
+        <i
+            v-else
+            class="iconfont icon-files"></i>
         <a
             v-if="type !== 'favorite' && item.dir"
             :href="`/?path=${item.path}`">{{ item.name }}</a>

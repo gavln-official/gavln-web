@@ -42,7 +42,7 @@ export default {
         {
           name: 'home',
           label: this.$t('main-nav.home'),
-          icon: 'file',
+          icon: 'files',
         },
         {
           name: 'favorite',
@@ -62,7 +62,7 @@ export default {
         {
           name: 'finished',
           label: this.$t('main-nav.finished'),
-          icon: 'check-o',
+          icon: 'check-circle',
         },
         {
           name: 'share',

@@ -14,7 +14,7 @@
     </div>
     <div class="content">
       <div class="file">
-        <i class="iconfont icon-folder-add"></i>
+        <i class="iconfont icon-files"></i>
         <span>{{ data.name }}</span>
       </div>
       <div class="info">{{ $t('file-size') }}: {{ data.size | filesize }}</div>

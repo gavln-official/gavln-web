@@ -61,8 +61,12 @@
     font-size: 18px;
     line-height: 32px;
     text-align: center;
-    &.icon-folder-add {
+    &.icon-folder,
+    &.icon-files {
       font-size: 24px;
+    }
+    &.icon-star-o {
+      font-size: 16px;
     }
   }
 

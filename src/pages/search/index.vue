@@ -66,8 +66,14 @@
           <el-table-column
               prop="type"
               width="70">
-            <template>
-              <i class="iconfont icon-folder-add"></i>
+            <template
+                slot-scope="scope">
+              <i
+                  v-if="scope.row.dir"
+                  class="iconfont icon-folder"></i>
+              <i
+                  v-else
+                  class="iconfont icon-files"></i>
             </template>
           </el-table-column>
           <el-table-column
@@ -129,7 +135,7 @@
                     v-if="scope.row.type !== 2"
                     placement="bottom"
                     @command="rowCommand($event, scope.row.file)">
-                  <i class="iconfont icon-menu-circle el-dropdown-link"></i>
+                  <i class="iconfont icon-menu el-dropdown-link"></i>
                   <el-dropdown-menu
                       slot="dropdown">
                     <el-dropdown-item

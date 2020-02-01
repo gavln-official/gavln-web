@@ -17,19 +17,13 @@
           prop="type"
           :label="$t('check-all')"
           width="100">
-        <template>
-          <i class="iconfont icon-folder-add"></i>
-        </template>
+        <i class="iconfont icon-files"></i>
       </el-table-column>
       <el-table-column
           :label="$t('file-name')">
         <template
             slot-scope="scope">
-          <a
-              v-if="scope.row.type === 'folder'"
-              :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
-          <span
-              v-else>{{ scope.row.name }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column

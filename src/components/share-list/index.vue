@@ -2,13 +2,18 @@
   <div class="file-list share-list">
     <el-table
         class="file-table share-table"
-        v-loading="loading"
         :data="data">
       <el-table-column
           prop="type"
           width="70">
-        <template>
-          <i class="iconfont icon-folder-add"></i>
+        <template
+            slot-scope="scope">
+          <i
+              v-if="scope.row.dir"
+              class="iconfont icon-folder"></i>
+          <i
+              v-else
+              class="iconfont icon-files"></i>
         </template>
       </el-table-column>
       <el-table-column
@@ -92,7 +97,6 @@ import Utils from '../../utils/index';
 export default {
   name: 'ShareList',
   props: {
-    loading: Boolean,
     data: Array,
   },
   data() {
