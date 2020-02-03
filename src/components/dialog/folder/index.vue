@@ -29,7 +29,8 @@
         :data="list"
         :height="360"
         :highlight-current-row="true"
-        @row-click="toggleSelected">
+        @row-click="toggleSelected"
+        @row-dblclick="openRow">
       <el-table-column
           prop="type"
           :label="$t('file-name')"
@@ -147,6 +148,9 @@ export default {
       this.path = path;
       this.selected = null;
       this.getPath();
+    },
+    openRow(row) {
+      this.switchPath(row.path);
     },
     getPath() {
       if (this.loading) {

@@ -5,7 +5,8 @@
         class="file-table"
         :data="data"
         :height="tableHeight"
-        @row-contextmenu="showContextMenu">
+        @row-contextmenu="showContextMenu"
+        @row-dblclick="openRow">
       <el-table-column
           prop="type"
           width="70">
@@ -163,8 +164,20 @@ export default {
       this.contextRow = row;
     },
     goPath() {
-      const { path } = this.contextRow;
-      this.$router.push(`/?path=${path}`);
+      this.$router.push({
+        name: 'home',
+        query: {
+          path: this.contextRow.path,
+        },
+      });
+    },
+    openRow(row) {
+      this.$router.push({
+        name: 'home',
+        query: {
+          path: row.path,
+        },
+      });
     },
     rowCommand(command, _row) {
       const row = _row || this.contextRow;

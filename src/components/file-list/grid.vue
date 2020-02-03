@@ -5,7 +5,8 @@
       <li
           v-for="item in data"
           :key="item.path"
-          @contextmenu.prevent="showContextMenu($event, item)">
+          @contextmenu.prevent="showContextMenu($event, item)"
+          @dblclick="openFolder(item)">
         <i
             v-if="item.dir"
             class="iconfont icon-folder"></i>
@@ -17,6 +18,9 @@
             :href="`/?path=${item.path}`">{{ item.name }}</a>
         <span
             v-else>{{ item.name }}</span>
+        <i
+            v-if="item.mark"
+            class="iconfont icon-star-o"></i>
       </li>
     </ul>
     <vue-context
@@ -76,8 +80,20 @@ export default {
       return item;
     },
     goPath() {
-      const { path } = this.contextRow;
-      this.$router.push(`/?path=${path}`);
+      this.$router.push({
+        name: 'home',
+        query: {
+          path: this.contextRow.path,
+        },
+      });
+    },
+    openFolder(folder) {
+      this.$router.push({
+        name: 'home',
+        query: {
+          path: folder.path,
+        },
+      });
     },
     rowCommand(command) {
       const row = this.contextRow;
