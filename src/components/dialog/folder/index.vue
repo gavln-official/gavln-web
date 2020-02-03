@@ -18,50 +18,53 @@
     <bread-crumb
         :path="path"
         @switch="switchPath" />
-    <ui-empty
-        v-if="!list
-            || !list.length">
-      <p>没有上传任何文件或文件夹。</p>
-    </ui-empty>
-    <el-table
-        v-else
-        class="file-table dialog-table"
-        :data="list"
-        :height="360"
-        :highlight-current-row="true"
-        @row-click="toggleSelected"
-        @row-dblclick="openRow">
-      <el-table-column
-          prop="type"
-          :label="$t('file-name')"
-          width="68">
-        <template
-            slot-scope="scope">
-          <i
-              v-if="scope.row.dir"
-              class="iconfont icon-folder"></i>
-          <i
-              v-else
-              class="iconfont icon-files"></i>
-        </template>
-      </el-table-column>
-      <el-table-column>
-        <template
-            slot-scope="scope">
-          <span
-              class="link"
-              @click="switchPath(scope.row.path)">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-          :label="$t('modify-time')"
-          width="160">
-        <template
-            slot-scope="scope">
-          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div
+        v-loading="loading">
+      <ui-empty
+          v-if="!list
+              || !list.length">
+        <p>没有上传任何文件或文件夹。</p>
+      </ui-empty>
+      <el-table
+          v-else
+          class="file-table dialog-table"
+          :data="list"
+          :height="360"
+          :highlight-current-row="true"
+          @row-click="toggleSelected"
+          @row-dblclick="openRow">
+        <el-table-column
+            prop="type"
+            :label="$t('file-name')"
+            width="68">
+          <template
+              slot-scope="scope">
+            <i
+                v-if="scope.row.dir"
+                class="iconfont icon-folder"></i>
+            <i
+                v-else
+                class="iconfont icon-files"></i>
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template
+              slot-scope="scope">
+            <span
+                class="link"
+                @click="switchPath(scope.row.path)">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            :label="$t('modify-time')"
+            width="160">
+          <template
+              slot-scope="scope">
+            <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div
         slot="footer">
       <el-button
