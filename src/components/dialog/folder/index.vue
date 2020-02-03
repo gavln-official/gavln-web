@@ -5,16 +5,6 @@
       width="640px"
       :title="title || defaultTitle"
       @close="close">
-    <el-button-group class="nav">
-      <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-left"></i>
-      </el-button>
-      <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-right"></i>
-      </el-button>
-    </el-button-group>
     <bread-crumb
         :path="path"
         @switch="switchPath" />

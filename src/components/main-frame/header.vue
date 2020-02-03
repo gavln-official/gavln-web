@@ -2,12 +2,14 @@
   <header class="frame-header">
     <el-button-group>
       <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-left"></i>
+          type="text"
+          @click="go(-1)">
+        <i class="iconfont icon-arrow-back"></i>
       </el-button>
       <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-right"></i>
+          type="text"
+          @click="go(1)">
+        <i class="iconfont icon-arrow-forward"></i>
       </el-button>
     </el-button-group>
     <div class="right"
@@ -71,6 +73,9 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    go(steps) {
+      this.$router.go(steps);
     },
     logout() {
       if (this.sending) {
