@@ -1,7 +1,13 @@
 <template>
   <main-frame>
     <div class="page-upload page-finished">
+      <ui-empty
+          v-if="!data
+              || !data.length">
+        <p>暂无传输完成的文件或文件夹。</p>
+      </ui-empty>
       <finished-list
+          v-else
           :data="data"
           @deleteRow="deleteRow"
           @deleteAll="deleteAll" />
@@ -12,12 +18,14 @@
 <script>
 import Transmission from '../utils/transmission';
 import MainFrame from '../components/main-frame/index.vue';
+import UiEmpty from '../components/ui-empty/index.vue';
 import FinishedList from '../components/finished-list/index.vue';
 
 export default {
   name: 'Finished',
   components: {
     MainFrame,
+    UiEmpty,
     FinishedList,
   },
   data() {

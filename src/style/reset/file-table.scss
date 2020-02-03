@@ -2,6 +2,10 @@
   width: 100%;
   color: #000;
 
+  .caret-wrapper {
+    height: 33px;
+  }
+
   thead {
     color: #000;
 
@@ -61,8 +65,12 @@
     font-size: 18px;
     line-height: 32px;
     text-align: center;
-    &.icon-folder-add {
+    &.icon-folder,
+    &.icon-files {
       font-size: 24px;
+    }
+    &.icon-star-o {
+      font-size: 16px;
     }
   }
 

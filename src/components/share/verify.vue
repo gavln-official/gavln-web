@@ -1,7 +1,9 @@
 <template>
   <div class="share-verify">
     <div class="header">
-      <img src="" />
+      <img
+          alt="Gavln"
+          :src="images.logo">
       <h2>
         <strong>Gavln</strong>
         <span>{{ $t('open-share.slogan') }}</span>
@@ -29,6 +31,8 @@
 </template>
 
 <script>
+import logo from '../../assets/logo-g-white.svg';
+
 export default {
   name: 'ShareVerify',
   props: {
@@ -39,6 +43,9 @@ export default {
   data() {
     return {
       code: '',
+      images: {
+        logo,
+      },
     };
   },
   methods: {

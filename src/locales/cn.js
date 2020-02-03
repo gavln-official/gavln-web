@@ -43,6 +43,7 @@ export default {
   close: '关闭',
   'check-all': '全选',
   status: '状态',
+  link: '链接',
   'verify-code': '提取码',
   'copy-success': '复制成功',
   prompt: '提示',

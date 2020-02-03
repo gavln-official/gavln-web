@@ -7,7 +7,8 @@
         :model="form"
         :rules="formRules"
         ref="form"
-        :disabled="saving">
+        :disabled="saving"
+        @keydown.native="keydown">
       <el-form-item
           prop="username">
         <el-input
@@ -126,6 +127,11 @@ export default {
       }
 
       callback();
+    },
+    keydown(event) {
+      if (event.key === 'Enter') {
+        this.register();
+      }
     },
     register() {
       if (this.saving) {

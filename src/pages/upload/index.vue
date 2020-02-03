@@ -1,7 +1,13 @@
 <template>
   <main-frame>
     <div class="page-upload">
+      <ui-empty
+          v-if="!data
+              || !data.length">
+        <p>暂无正在上传的文件或文件夹。</p>
+      </ui-empty>
       <upload-list
+          v-else
           :data="data"
           :status="status"
           type="upload"
@@ -16,12 +22,14 @@
 <script>
 import Transmission from '../../utils/transmission';
 import MainFrame from '../../components/main-frame/index.vue';
+import UiEmpty from '../../components/ui-empty/index.vue';
 import UploadList from '../../components/upload-list/index.vue';
 
 export default {
   name: 'Upload',
   components: {
     MainFrame,
+    UiEmpty,
     UploadList,
   },
   data() {

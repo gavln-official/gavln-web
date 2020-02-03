@@ -43,6 +43,7 @@ export default {
   close: 'Close',
   'check-all': 'Select all',
   status: 'Status',
+  link: 'Link',
   'verify-code': 'Extraction code',
   'copy-success': 'Copy success',
   prompt: 'Prompt',

@@ -3,11 +3,11 @@
   <div class="file-list upload-list">
     <div class="toolbar">
       <el-button @click="pauseAll">
-        <i class="iconfont icon-upload"></i>
+        <i class="iconfont icon-pause-circle"></i>
         <span>{{ type === 'upload' ? $t('upload-list.pause-all') : $t('upload-list.stop-all') }}</span>
       </el-button>
       <el-button @click="startAll" v-if="type === 'download'">
-        <i class="iconfont icon-folder-add"></i>
+        <i class="iconfont icon-play-circle"></i>
         <span>{{ $t('upload-list.start-all') }}</span>
       </el-button>
       <el-button @click="deleteAll">
@@ -33,19 +33,13 @@
           prop="type"
           :label="$t('check-all')"
           width="100">
-        <template>
-          <i class="iconfont icon-folder-add"></i>
-        </template>
+        <i class="iconfont icon-files"></i>
       </el-table-column>
       <el-table-column
           :label="$t('file-name')">
         <template
             slot-scope="scope">
-          <a
-              v-if="scope.row.type === 'folder'"
-              :href="`/?path=${scope.row.id}`">{{ scope.row.name }}</a>
-          <span
-              v-else>{{ scope.row.name }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -68,9 +62,9 @@
           <span v-else-if="scope.row.status === 'NEED-RESUME'">{{ $t('upload-list.paused') }}</span>
           <template v-else-if="scope.row.status === 'TRANSMITING'">
             <strong
-                  v-if="scope.row.usize < scope.row.size">
-                  {{ scope.row.speed | filesize }}/s </strong>
-              <span>{{ pendingTime(scope.row) }}</span>
+                v-if="scope.row.usize < scope.row.size">
+                {{ scope.row.speed | filesize }}/s </strong>
+            <span>{{ pendingTime(scope.row) }}</span>
           </template>
           <span
               v-else-if="scope.row.status === 'PAUSED'">
@@ -86,7 +80,7 @@
             <el-dropdown
                 placement="bottom"
                 @command="rowCommand($event, scope.row)">
-              <i class="iconfont icon-menu-circle"></i>
+              <i class="iconfont icon-menu"></i>
               <el-dropdown-menu
                   slot="dropdown">
                 <el-dropdown-item
@@ -132,7 +126,7 @@ export default {
   methods: {
     pendingTime(data) {
       const seconds = (data.size - data.usize) / data.speed;
-      return `${this.$t('upload-list.remaing')} ${Utils.formatTime(seconds)}`;
+      return `${this.$t('upload-list.remaining')} ${Utils.formatTime(seconds)}`;
     },
     deleteRow(row) {
       this.$emit('deleteRow', row);

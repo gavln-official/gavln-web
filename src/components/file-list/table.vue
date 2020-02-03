@@ -5,12 +5,19 @@
         class="file-table"
         :data="data"
         :height="tableHeight"
-        @row-contextmenu="showContextMenu">
+        @row-contextmenu="showContextMenu"
+        @row-dblclick="openRow">
       <el-table-column
           prop="type"
           width="70">
-        <template>
-          <i class="iconfont icon-folder-add"></i>
+        <template
+            slot-scope="scope">
+          <i
+              v-if="scope.row.dir"
+              class="iconfont icon-folder"></i>
+          <i
+              v-else
+              class="iconfont icon-files"></i>
         </template>
       </el-table-column>
       <el-table-column
@@ -23,7 +30,8 @@
               v-if="scope.row.mark"
               class="iconfont icon-star-o"></i>
           <a
-              v-if="type !== 'favorite' && scope.row.dir"
+              v-if="type !== 'favorite'
+                  && scope.row.dir"
               :href="`/?path=${scope.row.path}`">{{ scope.row.name }}</a>
           <span
               v-else>{{ scope.row.name }}</span>
@@ -64,7 +72,7 @@
             <el-dropdown
                 placement="bottom"
                 @command="rowCommand($event, scope.row)">
-              <i class="iconfont icon-menu-circle el-dropdown-link"></i>
+              <i class="iconfont icon-menu el-dropdown-link"></i>
               <el-dropdown-menu
                   slot="dropdown">
                 <el-dropdown-item
@@ -156,8 +164,20 @@ export default {
       this.contextRow = row;
     },
     goPath() {
-      const { path } = this.contextRow;
-      this.$router.push(`/?path=${path}`);
+      this.$router.push({
+        name: 'home',
+        query: {
+          path: this.contextRow.path,
+        },
+      });
+    },
+    openRow(row) {
+      this.$router.push({
+        name: 'home',
+        query: {
+          path: row.path,
+        },
+      });
     },
     rowCommand(command, _row) {
       const row = _row || this.contextRow;

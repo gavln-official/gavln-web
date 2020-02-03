@@ -1,7 +1,13 @@
 <template>
   <main-frame>
     <div class="page-upload page-download">
+      <ui-empty
+          v-if="!data
+              || !data.length">
+        <p>暂无正在下载的文件或文件夹。</p>
+      </ui-empty>
       <upload-list
+          v-else
           :data="data"
           type="download"
           @command="onRowCommand"
@@ -17,12 +23,14 @@
 import Transmission from '../utils/transmission';
 import FileAPI from '../api/file';
 import MainFrame from '../components/main-frame/index.vue';
+import UiEmpty from '../components/ui-empty/index.vue';
 import UploadList from '../components/upload-list/index.vue';
 
 export default {
   name: 'Download',
   components: {
     MainFrame,
+    UiEmpty,
     UploadList,
   },
   data() {
