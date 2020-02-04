@@ -58,7 +58,8 @@
     <div
         slot="footer">
       <el-button
-          class="left">{{ $t('create-folder') }}</el-button>
+          class="left"
+          @click="toggleNameDialog()">{{ $t('create-folder') }}</el-button>
       <el-button
           :disabled="saving"
           @click="close">{{ $t('cancel') }}</el-button>
@@ -66,6 +67,12 @@
           :disabled="saving"
           @click="ok">{{ actionLabel }}</el-button>
     </div>
+    <name-dialog
+        v-if="showNameDialog"
+        :visible="showNameDialog"
+        :data="nameData"
+        @close="nameDialogClose"
+        @success="nameDialogSuccess" />
   </el-dialog>
 </template>
 
@@ -75,12 +82,14 @@ import ShareAPI from '../../../api/share';
 
 import BreadCrumb from './bread-crumb.vue';
 import UiEmpty from '../../ui-empty/index.vue';
+import NameDialog from '../name.vue';
 
 export default {
   name: 'FolderDialog',
   components: {
     BreadCrumb,
     UiEmpty,
+    NameDialog,
   },
   props: {
     visible: {
@@ -101,6 +110,18 @@ export default {
       list: [],
       selected: null,
       saving: false,
+
+      showNameDialog: false,
+      nameData: {
+        // full path
+        path: this.path,
+        // folder/file name
+        name: '',
+        // form action
+        action: 'create',
+        // is dir
+        dir: true,
+      },
     };
   },
   computed: {
@@ -144,6 +165,25 @@ export default {
     },
     openRow(row) {
       this.switchPath(row.path);
+    },
+
+    // folder name dialog
+    toggleNameDialog() {
+      this.nameData = {
+        path: this.path,
+        name: '',
+        action: 'create',
+        dir: true,
+      };
+
+      this.showNameDialog = true;
+    },
+    nameDialogClose() {
+      this.showNameDialog = false;
+    },
+    nameDialogSuccess() {
+      this.showNameDialog = false;
+      this.getPath();
     },
     getPath() {
       if (this.loading) {
