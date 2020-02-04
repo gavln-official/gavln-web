@@ -118,9 +118,7 @@ export default {
         });
     },
     redirect() {
-      let {
-        path,
-      } = this.$route.query;
+      let path = this.$route.query.redirect;
 
       if (!path) {
         path = '/';

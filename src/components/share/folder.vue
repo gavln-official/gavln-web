@@ -5,7 +5,7 @@
     <div class="header">
       <el-button
           @click="save()">
-        <i class="iconfont icon-file-copy"></i>
+        <i class="iconfont icon-save"></i>
         <span>{{ $t('open-share.save') }}</span>
       </el-button>
     </div>
@@ -87,6 +87,8 @@
 
 <script>
 import FileAPI from '../../api/file';
+
+import Storage from '../../utils/storage';
 
 import BreadCrumb from '../dialog/folder/bread-crumb.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -177,7 +179,20 @@ export default {
         ...data,
       };
 
-      this.showFolderDialog = true;
+      const hasLogin = Storage.getToken();
+
+      if (hasLogin) {
+        this.showFolderDialog = true;
+      } else {
+        this.$message.error('请先登录');
+
+        this.$router.replace({
+          name: 'login',
+          query: {
+            redirect: window.location.pathname,
+          },
+        });
+      }
     },
     folderDialogClose() {
       this.showFolderDialog = false;
