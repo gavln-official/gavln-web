@@ -62,14 +62,15 @@
         <el-table
             class="file-table"
             v-loading="loading"
-            :data="data">
+            :data="data"
+            @row-dblclick="openRow">
           <el-table-column
               prop="type"
               width="70">
             <template
                 slot-scope="scope">
               <i
-                  v-if="scope.row.dir"
+                  v-if="scope.row.file.dir"
                   class="iconfont icon-folder"></i>
               <i
                   v-else
@@ -493,6 +494,16 @@ export default {
         this.$message.success(this.$t('copy-success'));
       } catch (error) {
         //
+      }
+    },
+    openRow(row) {
+      if (row.file.dir) {
+        this.$router.push({
+          name: 'home',
+          query: {
+            path: row.file.path,
+          },
+        });
       }
     },
     rowCommand(command, data) {
