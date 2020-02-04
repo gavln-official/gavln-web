@@ -21,9 +21,7 @@
         </template>
       </el-table-column>
       <el-table-column
-          :label="$t('file-name')"
-          sortable
-          :sort-method="sortByName">
+          :label="$t('file-name')">
         <template
             slot-scope="scope">
           <i
@@ -39,9 +37,7 @@
       </el-table-column>
       <el-table-column
           :label="$t('file-size')"
-          sortable
-          width="100"
-          :sort-method="sortBySize">
+          width="100">
         <template
             slot-scope="scope">
           <span>{{ scope.row.size | filesize }}</span>
@@ -49,9 +45,7 @@
       </el-table-column>
       <el-table-column
           :label="$t('modify-time')"
-          sortable
-          width="160"
-          :sort-method="sortByTime">
+          width="160">
         <template
             slot-scope="scope">
           <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
@@ -146,16 +140,6 @@ export default {
     };
   },
   methods: {
-    sortByName(a, b) {
-      return a.name
-        .localeCompare(b.name);
-    },
-    sortBySize(a, b) {
-      return a.size - b.size;
-    },
-    sortByTime(a, b) {
-      return new Date(a.time) - new Date(b.time);
-    },
     showContextMenu(row, col, event) {
       if (event) {
         event.preventDefault();
