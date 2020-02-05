@@ -13,7 +13,7 @@
       <ui-empty
           v-if="!list
               || !list.length">
-        <p>没有上传任何文件或文件夹。</p>
+        <p>{{ $t('empty-message.file') }}</p>
       </ui-empty>
       <el-table
           v-else

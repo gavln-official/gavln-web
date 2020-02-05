@@ -1,4 +1,5 @@
 // https://github.com/ianopolous/ErasureCodes/blob/master/scripts/erasure.js
+/* eslint-disable */
 let ByteArrayOutputStream = function (size) {
   if (size == null) { size = 64; }
   this.arr = new Uint8Array(size);
@@ -405,3 +406,4 @@ self.onmessage = function(evt) {
     default:
   }
 }
+/* eslint-enable */

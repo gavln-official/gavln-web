@@ -4,7 +4,7 @@
       <ui-empty
           v-if="!data
               || !data.length">
-        <p>暂无正在上传的文件或文件夹。</p>
+        <p>{{ $t('empty-message.upload') }}</p>
       </ui-empty>
       <upload-list
           v-else

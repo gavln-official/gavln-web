@@ -54,8 +54,8 @@
               && (!data
                 || !data.length)"
           icon="search">
-        <p>在您的文件或者文件夹中，找不到与此搜索条件相符的结果。</p>
-        <span>请尝试其他搜索，或者按类型等条件查找文件。</span>
+        <p>{{ $t('empty-message.trash-1') }}</p>
+        <span>{{ $t('empty-message.trash-2') }}</span>
       </ui-empty>
       <template
           v-else>

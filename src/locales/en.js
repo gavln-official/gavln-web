@@ -52,6 +52,7 @@ export default {
   'delete-permanently': 'Empty',
   expired: 'Expired',
   trash: 'Trash',
+  'download-start': '开始下载',
 
   // main-nav
   'main-nav': {
@@ -81,6 +82,21 @@ export default {
     'text-required': 'Input search keyword',
     'source-required': 'Select search path in location',
     'code-required': 'Input code',
+  },
+
+  // empty messages
+  'empty-message': {
+    file: '没有上传任何文件或文件夹。',
+    'favorite-1': '没有任何添加收藏的文件或文件夹。',
+    'favorite-2': '给您希望以后能快速找到的文件/文件夹添加为收藏。',
+    upload: '暂无正在上传的文件或文件夹。',
+    download: '暂无正在下载的文件或文件夹。',
+    finished: '暂无传输完成的文件或文件夹。',
+    share: '暂无共享的文件或文件夹。',
+    'trash-1': '“回收站”中没有任何文件或者文件夹。',
+    'trash-2': '将不再需要的文件移动到回收站，只需清空回收站，即可永久删除内容并释放存储空间。',
+    'search-1': '在您的文件或者文件夹中，找不到与此搜索条件相符的结果。',
+    'search-2': '请尝试其他搜索，或者按类型等条件查找文件。',
   },
 
   // request messages
@@ -243,6 +259,7 @@ export default {
     expired: 'Share expired',
     invalid: 'Invalid share',
     'invalid-code': 'Invalid verification code',
+    'login-required': '请先登录',
   },
 
   // http error

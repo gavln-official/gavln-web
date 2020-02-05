@@ -67,11 +67,11 @@
               || !data.length"
           :icon="emptyIcon">
         <p
-            v-if="$route.name === 'favorite'">没有任何添加收藏的文件或文件夹。</p>
+            v-if="$route.name === 'favorite'">{{ $t('empty-message.favorite-1') }}</p>
         <p
-            v-else>没有上传任何文件或文件夹。</p>
+            v-else>{{ $t('empty-message.file') }}</p>
         <span
-            v-if="$route.name === 'favorite'">给您希望以后能快速找到的文件/文件夹添加为收藏。</span>
+            v-if="$route.name === 'favorite'">{{ $t('empty-message.favorite-2') }}</span>
       </ui-empty>
       <template
           v-else>
@@ -345,7 +345,7 @@ export default {
     // download file
     download(item) {
       FileAPI.download(item);
-      this.$message.info('开始下载');
+      this.$message.info(this.$t('download-start'));
       this.$router.push('/download');
     },
 

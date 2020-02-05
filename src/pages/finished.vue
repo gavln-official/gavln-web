@@ -4,7 +4,7 @@
       <ui-empty
           v-if="!data
               || !data.length">
-        <p>暂无传输完成的文件或文件夹。</p>
+        <p>{{ $t('empty-message.finished') }}</p>
       </ui-empty>
       <finished-list
           v-else
