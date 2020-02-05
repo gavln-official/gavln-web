@@ -7,7 +7,7 @@
           v-if="!data
               || !data.length"
           icon="share">
-        <p>暂无共享的文件或文件夹。</p>
+        <p>{{ $t('empty-message.share') }}</p>
       </ui-empty>
       <share-list
           v-else

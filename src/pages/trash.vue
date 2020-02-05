@@ -7,8 +7,8 @@
           v-if="!data
               || !data.length"
           icon="trash">
-        <p>“回收站”中没有任何文件或者文件夹。</p>
-        <span>将不再需要的文件移动到回收站，只需清空回收站，即可永久删除内容并释放存储空间。</span>
+        <p>{{ $t('empty-message.trash-1') }}</p>
+        <span>{{ $t('empty-message.trash-2') }}</span>
       </ui-empty>
       <trash-list
           v-else

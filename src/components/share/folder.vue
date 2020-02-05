@@ -184,7 +184,7 @@ export default {
       if (hasLogin) {
         this.showFolderDialog = true;
       } else {
-        this.$message.error('请先登录');
+        this.$message.error(this.$t('open-share.login-required'));
 
         this.$router.replace({
           name: 'login',
@@ -204,7 +204,7 @@ export default {
     },
     download(target) {
       FileAPI.download(target);
-      this.$message.info('开始下载');
+      this.$message.info(this.$t('download-start'));
       this.$router.push('/download');
     },
   },
