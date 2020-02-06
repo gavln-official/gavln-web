@@ -52,7 +52,7 @@ export default {
   'delete-permanently': 'Empty',
   expired: 'Expired',
   trash: 'Trash',
-  'download-start': '开始下载',
+  'download-start': 'Start download',
 
 
   // main-nav
