@@ -2,17 +2,20 @@
   <header class="frame-header">
     <el-button-group>
       <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-left"></i>
+          type="text"
+          @click="go(-1)">
+        <i class="iconfont icon-arrow-back"></i>
       </el-button>
       <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-right"></i>
+          type="text"
+          @click="go(1)">
+        <i class="iconfont icon-arrow-forward"></i>
       </el-button>
     </el-button-group>
     <div class="right"
         v-if="!loading">
-      <img src="">
+      <img
+          :src="images.avatar">
       <span>{{ profile.name }}</span>
       <el-button
           type="text"
@@ -29,6 +32,8 @@ import UserAPI from '../../api/user';
 
 import Storage from '../../utils/storage';
 
+import avatar from '../../assets/avatar.png';
+
 export default {
   name: 'FrameHeader',
   data() {
@@ -39,6 +44,9 @@ export default {
         mail: '',
       },
       sending: false,
+      images: {
+        avatar,
+      },
     };
   },
   mounted() {
@@ -65,6 +73,9 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    go(steps) {
+      this.$router.go(steps);
     },
     logout() {
       if (this.sending) {

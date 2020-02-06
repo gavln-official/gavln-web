@@ -43,6 +43,7 @@ export default {
   close: '关闭',
   'check-all': '全选',
   status: '状态',
+  link: '链接',
   'verify-code': '提取码',
   'copy-success': '复制成功',
   prompt: '提示',
@@ -51,6 +52,7 @@ export default {
   'delete-permanently': '彻底删除',
   expired: '已失效',
   trash: '回收站',
+  'download-start': '开始下载',
 
   // main-nav
   'main-nav': {
@@ -80,6 +82,21 @@ export default {
     'text-required': '请输入搜索内容',
     'source-required': '请选择搜索位置',
     'code-required': '请输入提取码',
+  },
+
+  // empty messages
+  'empty-message': {
+    file: '没有上传任何文件或文件夹。',
+    'favorite-1': '没有任何添加收藏的文件或文件夹。',
+    'favorite-2': '给您希望以后能快速找到的文件/文件夹添加为收藏。',
+    upload: '暂无正在上传的文件或文件夹。',
+    download: '暂无正在下载的文件或文件夹。',
+    finished: '暂无传输完成的文件或文件夹。',
+    share: '暂无共享的文件或文件夹。',
+    'trash-1': '“回收站”中没有任何文件或者文件夹。',
+    'trash-2': '将不再需要的文件移动到回收站，只需清空回收站，即可永久删除内容并释放存储空间。',
+    'search-1': '在您的文件或者文件夹中，找不到与此搜索条件相符的结果。',
+    'search-2': '请尝试其他搜索，或者按类型等条件查找文件。',
   },
 
   // request messages
@@ -242,6 +259,7 @@ export default {
     expired: '分享已过期',
     invalid: '无效的分享链接',
     'invalid-code': '无效的提取码',
+    'login-required': '请先登录',
   },
 
   // http error

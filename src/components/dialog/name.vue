@@ -3,6 +3,7 @@
       :visible="visible"
       :title="title"
       width="480px"
+      append-to-body
       @close="close">
     <el-form
         label-width="80px"

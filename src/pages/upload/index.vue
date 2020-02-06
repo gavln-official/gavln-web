@@ -1,7 +1,13 @@
 <template>
   <main-frame>
     <div class="page-upload">
+      <ui-empty
+          v-if="!data
+              || !data.length">
+        <p>{{ $t('empty-message.upload') }}</p>
+      </ui-empty>
       <upload-list
+          v-else
           :data="data"
           :status="status"
           type="upload"
@@ -16,12 +22,14 @@
 <script>
 import Transmission from '../../utils/transmission';
 import MainFrame from '../../components/main-frame/index.vue';
+import UiEmpty from '../../components/ui-empty/index.vue';
 import UploadList from '../../components/upload-list/index.vue';
 
 export default {
   name: 'Upload',
   components: {
     MainFrame,
+    UiEmpty,
     UploadList,
   },
   data() {
@@ -40,10 +48,11 @@ export default {
     getUploadList() {
       const list = Transmission.readList('upload');
       this.data = list.map((item) => {  /* eslint-disable-line */
+        const percentage = Math.min((item.usize / item.size), 1) * 100;
         return {
           speed: 0,
-          percentage: Math.min((item.usize / item.size), 1) * 100,
-          status: 'NEED-RESUME',
+          percentage,
+          status: percentage > 0 ? 'NEED-RESUME' : 'STANDBY',
           ...item,
         };
       });

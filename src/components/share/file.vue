@@ -3,7 +3,7 @@
     <div class="header">
       <el-button
           @click="save">
-        <i class="iconfont icon-download"></i>
+        <i class="iconfont icon-save"></i>
         <span>{{ $t('open-share.save') }}</span>
       </el-button>
       <el-button
@@ -14,7 +14,7 @@
     </div>
     <div class="content">
       <div class="file">
-        <i class="iconfont icon-folder-add"></i>
+        <i class="iconfont icon-files"></i>
         <span>{{ data.name }}</span>
       </div>
       <div class="info">{{ $t('file-size') }}: {{ data.size | filesize }}</div>
@@ -31,6 +31,8 @@
 
 <script>
 import FolderDialog from '../dialog/folder/index.vue';
+
+import Storage from '../../utils/storage';
 
 import FileAPI from '../../api/file';
 
@@ -49,8 +51,20 @@ export default {
   },
   methods: {
     save() {
-      // TODO: check login
-      this.showFolderDialog = true;
+      const hasLogin = Storage.getToken();
+
+      if (hasLogin) {
+        this.showFolderDialog = true;
+      } else {
+        this.$message.error(this.$t('open-share.login-required'));
+
+        this.$router.replace({
+          name: 'login',
+          query: {
+            redirect: window.location.pathname,
+          },
+        });
+      }
     },
     folderDialogClose() {
       this.showFolderDialog = false;
@@ -62,6 +76,8 @@ export default {
     },
     download() {
       FileAPI.download(this.data);
+      this.$message.info(this.$t('download-start'));
+      this.$router.push('/download');
     },
   },
 };

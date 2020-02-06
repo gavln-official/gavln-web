@@ -7,7 +7,8 @@
         :model="form"
         :rules="formRules"
         ref="form"
-        :disabled="saving">
+        :disabled="saving"
+        @keydown.native="keydown">
       <el-form-item
           prop="username">
         <el-input
@@ -80,6 +81,11 @@ export default {
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
     },
+    keydown(event) {
+      if (event.key === 'Enter') {
+        this.login();
+      }
+    },
     login() {
       if (this.saving) {
         return;
@@ -112,9 +118,7 @@ export default {
         });
     },
     redirect() {
-      let {
-        path,
-      } = this.$route.query;
+      let path = this.$route.query.redirect;
 
       if (!path) {
         path = '/';

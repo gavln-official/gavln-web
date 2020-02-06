@@ -37,11 +37,7 @@
               class="el-dropdown-link">
             <span>{{ $t('file-list.sort') }}</span>&nbsp;
             <i
-                class="el-icon-bottom"
-                v-if="orderIn === 'DESC'"></i>
-            <i
-                class="el-icon-top"
-                v-else></i>
+                class="iconfont icon-sort"></i>
           </el-button>
           <el-dropdown-menu
               slot="dropdown">
@@ -55,22 +51,42 @@
         </el-dropdown>
         <el-button
             @click="toggleViewMode">
-          <i class="iconfont icon-app"></i>
+          <i
+              v-if="viewMode === 'list'"
+              class="iconfont icon-list"></i>
+          <i
+              v-else
+              class="iconfont icon-blocks"></i>
         </el-button>
       </div>
     </div>
-    <file-table
-        v-if="viewMode === 'list'"
-        v-loading="loading"
-        :type="type"
-        :data="fileList"
-        @command="onCommand" />
-    <file-grid
-        v-else
-        v-loading="loading"
-        :type="type"
-        :data="fileList"
-        @command="onCommand" />
+    <div
+        v-loading="loading">
+      <ui-empty
+          v-if="!data
+              || !data.length"
+          :icon="emptyIcon">
+        <p
+            v-if="$route.name === 'favorite'">{{ $t('empty-message.favorite-1') }}</p>
+        <p
+            v-else>{{ $t('empty-message.file') }}</p>
+        <span
+            v-if="$route.name === 'favorite'">{{ $t('empty-message.favorite-2') }}</span>
+      </ui-empty>
+      <template
+          v-else>
+        <file-table
+            v-if="viewMode === 'list'"
+            :type="type"
+            :data="fileList"
+            @command="onCommand" />
+        <file-grid
+            v-else
+            :type="type"
+            :data="fileList"
+            @command="onCommand" />
+      </template>
+    </div>
     <upload-dialog
         v-if="showUploadDialog"
         :visible="showUploadDialog"
@@ -106,6 +122,7 @@
 <script>
 import BreadCrumb from './bread-crumb.vue';
 import SearchInput from '../search-input/index.vue';
+import UiEmpty from '../ui-empty/index.vue';
 import FileTable from './table.vue';
 import FileGrid from './grid.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -125,6 +142,7 @@ export default {
   components: {
     BreadCrumb,
     SearchInput,
+    UiEmpty,
     FileTable,
     FileGrid,
     FolderDialog,
@@ -216,6 +234,13 @@ export default {
       }
 
       return ['all'];
+    },
+    emptyIcon() {
+      if (this.$route.name === 'favorite') {
+        return 'star';
+      }
+
+      return null;
     },
   },
   created() {
@@ -320,6 +345,8 @@ export default {
     // download file
     download(item) {
       FileAPI.download(item);
+      this.$message.info(this.$t('download-start'));
+      this.$router.push('/download');
     },
 
     // folder dialog

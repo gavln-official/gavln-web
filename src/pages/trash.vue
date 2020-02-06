@@ -1,7 +1,17 @@
 <template>
   <main-frame>
-    <div class="page-upload page-trash" v-loading="loading">
+    <div
+        class="page-upload page-trash"
+        v-loading="loading">
+      <ui-empty
+          v-if="!data
+              || !data.length"
+          icon="trash">
+        <p>{{ $t('empty-message.trash-1') }}</p>
+        <span>{{ $t('empty-message.trash-2') }}</span>
+      </ui-empty>
       <trash-list
+          v-else
           :data="data"
           @restore="restore"
           @delete="doDelete"
@@ -11,14 +21,17 @@
 </template>
 
 <script>
-import MainFrame from '../components/main-frame/index.vue';
-import TrashList from '../components/trash-list/index.vue';
 import TrashAPI from '../api/trash';
+
+import MainFrame from '../components/main-frame/index.vue';
+import UiEmpty from '../components/ui-empty/index.vue';
+import TrashList from '../components/trash-list/index.vue';
 
 export default {
   name: 'Trash',
   components: {
     MainFrame,
+    UiEmpty,
     TrashList,
   },
   data() {

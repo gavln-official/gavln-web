@@ -1,6 +1,6 @@
 import IPFS from 'ipfs';
 import Crypto from 'crypto-js';
-import Erasure from './erasure';
+import ERASURE from 'worker-loader!./erasure-worker';
 import Transmission from './transmission';
 
 let rootNode = null;
@@ -9,7 +9,6 @@ async function init() {
   if (!rootNode) {
     rootNode = await IPFS.create();
   }
-
   return rootNode;
 }
 
@@ -32,9 +31,27 @@ function getBlockSize(file) {
 }
 
 async function encode(file) {
-  const buffer = new Uint8Array(await file.arrayBuffer());
-  const blockSize = getBlockSize(file);
-  return Erasure.split(buffer, blockSize.originalBlocks, blockSize.extraBlocks);
+  return new Promise(async (resolve) => {
+    const buffer = new Uint8Array(await file.arrayBuffer());
+    const blockSize = getBlockSize(file);
+    const fragments = [];
+    const erasure = new ERASURE();
+    erasure.onmessage = (evt) => {
+      const data = evt.data;
+      const fragment = new Uint8Array(data.buffer);
+      fragments.push(fragment);
+      if (data.blockId === data.totalBlocks) {
+        erasure.onmessage = null;
+        erasure.terminate();
+        resolve(fragments);
+      }
+    };
+    erasure.postMessage({
+      command: 'encode',
+      buffer: buffer.buffer,
+      blockSize,
+    }, [buffer.buffer]);
+  });
 }
 
 /* eslint-disable */
@@ -93,18 +110,30 @@ async function upload(fid, keys, fragments, finishedBlocks) {
   }
 }
 
-function decode(fragments, size, originalBlocks, extraBlocks) {
-  const fileData = Erasure.recombine(fragments, size, originalBlocks, extraBlocks);
-
-  return fileData.buffer.slice(0, size);
+function decode(fragments, size) {
+  return new Promise((resolve) => {
+    const erasure = new ERASURE();
+    erasure.onmessage = (evt) => {
+      erasure.onmessage = null;
+      erasure.terminate();
+      resolve(evt.data.buffer);
+    };
+    let i = 0;
+    const total = fragments.length;
+    for (; i < total; i++) { /* eslint-disable-line */
+      erasure.postMessage({
+        command: 'decode',
+        blockId: i + 1,
+        totalBlocks: total,
+        size,
+        buffer: fragments[i].buffer,
+      }, [fragments[i].buffer]);
+    }
+  });
 }
 
 async function download(file) {
   const list = file.blocks;
-  const size = file.size;
-  const originalBlocks = file.data_shard;
-  const extraBlocks = file.parity_shard;
-
   if (!rootNode) {
     rootNode = await init();
   }
@@ -125,7 +154,7 @@ async function download(file) {
     }
     await rootNode.stop();
     rootNode = null;
-    return decode(fragments, size, originalBlocks, extraBlocks);
+    return fragments;
   } catch (error) {
     throw error;
   }

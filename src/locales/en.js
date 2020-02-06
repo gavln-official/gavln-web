@@ -43,6 +43,7 @@ export default {
   close: 'Close',
   'check-all': 'Select all',
   status: 'Status',
+  link: 'Link',
   'verify-code': 'Extraction code',
   'copy-success': 'Copy success',
   prompt: 'Prompt',
@@ -51,7 +52,8 @@ export default {
   'delete-permanently': 'Empty',
   expired: 'Expired',
   trash: 'Trash',
-  'download-start': 'Start download',
+  'download-start': '开始下载',
+
 
   // main-nav
   'main-nav': {
@@ -97,7 +99,6 @@ export default {
     'search-1': 'No results matched your search in your file or folder.',
     'search-2': 'Try another search, or find files by criteria such as type.',
   },
-
 
   // request messages
   'request-message': {
@@ -260,6 +261,7 @@ export default {
     invalid: 'Invalid share',
     'invalid-code': 'Invalid verification code',
     'login-required': 'Please login',
+
   },
 
   // http error

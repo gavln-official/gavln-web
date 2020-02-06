@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     switchPath(path) {
-      this.$emit('switch', `${this.rootPath}${path}`);
+      this.$emit('switch', `${this.rootPath || ''}${path}`);
     },
   },
 };

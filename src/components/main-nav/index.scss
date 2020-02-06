@@ -11,10 +11,14 @@
     text-align: center;
 
     a {
-      font-size: 32px;
-      line-height: 40px;
+      display: inline-block;
+      padding: 4px 0;
       color: #FFF;
       text-decoration: none;
+
+      img {
+        height: 32px;
+      }
     }
   }
 

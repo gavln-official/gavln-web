@@ -5,54 +5,61 @@
       width="640px"
       :title="title || defaultTitle"
       @close="close">
-    <el-button-group class="nav">
-      <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-left"></i>
-      </el-button>
-      <el-button
-          type="text">
-        <i class="iconfont icon-arrow-l-right"></i>
-      </el-button>
-    </el-button-group>
     <bread-crumb
         :path="path"
         @switch="switchPath" />
-    <el-table
-        class="file-table dialog-table"
-        :data="list"
-        :height="360"
-        :highlight-current-row="true"
-        @row-click="toggleSelected">
-      <el-table-column
-          prop="type"
-          :label="$t('file-name')"
-          width="68">
-        <template>
-          <i class="iconfont icon-folder-add"></i>
-        </template>
-      </el-table-column>
-      <el-table-column>
-        <template
-            slot-scope="scope">
-          <span
-              class="link"
-              @click="switchPath(scope.row.path)">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-          :label="$t('modify-time')"
-          width="160">
-        <template
-            slot-scope="scope">
-          <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div
+        v-loading="loading">
+      <ui-empty
+          v-if="!list
+              || !list.length">
+        <p>{{ $t('empty-message.file') }}</p>
+      </ui-empty>
+      <el-table
+          v-else
+          class="file-table dialog-table"
+          :data="list"
+          :height="360"
+          :highlight-current-row="true"
+          @row-click="toggleSelected"
+          @row-dblclick="openRow">
+        <el-table-column
+            prop="type"
+            :label="$t('file-name')"
+            width="68">
+          <template
+              slot-scope="scope">
+            <i
+                v-if="scope.row.dir"
+                class="iconfont icon-folder"></i>
+            <i
+                v-else
+                class="iconfont icon-files"></i>
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template
+              slot-scope="scope">
+            <span
+                class="link"
+                @click="switchPath(scope.row.path)">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            :label="$t('modify-time')"
+            width="160">
+          <template
+              slot-scope="scope">
+            <span>{{ scope.row.time | time('yyyy/MM/dd HH:mm') }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div
         slot="footer">
       <el-button
-          class="left">{{ $t('create-folder') }}</el-button>
+          class="left"
+          @click="toggleNameDialog()">{{ $t('create-folder') }}</el-button>
       <el-button
           :disabled="saving"
           @click="close">{{ $t('cancel') }}</el-button>
@@ -60,19 +67,29 @@
           :disabled="saving"
           @click="ok">{{ actionLabel }}</el-button>
     </div>
+    <name-dialog
+        v-if="showNameDialog"
+        :visible="showNameDialog"
+        :data="nameData"
+        @close="nameDialogClose"
+        @success="nameDialogSuccess" />
   </el-dialog>
 </template>
 
 <script>
-import BreadCrumb from './bread-crumb.vue';
-
 import FileAPI from '../../../api/file';
 import ShareAPI from '../../../api/share';
+
+import BreadCrumb from './bread-crumb.vue';
+import UiEmpty from '../../ui-empty/index.vue';
+import NameDialog from '../name.vue';
 
 export default {
   name: 'FolderDialog',
   components: {
     BreadCrumb,
+    UiEmpty,
+    NameDialog,
   },
   props: {
     visible: {
@@ -93,6 +110,18 @@ export default {
       list: [],
       selected: null,
       saving: false,
+
+      showNameDialog: false,
+      nameData: {
+        // full path
+        path: this.path,
+        // folder/file name
+        name: '',
+        // form action
+        action: 'create',
+        // is dir
+        dir: true,
+      },
     };
   },
   computed: {
@@ -132,6 +161,28 @@ export default {
     switchPath(path) {
       this.path = path;
       this.selected = null;
+      this.getPath();
+    },
+    openRow(row) {
+      this.switchPath(row.path);
+    },
+
+    // folder name dialog
+    toggleNameDialog() {
+      this.nameData = {
+        path: this.path,
+        name: '',
+        action: 'create',
+        dir: true,
+      };
+
+      this.showNameDialog = true;
+    },
+    nameDialogClose() {
+      this.showNameDialog = false;
+    },
+    nameDialogSuccess() {
+      this.showNameDialog = false;
       this.getPath();
     },
     getPath() {

@@ -1,8 +1,16 @@
 <template>
   <main-frame>
-    <div class="page-upload page-share">
+    <div
+        class="page-upload page-share"
+        v-loading="loading">
+      <ui-empty
+          v-if="!data
+              || !data.length"
+          icon="share">
+        <p>{{ $t('empty-message.share') }}</p>
+      </ui-empty>
       <share-list
-          :loading="loading"
+          v-else
           :data="data"
           @refresh="getList" />
     </div>
@@ -11,6 +19,7 @@
 
 <script>
 import MainFrame from '../components/main-frame/index.vue';
+import UiEmpty from '../components/ui-empty/index.vue';
 import ShareList from '../components/share-list/index.vue';
 
 import ShareAPI from '../api/share';
@@ -19,6 +28,7 @@ export default {
   name: 'share',
   components: {
     MainFrame,
+    UiEmpty,
     ShareList,
   },
   data() {

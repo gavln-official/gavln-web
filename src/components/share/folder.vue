@@ -5,7 +5,7 @@
     <div class="header">
       <el-button
           @click="save()">
-        <i class="iconfont icon-file-copy"></i>
+        <i class="iconfont icon-save"></i>
         <span>{{ $t('open-share.save') }}</span>
       </el-button>
     </div>
@@ -20,8 +20,14 @@
         <el-table-column
             prop="type"
             width="64">
-          <template>
-            <i class="iconfont icon-folder-add"></i>
+          <template
+              slot-scope="scope">
+            <i
+                v-if="scope.row.dir"
+                class="iconfont icon-folder"></i>
+            <i
+                v-else
+                class="iconfont icon-files"></i>
           </template>
         </el-table-column>
         <el-table-column
@@ -81,6 +87,8 @@
 
 <script>
 import FileAPI from '../../api/file';
+
+import Storage from '../../utils/storage';
 
 import BreadCrumb from '../dialog/folder/bread-crumb.vue';
 import FolderDialog from '../dialog/folder/index.vue';
@@ -171,7 +179,20 @@ export default {
         ...data,
       };
 
-      this.showFolderDialog = true;
+      const hasLogin = Storage.getToken();
+
+      if (hasLogin) {
+        this.showFolderDialog = true;
+      } else {
+        this.$message.error(this.$t('open-share.login-required'));
+
+        this.$router.replace({
+          name: 'login',
+          query: {
+            redirect: window.location.pathname,
+          },
+        });
+      }
     },
     folderDialogClose() {
       this.showFolderDialog = false;
@@ -183,6 +204,8 @@ export default {
     },
     download(target) {
       FileAPI.download(target);
+      this.$message.info(this.$t('download-start'));
+      this.$router.push('/download');
     },
   },
 };
