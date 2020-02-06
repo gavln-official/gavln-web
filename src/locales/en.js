@@ -51,6 +51,7 @@ export default {
   'delete-permanently': 'Empty',
   expired: 'Expired',
   trash: 'Trash',
+  'download-start': 'Start download',
 
   // main-nav
   'main-nav': {
@@ -81,6 +82,22 @@ export default {
     'source-required': 'Select search path in location',
     'code-required': 'Input code',
   },
+
+  // empty messages
+  'empty-message': {
+    file: 'No files or folders uploaded.',
+    'favorite-1': 'There are no favorite files or folders.',
+    'favorite-2': 'Add your favorite files / folders you want to find quickly in the future.',
+    upload: 'No files or folders being uploaded.',
+    download: 'No files or folders being download.',
+    finished: 'No files or folders have been transferred.',
+    share: 'No files or folders have been share.',
+    'trash-1': 'There are no files or folders in the trash.',
+    'trash-2': 'Move files you no longer need to the trash, simply empty the trash to permanently delete content and free up storage space.',
+    'search-1': 'No results matched your search in your file or folder.',
+    'search-2': 'Try another search, or find files by criteria such as type.',
+  },
+
 
   // request messages
   'request-message': {
@@ -242,6 +259,7 @@ export default {
     expired: 'Share expired',
     invalid: 'Invalid share',
     'invalid-code': 'Invalid verification code',
+    'login-required': 'Please login',
   },
 
   // http error
