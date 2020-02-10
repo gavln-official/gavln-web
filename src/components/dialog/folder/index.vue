@@ -144,7 +144,14 @@ export default {
       return labels[this.type];
     },
   },
-  created() {
+  watch: {
+    visible(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.getPath();
+      }
+    },
+  },
+  mounted() {
     this.getPath();
   },
   methods: {
@@ -164,7 +171,9 @@ export default {
       this.getPath();
     },
     openRow(row) {
-      this.switchPath(row.path);
+      if (row.dir) {
+        this.switchPath(row.path);
+      }
     },
 
     // folder name dialog

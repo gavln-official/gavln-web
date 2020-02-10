@@ -156,12 +156,14 @@ export default {
       });
     },
     openRow(row) {
-      this.$router.push({
-        name: 'home',
-        query: {
-          path: row.path,
-        },
-      });
+      if (row.dir) {
+        this.$router.push({
+          name: 'home',
+          query: {
+            path: row.path,
+          },
+        });
+      }
     },
     rowCommand(command, _row) {
       const row = _row || this.contextRow;
