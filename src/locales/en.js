@@ -52,7 +52,8 @@ export default {
   'delete-permanently': 'Empty',
   expired: 'Expired',
   trash: 'Trash',
-  'download-start': '开始下载',
+  'download-start': 'Start download',
+
 
   // main-nav
   'main-nav': {
@@ -86,17 +87,17 @@ export default {
 
   // empty messages
   'empty-message': {
-    file: '没有上传任何文件或文件夹。',
-    'favorite-1': '没有任何添加收藏的文件或文件夹。',
-    'favorite-2': '给您希望以后能快速找到的文件/文件夹添加为收藏。',
-    upload: '暂无正在上传的文件或文件夹。',
-    download: '暂无正在下载的文件或文件夹。',
-    finished: '暂无传输完成的文件或文件夹。',
-    share: '暂无共享的文件或文件夹。',
-    'trash-1': '“回收站”中没有任何文件或者文件夹。',
-    'trash-2': '将不再需要的文件移动到回收站，只需清空回收站，即可永久删除内容并释放存储空间。',
-    'search-1': '在您的文件或者文件夹中，找不到与此搜索条件相符的结果。',
-    'search-2': '请尝试其他搜索，或者按类型等条件查找文件。',
+    file: 'No files or folders uploaded.',
+    'favorite-1': 'There are no favorite files or folders.',
+    'favorite-2': 'Add your favorite files / folders you want to find quickly in the future.',
+    upload: 'No files or folders being uploaded.',
+    download: 'No files or folders being download.',
+    finished: 'No files or folders have been transferred.',
+    share: 'No files or folders have been share.',
+    'trash-1': 'There are no files or folders in the trash.',
+    'trash-2': 'Move files you no longer need to the trash, simply empty the trash to permanently delete content and free up storage space.',
+    'search-1': 'No results matched your search in your file or folder.',
+    'search-2': 'Try another search, or find files by criteria such as type.',
   },
 
   // request messages
@@ -259,7 +260,8 @@ export default {
     expired: 'Share expired',
     invalid: 'Invalid share',
     'invalid-code': 'Invalid verification code',
-    'login-required': '请先登录',
+    'login-required': 'Please login',
+
   },
 
   // http error
