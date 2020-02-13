@@ -1,6 +1,7 @@
 import HTTP from './http';
 import Utils from '../utils/index';
 import Storage from '../utils/storage';
+import LocalStorage from '../utils/local-storage';
 
 function checkUsername(username) {
   const data = new FormData();
@@ -43,7 +44,9 @@ function login(username, password) {
         Storage.set('access_token', res.data.access_token);
         Storage.set('refresh_token', res.data.refresh_token);
         Storage.set('token_expires_at', res.data.expires * 1000);
-
+        LocalStorage.remove('transmission-download-list');
+        LocalStorage.remove('transmission-upload-list');
+        LocalStorage.remove('transmission-completed-list');
         resolve(res);
       })
       .catch((error) => {
@@ -60,9 +63,16 @@ function getProfile() {
 }
 
 function logOut() {
-  return HTTP({
-    method: 'POST',
-    url: '/user/logout',
+  return new Promise((resolve) => {
+    HTTP({
+      method: 'POST',
+      url: '/user/logout',
+    }).then(() => {
+      LocalStorage.remove('transmission-download-list');
+      LocalStorage.remove('transmission-upload-list');
+      LocalStorage.remove('transmission-completed-list');
+      resolve();
+    });
   });
 }
 

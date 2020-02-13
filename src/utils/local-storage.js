@@ -11,4 +11,7 @@ export default {
       return null;
     }
   },
+  remove(key) {
+    window.localStorage.removeItem(key);
+  },
 };
