@@ -21,6 +21,10 @@ import IntroCn from './content/cn/intro.vue';
 import EulaCn from './content/cn/eula.vue';
 import PrivacyCn from './content/cn/privacy.vue';
 
+import IntroEn from './content/en/intro.vue';
+import EulaEn from './content/en/eula.vue';
+import PrivacyEn from './content/en/privacy.vue';
+
 export default {
   name: 'PageLogin',
   components: {
@@ -40,7 +44,9 @@ export default {
           privacy: PrivacyCn,
         },
         en: {
-          intro: IntroCn,
+          intro: IntroEn,
+          eula: EulaEn,
+          privacy: PrivacyEn,
         },
       };
 
@@ -60,5 +66,4 @@ export default {
 
 <style
     src="./index.scss"
-    lang="scss"
-    scoped></style>
+    lang="scss"></style>
