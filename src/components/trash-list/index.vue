@@ -24,7 +24,7 @@
         <template
             slot-scope="scope">
           <i
-              v-if="scope.row.dir"
+              v-if="scope.row.file.dir"
               class="iconfont icon-folder"></i>
           <i
               v-else

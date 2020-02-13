@@ -88,12 +88,14 @@ export default {
       });
     },
     openFolder(folder) {
-      this.$router.push({
-        name: 'home',
-        query: {
-          path: folder.path,
-        },
-      });
+      if (folder.dir) {
+        this.$router.push({
+          name: 'home',
+          query: {
+            path: folder.path,
+          },
+        });
+      }
     },
     rowCommand(command) {
       const row = this.contextRow;

@@ -6,7 +6,7 @@
       <file-list
           type="favorite"
           path="favorite"
-          @reload="getList"
+          @refresh="getList"
           :data="data"></file-list>
     </div>
   </main-frame>

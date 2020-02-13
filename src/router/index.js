@@ -99,6 +99,11 @@ const routes = [
     },
   },
   {
+    path: '/article/:name',
+    name: 'article',
+    component: () => import('../pages/article/index.vue'),
+  },
+  {
     path: '*',
     redirect: '/',
   },

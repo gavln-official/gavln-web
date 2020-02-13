@@ -9,7 +9,7 @@
     </a>
     <ul class="links">
       <li>
-        <a href="/">{{ $t('page-frame.intro') }}</a>
+        <a href="/article/intro">{{ $t('page-frame.intro') }}</a>
       </li>
       <li>
         <el-dropdown

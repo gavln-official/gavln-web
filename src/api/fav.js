@@ -7,6 +7,4 @@ export default {
       url: '/mark/get',
     });
   },
-
-
 };
